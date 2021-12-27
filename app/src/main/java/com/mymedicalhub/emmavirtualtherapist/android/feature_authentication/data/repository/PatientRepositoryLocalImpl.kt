@@ -2,12 +2,12 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.dat
 
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.data.data_source.PatientDao
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.model.Patient
-import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.repository.PatientRepository
+import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.repository.PatientRepositoryLocal
 import kotlinx.coroutines.flow.Flow
 
-class PatientRepositoryImpl(
+class PatientRepositoryLocalImpl(
     private val dao: PatientDao
-) : PatientRepository {
+) : PatientRepositoryLocal {
     override fun getPatients(): Flow<List<Patient>> {
         return dao.getPatients()
     }

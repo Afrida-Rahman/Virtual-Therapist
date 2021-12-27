@@ -2,18 +2,21 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.dom
 
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.model.InvalidPatientException
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.model.Patient
-import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.repository.PatientRepository
+import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.repository.PatientRepositoryLocal
 
 class InsertPatient(
-    private val repository: PatientRepository
+    private val repository: PatientRepositoryLocal
 ) {
 
     @Throws(InvalidPatientException::class)
     suspend operator fun invoke(patient: Patient) {
-        if (patient.name.isBlank()) {
-            throw InvalidPatientException("Patient's name cannot be empty")
+        if (patient.firstName.isBlank()) {
+            throw InvalidPatientException("Patient's first name cannot be empty")
         }
-        if (patient.patientId.isBlank()){
+        if (patient.firstName.isBlank()) {
+            throw InvalidPatientException("Patient's last name cannot be empty")
+        }
+        if (patient.patientId.isBlank()) {
             throw InvalidPatientException("Patient's ID cannot be empty")
         }
         if (patient.tenant.isBlank()) {

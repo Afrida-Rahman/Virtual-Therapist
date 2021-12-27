@@ -6,9 +6,10 @@ import androidx.room.PrimaryKey
 @Entity
 data class Patient(
     @PrimaryKey val id: Int? = null,
-    val name: String,
     val tenant: String,
     val patientId: String,
+    val firstName: String,
+    val lastName: String,
     val loggedIn: Boolean = false
 )
 
