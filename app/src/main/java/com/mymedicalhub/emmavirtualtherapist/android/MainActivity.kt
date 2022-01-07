@@ -3,7 +3,6 @@ package com.mymedicalhub.emmavirtualtherapist.android
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.Surface
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -19,18 +18,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             EmmaVirtualTherapistTheme {
-                Surface() {
-                    val navController = rememberNavController()
-                    NavHost(
-                        navController = navController,
-                        startDestination = Screen.SignInScreen.route
-                    ) {
-                        composable(route = Screen.SignInScreen.route) {
-                            SignInScreen()
-                        }
-                        composable(route = Screen.AssessmentListScreen.route) {
-                            SignInScreen()
-                        }
+                val navController = rememberNavController()
+                NavHost(
+                    navController = navController,
+                    startDestination = Screen.SignInScreen.route
+                ) {
+                    composable(route = Screen.SignInScreen.route) {
+                        SignInScreen()
+                    }
+                    composable(route = Screen.AssessmentListScreen.route) {
+                        SignInScreen()
                     }
                 }
             }

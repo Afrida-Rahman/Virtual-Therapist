@@ -1,17 +1,23 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.sign_in
 
-import android.util.Log
+import android.annotation.SuppressLint
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mymedicalhub.emmavirtualtherapist.android.core.Resource
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.usecase.PatientUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignInViewModel @Inject constructor(
+class SignInViewModel @SuppressLint("StaticFieldLeak")
+@Inject constructor(
     private val patientUseCases: PatientUseCases
 ) : ViewModel() {
 
@@ -28,7 +34,10 @@ class SignInViewModel @Inject constructor(
     val tenant: State<String> = _tenant
 
     private val _showCircularProgress = mutableStateOf(false)
-    val showCircularProgress: State<Boolean> = _showCircularProgress
+    val showCircularProgressIndicator: State<Boolean> = _showCircularProgress
+
+    private val _eventFlow = MutableSharedFlow<UIEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()
 
     fun onEvent(event: SignInEvent) {
         when (event) {
@@ -45,28 +54,41 @@ class SignInViewModel @Inject constructor(
                 _showPassword.value = !showPassword.value
             }
             is SignInEvent.ShowCircularProgress -> {
-                _showCircularProgress.value = !showCircularProgress.value
+                _showCircularProgress.value = !showCircularProgressIndicator.value
             }
             is SignInEvent.SignInButtonClick -> {
                 viewModelScope.launch {
-                    if (patientUseCases.signInPatient(
+                    if (!showCircularProgressIndicator.value) {
+                        patientUseCases.signInPatient(
                             email = email.value,
                             password = password.value,
                             tenant = tenant.value
-                        )
-                    ) {
-//                        Toast.makeText(context, "Successfully logged in!", Toast.LENGTH_LONG).show()
-                        Log.d("SignInViewModel", "Successfully logged in!")
-                    } else {
-                        Log.d("SignInViewModel", "Email or password did not match!")
-//                        Toast.makeText(
-//                            context,
-//                            "Email or password did not match!",
-//                            Toast.LENGTH_LONG
-//                        ).show()
+                        ).onEach {
+                            when (it) {
+                                is Resource.Loading -> {
+                                    _showCircularProgress.value = true
+                                }
+                                is Resource.Success -> {
+                                    _showCircularProgress.value = false
+                                    _eventFlow.emit(UIEvent.ShowSnackBar(message = "Successfully signed in"))
+                                }
+                                is Resource.Error -> {
+                                    _showCircularProgress.value = false
+                                    _eventFlow.emit(
+                                        UIEvent.ShowSnackBar(
+                                            message = it.message ?: "Unknown error"
+                                        )
+                                    )
+                                }
+                            }
+                        }.launchIn(this)
                     }
                 }
             }
         }
+    }
+
+    sealed class UIEvent {
+        data class ShowSnackBar(val message: String) : UIEvent()
     }
 }

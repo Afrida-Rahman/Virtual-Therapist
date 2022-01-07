@@ -38,10 +38,10 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesPatientRepositoryApi(tenant: String): PatientRepositoryApi {
+    fun providesPatientRepositoryApi(): PatientRepositoryApi {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(Urls.get(tenant))
+            .baseUrl(Urls.get("emma"))
             .build()
             .create(PatientRepositoryApi::class.java)
     }
