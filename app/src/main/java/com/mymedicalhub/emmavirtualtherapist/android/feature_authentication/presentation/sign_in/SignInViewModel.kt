@@ -1,6 +1,5 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.sign_in
 
-import android.annotation.SuppressLint
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -16,8 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignInViewModel @SuppressLint("StaticFieldLeak")
-@Inject constructor(
+class SignInViewModel @Inject constructor(
     private val patientUseCases: PatientUseCases
 ) : ViewModel() {
 
