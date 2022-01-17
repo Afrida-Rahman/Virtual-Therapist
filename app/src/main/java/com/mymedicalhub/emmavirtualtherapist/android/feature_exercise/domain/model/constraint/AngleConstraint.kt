@@ -1,27 +1,29 @@
-package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.constraint
+package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.constraint
 
 
 import android.graphics.Paint
 import com.mymedicalhub.emmavirtualtherapist.android.core.model.Point
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Draw
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.Constraint
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Constraint
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.LineType
 
 data class AngleConstraint(
-    val startPoint: Point,
-    val middlePoint: Point,
-    val endPoint: Point,
+    val startPointIndex: Int,
+    val middlePointIndex: Int,
+    val endPointIndex: Int,
     val lineType: LineType = LineType.SOLID,
-    val ninValidationValue: Int,
+    val minValidationValue: Int,
     val maxValidationValue: Int,
     val isClockwise: Boolean
 ) : Constraint {
     override fun draw(draw: Draw) {
-        val lineStyle = if (lineType == LineType.SOLID) {
-            Paint.Style.FILL
-        } else {
-            Paint.Style.FILL_AND_STROKE
+        val lineStyle = when (lineType) {
+            LineType.SOLID -> Paint.Style.FILL
+            LineType.DASHED -> Paint.Style.FILL_AND_STROKE
         }
+        val startPoint = Point(0f, 0f)
+        val middlePoint = Point(0f, 0f)
+        val endPoint = Point(0f, 0f)
         draw.angle(
             startPoint = startPoint,
             middlePoint = middlePoint,

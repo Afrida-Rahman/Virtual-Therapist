@@ -2,10 +2,10 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.dom
 
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.model.InvalidPatientException
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.model.Patient
-import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.repository.PatientRepositoryLocal
+import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.repository.LocalPatientRepository
 
 class InsertPatient(
-    private val repository: PatientRepositoryLocal
+    private val repositoryPatientRepository: LocalPatientRepository
 ) {
 
     @Throws(InvalidPatientException::class)
@@ -22,6 +22,6 @@ class InsertPatient(
         if (patient.tenant.isBlank()) {
             throw InvalidPatientException("Patient's tenant cannot be empty")
         }
-        repository.insertPatient(patient)
+        repositoryPatientRepository.insertPatient(patient)
     }
 }

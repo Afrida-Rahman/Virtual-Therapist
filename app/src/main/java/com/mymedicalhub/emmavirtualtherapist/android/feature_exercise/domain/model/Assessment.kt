@@ -8,5 +8,6 @@ data class Assessment(
     val providerName: String,
     val bodyRegionId: Int,
     val bodyRegionName: String,
+    val registrationType: String,
     val exercises: List<Exercise>
 )

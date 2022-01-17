@@ -2,17 +2,17 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.dom
 
 import com.mymedicalhub.emmavirtualtherapist.android.core.Resource
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.data.dto.toPatient
-import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.data.payload.LogInPayload
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.model.Patient
-import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.repository.PatientRepositoryApi
+import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.payload.PatientInformationPayload
+import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.repository.RemotePatientRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
-class SignInPatient @Inject constructor(
-    private val api: PatientRepositoryApi
+class PatientInformation @Inject constructor(
+    private val remote: RemotePatientRepository
 ) {
 
     suspend operator fun invoke(
@@ -22,14 +22,18 @@ class SignInPatient @Inject constructor(
     ): Flow<Resource<Patient>> = flow {
         try {
             emit(Resource.Loading())
-            when(true) {
+            when {
                 tenant.isEmpty() -> emit(Resource.Error("Tenant cannot be empty"))
                 email.isEmpty() -> emit(Resource.Error("Email cannot be empty"))
                 password.isEmpty() -> emit(Resource.Error("Password cannot be empty"))
                 else -> {
                     val patientDto =
-                        api.patientLogIn(
-                            LogInPayload(tenant = tenant, email = email, password = password)
+                        remote.patientInformation(
+                            PatientInformationPayload(
+                                tenant = tenant,
+                                email = email,
+                                password = password
+                            )
                         )
                     if (patientDto.success) {
                         emit(Resource.Success(patientDto.toPatient(tenant)))

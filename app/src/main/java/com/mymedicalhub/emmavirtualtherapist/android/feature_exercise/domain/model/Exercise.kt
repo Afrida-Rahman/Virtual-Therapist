@@ -4,6 +4,7 @@ data class Exercise(
     val id: Int,
     val name: String,
     val imageURLs: List<String>,
+    val videoURL: String?,
     val frequency: Int,
     val repetition: Int,
     val set: Int,

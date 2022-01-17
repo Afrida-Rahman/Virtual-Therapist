@@ -21,20 +21,23 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
+import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.sign_in.component.OutlineInputTextField
 import kotlinx.coroutines.flow.collect
 
 @Composable
 fun SignInScreen(
-    viewModel: SignInViewModel = hiltViewModel()
+    viewModel: SignInViewModel = hiltViewModel(),
+    navController: NavController
 ) {
     val scaffoldState = rememberScaffoldState()
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collect { event ->
             when (event) {
-                is SignInViewModel.UIEvent.ShowSnackBar -> {
+                is UIEvent.ShowSnackBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(event.message)
                 }
             }
@@ -115,7 +118,7 @@ fun SignInScreen(
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
                         onClick = {
-                            viewModel.onEvent(SignInEvent.SignInButtonClick)
+                            viewModel.onEvent(SignInEvent.SignInButtonClick(navController = navController))
                         },
                         modifier = Modifier
                             .fillMaxWidth()

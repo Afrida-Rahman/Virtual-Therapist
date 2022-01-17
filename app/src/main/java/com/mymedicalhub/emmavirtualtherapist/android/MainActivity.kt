@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.sign_in.SignInScreen
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessment_list.AssessmentListScreen
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,10 +25,10 @@ class MainActivity : ComponentActivity() {
                     startDestination = Screen.SignInScreen.route
                 ) {
                     composable(route = Screen.SignInScreen.route) {
-                        SignInScreen()
+                        SignInScreen(navController = navController)
                     }
                     composable(route = Screen.AssessmentListScreen.route) {
-                        SignInScreen()
+                        AssessmentListScreen()
                     }
                 }
             }

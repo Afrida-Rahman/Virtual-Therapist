@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mymedicalhub.emmavirtualtherapist.android.core.Resource
+import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
+import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.usecase.PatientUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -57,7 +59,7 @@ class SignInViewModel @Inject constructor(
             is SignInEvent.SignInButtonClick -> {
                 viewModelScope.launch {
                     if (!showCircularProgressIndicator.value) {
-                        patientUseCases.signInPatient(
+                        patientUseCases.patientInformation(
                             email = email.value,
                             password = password.value,
                             tenant = tenant.value
@@ -69,6 +71,7 @@ class SignInViewModel @Inject constructor(
                                 is Resource.Success -> {
                                     _showCircularProgress.value = false
                                     _eventFlow.emit(UIEvent.ShowSnackBar(message = "Successfully signed in"))
+                                    event.navController.navigate(Screen.AssessmentListScreen.route)
                                 }
                                 is Resource.Error -> {
                                     _showCircularProgress.value = false
@@ -84,9 +87,5 @@ class SignInViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    sealed class UIEvent {
-        data class ShowSnackBar(val message: String) : UIEvent()
     }
 }

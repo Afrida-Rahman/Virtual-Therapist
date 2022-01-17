@@ -1,9 +1,9 @@
-package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.constraint
+package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.constraint
 
 import android.graphics.Color
 import com.mymedicalhub.emmavirtualtherapist.android.core.model.Point
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Draw
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.Constraint
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Constraint
 
 data class TextConstraint(
     val text: String,
