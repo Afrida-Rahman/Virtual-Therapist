@@ -2,4 +2,7 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentat
 
 sealed class ExerciseEvent {
     object FetchAssessments : ExerciseEvent()
+    object ShowSearchBar : ExerciseEvent()
+    object HideSearchBar : ExerciseEvent()
+    data class SearchTermEntered(val testId: String, val searchTerm: String) : ExerciseEvent()
 }

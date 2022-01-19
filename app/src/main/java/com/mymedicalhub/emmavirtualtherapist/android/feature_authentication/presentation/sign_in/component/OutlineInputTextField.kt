@@ -2,17 +2,13 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.pre
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -21,7 +17,7 @@ import androidx.compose.ui.unit.dp
 fun OutlineInputTextField(
     field: State<String>,
     onValueChange: (value: String) -> Unit,
-    icon: ImageVector?,
+    icon: Painter? = null,
     onIconPressed: () -> Unit,
     placeholder: String,
     keyboardType: KeyboardType,
@@ -35,14 +31,19 @@ fun OutlineInputTextField(
         modifier = Modifier
             .fillMaxWidth()
             .padding(5.dp),
-        leadingIcon = {
+        trailingIcon = {
             icon?.let {
                 IconButton(
                     onClick = {
                         onIconPressed()
                     },
                 ) {
-                    Icon(imageVector = icon, contentDescription = "", tint = Color.Green)
+                    Icon(
+                        painter = icon,
+                        contentDescription = "",
+                        tint = MaterialTheme.colors.primary,
+                        modifier = Modifier.size(20.dp)
+                    )
                 }
             }
         },

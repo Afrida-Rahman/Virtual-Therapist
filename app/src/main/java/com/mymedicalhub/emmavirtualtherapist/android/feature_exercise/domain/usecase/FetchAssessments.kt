@@ -27,7 +27,11 @@ class FetchAssessments @Inject constructor(
                     patientId = patientId
                 )
             )
-            emit(Resource.Success(assessmentDto.toAssessmentList()))
+            emit(
+                Resource.Success(
+                    assessmentDto.toAssessmentList().sortedBy { it.creationDate }.reversed()
+                )
+            )
         } catch (e: IOException) {
             emit(Resource.Error("Could not reach to the server"))
         } catch (e: HttpException) {

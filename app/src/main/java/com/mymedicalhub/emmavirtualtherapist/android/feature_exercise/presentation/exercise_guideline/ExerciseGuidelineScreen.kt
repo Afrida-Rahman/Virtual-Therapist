@@ -1,33 +1,52 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise_guideline
 
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Scaffold
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseViewModel
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ExerciseTopBar
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise_guideline.component.ImageSection
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise_guideline.component.InstructionSection
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise_guideline.component.VideoSection
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
 
 @Composable
-fun ExerciseGuidelineScreen() {
-    val scrollState = rememberScrollState()
-    Column(
-        modifier = Modifier.scrollable(scrollState, orientation = Orientation.Horizontal)
+fun ExerciseGuidelineScreen(
+    testId: String,
+    exerciseId: Int,
+    navController: NavController,
+    viewModel: ExerciseViewModel
+) {
+    val scaffoldState = rememberScaffoldState()
+    val exercise = viewModel.getExercise(testId = testId, exerciseId = exerciseId)
+
+    Scaffold(
+        scaffoldState = scaffoldState,
+        topBar = {
+            ExerciseTopBar(
+                title = "Exercise Guideline",
+                navigationIcon = Icons.Default.ArrowBack,
+                onNavigationIconClicked = { navController.popBackStack() }
+            )
+        }
     ) {
-        InstructionSection()
-        VideoSection(videoUrl = "null")
-        ImageSection()
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun ExerciseGuidelineScreenPreview() {
-    EmmaVirtualTherapistTheme {
-        ExerciseGuidelineScreen()
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            exercise?.let {
+                InstructionSection(it.instruction)
+                VideoSection(videoUrl = it.videoURL)
+                ImageSection(it.imageURLs)
+            }
+        }
     }
 }

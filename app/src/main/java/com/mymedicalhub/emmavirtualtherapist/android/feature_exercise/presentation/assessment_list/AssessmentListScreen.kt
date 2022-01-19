@@ -6,6 +6,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -13,17 +15,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Assessment
+import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseEvent
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseViewModel
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessment_list.component.AssessmentCard
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ExerciseTopBar
 import kotlinx.coroutines.flow.collect
 
 @Composable
 fun AssessmentListScreen(
-    viewModel: ExerciseViewModel = hiltViewModel()
+    navController: NavController,
+    viewModel: ExerciseViewModel
 ) {
     val scaffoldState = rememberScaffoldState()
 
@@ -37,7 +41,16 @@ fun AssessmentListScreen(
         }
     }
 
-    Scaffold(scaffoldState = scaffoldState) {
+    Scaffold(
+        scaffoldState = scaffoldState,
+        topBar = {
+            ExerciseTopBar(
+                title = "My Assessments",
+                navigationIcon = Icons.Default.Menu,
+                onNavigationIconClicked = { }
+            )
+        }
+    ) {
         Column(
             modifier = Modifier.padding(8.dp)
         ) {
@@ -51,19 +64,9 @@ fun AssessmentListScreen(
                     modifier = Modifier.padding(top = 8.dp)
                 ) {
                     items(viewModel.assessments.value) {
-                        AssessmentCard(
-                            Assessment(
-                                testId = it.testId,
-                                creationDate = it.creationDate,
-                                isReportReady = it.isReportReady,
-                                providerId = it.providerId,
-                                providerName = it.providerName,
-                                bodyRegionId = it.bodyRegionId,
-                                bodyRegionName = it.bodyRegionName,
-                                registrationType = it.registrationType,
-                                exercises = it.exercises,
-                            )
-                        )
+                        AssessmentCard(it) {
+                            navController.navigate(Screen.ExerciseListScreen.withArgs(it.testId))
+                        }
                     }
                 }
             } else {

@@ -12,12 +12,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun InstructionSection() {
+fun InstructionSection(instruction: String) {
     Column(
-        modifier = Modifier.padding(8.dp)
+        modifier = Modifier
+            .padding(8.dp)
     ) {
         Text(text = "Exercise Instruction", fontSize = 24.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Get down on your hands and knees with your hands shoulder-width apart and flat on the floor. Your knees should be hip-width apart and bent 90 degrees. Raise your arm to shoulder level. Without allowing your lower back to rise or round, tighten your core and hold this position. Repeat on the other side as shown in the table.")
+        Text(text = instruction)
     }
 }

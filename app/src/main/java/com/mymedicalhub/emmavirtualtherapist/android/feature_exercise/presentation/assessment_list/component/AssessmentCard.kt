@@ -15,7 +15,7 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.mod
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
 
 @Composable
-fun AssessmentCard(assessment: Assessment) {
+fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -38,7 +38,10 @@ fun AssessmentCard(assessment: Assessment) {
                 exerciseCount = assessment.exercises.size
             )
             Spacer(Modifier.height(12.dp))
-            Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth()) {
+            Button(
+                onClick = { onViewExerciseButtonClicked() },
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Text(
                     text = "View Assigned Exercises",
                     textAlign = TextAlign.Center,
@@ -65,6 +68,6 @@ fun AssessmentCardPreview() {
                 registrationType = "In Clinic",
                 exercises = emptyList(),
             )
-        )
+        ) {}
     }
 }

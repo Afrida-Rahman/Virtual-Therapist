@@ -4,10 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Password
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -24,13 +20,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
+import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.sign_in.component.OutlineInputTextField
 import kotlinx.coroutines.flow.collect
 
 @Composable
 fun SignInScreen(
-    viewModel: SignInViewModel = hiltViewModel(),
-    navController: NavController
+    navController: NavController,
+    viewModel: SignInViewModel = hiltViewModel()
 ) {
     val scaffoldState = rememberScaffoldState()
 
@@ -81,7 +78,6 @@ fun SignInScreen(
                         onValueChange = {
                             viewModel.onEvent(SignInEvent.EnteredTenant(it))
                         },
-                        icon = Icons.Default.Home,
                         onIconPressed = {},
                         placeholder = "Tenant",
                         keyboardType = KeyboardType.Text
@@ -92,7 +88,6 @@ fun SignInScreen(
                         onValueChange = {
                             viewModel.onEvent(SignInEvent.EnteredEmail(it))
                         },
-                        icon = Icons.Default.Email,
                         onIconPressed = {},
                         placeholder = "Email",
                         keyboardType = KeyboardType.Text
@@ -103,7 +98,11 @@ fun SignInScreen(
                         onValueChange = {
                             viewModel.onEvent(SignInEvent.EnteredPassword(it))
                         },
-                        icon = Icons.Default.Password,
+                        icon = if (viewModel.showPassword.value) {
+                            painterResource(id = R.drawable.ic_eye_open)
+                        } else {
+                            painterResource(id = R.drawable.ic_eye_closed)
+                        },
                         onIconPressed = {
                             viewModel.onEvent(SignInEvent.ShowPassword)
                         },
@@ -118,7 +117,9 @@ fun SignInScreen(
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
                         onClick = {
-                            viewModel.onEvent(SignInEvent.SignInButtonClick(navController = navController))
+                            viewModel.onEvent(SignInEvent.SignInButtonClick {
+                                navController.navigate(Screen.AssessmentListScreen.route)
+                            })
                         },
                         modifier = Modifier
                             .fillMaxWidth()

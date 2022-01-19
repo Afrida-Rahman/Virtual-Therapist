@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mymedicalhub.emmavirtualtherapist.android.core.Resource
 import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
-import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.usecase.PatientUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -70,11 +69,14 @@ class SignInViewModel @Inject constructor(
                                 }
                                 is Resource.Success -> {
                                     _showCircularProgress.value = false
+                                    _email.value = ""
+                                    _password.value = ""
                                     _eventFlow.emit(UIEvent.ShowSnackBar(message = "Successfully signed in"))
-                                    event.navController.navigate(Screen.AssessmentListScreen.route)
+                                    event.onSuccess()
                                 }
                                 is Resource.Error -> {
                                     _showCircularProgress.value = false
+                                    _password.value = ""
                                     _eventFlow.emit(
                                         UIEvent.ShowSnackBar(
                                             message = it.message ?: "Unknown error"
