@@ -4,5 +4,6 @@ sealed class ExerciseEvent {
     object FetchAssessments : ExerciseEvent()
     object ShowSearchBar : ExerciseEvent()
     object HideSearchBar : ExerciseEvent()
+    object FlipCamera : ExerciseEvent()
     data class SearchTermEntered(val testId: String, val searchTerm: String) : ExerciseEvent()
 }

@@ -13,6 +13,7 @@ import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.sign_in.SignInScreen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseViewModel
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessment_list.AssessmentListScreen
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise.ExerciseScreen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise_guideline.ExerciseGuidelineScreen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise_list.ExerciseListScreen
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
@@ -76,8 +77,27 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     }
-                    composable(route = Screen.ExerciseScreen.route) {
-                        AssessmentListScreen(navController = navController, viewModel = viewModel)
+                    composable(
+                        route = Screen.ExerciseScreen.route + "/{testId}/{exerciseId}",
+                        arguments = listOf(
+                            navArgument(name = "testId") {
+                                type = NavType.StringType
+                            },
+                            navArgument(name = "exerciseId") {
+                                type = NavType.IntType
+                            }
+                        )
+                    ) {
+                        it.arguments?.getString("testId")?.also { testId ->
+                            it.arguments?.getInt("exerciseId")?.let { exerciseId ->
+                                ExerciseScreen(
+                                    testId = testId,
+                                    exerciseId = exerciseId,
+                                    navController = navController,
+                                    viewModel = viewModel
+                                )
+                            }
+                        }
                     }
                 }
             }

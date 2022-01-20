@@ -6,7 +6,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -32,7 +32,7 @@ fun ExerciseGuidelineScreen(
         topBar = {
             ExerciseTopBar(
                 title = "Exercise Guideline",
-                navigationIcon = Icons.Default.ArrowBack,
+                navigationIcon = Icons.Default.ArrowBackIos,
                 onNavigationIconClicked = { navController.popBackStack() }
             )
         }

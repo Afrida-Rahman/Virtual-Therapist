@@ -1,5 +1,6 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise_list
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -7,13 +8,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -34,6 +39,10 @@ fun ExerciseListScreen(
     viewModel: ExerciseViewModel
 ) {
     val scaffoldState = rememberScaffoldState()
+    val context = LocalContext.current
+    val focusRequester = remember {
+        FocusRequester()
+    }
     viewModel.searchExercises(testId = testId)
 
     LaunchedEffect(key1 = true) {
@@ -41,6 +50,9 @@ fun ExerciseListScreen(
             when (event) {
                 is UIEvent.ShowSnackBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(event.message)
+                }
+                is UIEvent.ShowToastMessage -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -55,7 +67,8 @@ fun ExerciseListScreen(
                         value = viewModel.searchTerm.value,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color.White),
+                            .background(Color.White)
+                            .focusRequester(focusRequester = focusRequester),
                         onValueChange = { searchTerm ->
                             viewModel.onEvent(
                                 ExerciseEvent.SearchTermEntered(
@@ -80,10 +93,13 @@ fun ExerciseListScreen(
             } else {
                 ExerciseTopBar(
                     title = "Home Exercises",
-                    navigationIcon = Icons.Default.ArrowBack,
+                    navigationIcon = Icons.Default.ArrowBackIos,
                     onNavigationIconClicked = { navController.popBackStack() },
                     trailingIcon = Icons.Default.Search,
-                    onTrailingIconClicked = { viewModel.onEvent(ExerciseEvent.ShowSearchBar) }
+                    onTrailingIconClicked = {
+                        viewModel.onEvent(ExerciseEvent.ShowSearchBar)
+                        focusRequester.requestFocus()
+                    }
                 )
             }
         }
@@ -105,15 +121,25 @@ fun ExerciseListScreen(
                             name = it.name,
                             repetition = it.repetition,
                             set = it.set,
-                            isActive = true
-                        ) {
-                            navController.navigate(
-                                Screen.ExerciseGuidelineScreen.withArgs(
-                                    testId,
-                                    it.id.toString()
+                            isActive = true,
+                            onGuidelineButtonClicked = {
+                                navController.navigate(
+                                    Screen.ExerciseGuidelineScreen.withArgs(
+                                        testId,
+                                        it.id.toString()
+                                    )
                                 )
-                            )
-                        }
+                            },
+                            onStartWorkoutButtonClicked = {
+                                navController.navigate(
+                                    Screen.ExerciseScreen.withArgs(
+                                        testId,
+                                        it.id.toString()
+                                    )
+                                )
+                            },
+                            onManualButtonClicked = {}
+                        )
                     }
                 }
             } else {

@@ -28,7 +28,9 @@ fun ExerciseCard(
     repetition: Int,
     set: Int,
     isActive: Boolean,
-    onGuidelineButtonClicked: () -> Unit
+    onGuidelineButtonClicked: () -> Unit,
+    onStartWorkoutButtonClicked: () -> Unit = {},
+    onManualButtonClicked: () -> Unit = {}
 ) {
     val statusIconId = if (isActive) {
         R.drawable.ic_exercise_active
@@ -103,10 +105,10 @@ fun ExerciseCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Button(onClick = { /*TODO*/ }) {
+                Button(onClick = { onStartWorkoutButtonClicked() }) {
                     Text(text = "Start Workout")
                 }
-                Button(onClick = { /*TODO*/ }) {
+                Button(onClick = { onManualButtonClicked() }) {
                     Text(text = "Manual Tracking")
                 }
             }
@@ -124,6 +126,7 @@ fun ExerciseCardPreview() {
             repetition = 5,
             set = 3,
             isActive = true,
-        ) {}
+            onGuidelineButtonClicked = {}
+        )
     }
 }

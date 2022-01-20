@@ -1,5 +1,7 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
 
+import android.util.Log
+import androidx.camera.core.CameraSelector
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -41,7 +43,12 @@ class ExerciseViewModel @Inject constructor(
     private val _searchTerm = mutableStateOf("")
     val searchTerm: State<String> = _searchTerm
 
-    var searchCoroutine: Job? = null
+    private val showFrontCamera = mutableStateOf(true)
+
+    private val _selectedCamera = mutableStateOf(CameraSelector.LENS_FACING_FRONT)
+    val selectedCamera: State<Int> = _selectedCamera
+
+    private var searchCoroutine: Job? = null
 
     private val _eventFlow = MutableSharedFlow<UIEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
@@ -63,6 +70,18 @@ class ExerciseViewModel @Inject constructor(
             is ExerciseEvent.HideSearchBar -> {
                 _showSearchBar.value = false
                 _searchTerm.value = ""
+            }
+            is ExerciseEvent.FlipCamera -> {
+                _selectedCamera.value = if (showFrontCamera.value) {
+                    CameraSelector.LENS_FACING_BACK
+                } else {
+                    CameraSelector.LENS_FACING_FRONT
+                }
+                Log.d(
+                    "CameraIssueAndroidView",
+                    "${showFrontCamera.value} -> ${selectedCamera.value}"
+                )
+                showFrontCamera.value = !showFrontCamera.value
             }
         }
     }
