@@ -1,4 +1,4 @@
-package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise_guideline.component
+package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column

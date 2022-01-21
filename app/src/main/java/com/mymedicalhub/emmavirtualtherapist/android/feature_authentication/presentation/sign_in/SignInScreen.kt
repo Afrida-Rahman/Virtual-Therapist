@@ -22,8 +22,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
+import com.mymedicalhub.emmavirtualtherapist.android.core.component.OutlineInputTextField
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
-import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.sign_in.component.OutlineInputTextField
 import kotlinx.coroutines.flow.collect
 
 @Composable

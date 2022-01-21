@@ -1,7 +1,5 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
 
-import android.util.Log
-import androidx.camera.core.CameraSelector
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -28,8 +26,8 @@ class ExerciseViewModel @Inject constructor(
     private val _assessments = mutableStateOf<List<Assessment>>(emptyList())
     val assessments: State<List<Assessment>> = _assessments
 
-    private val _exercises = mutableStateOf<List<Exercise>>(emptyList())
-    val exercises: State<List<Exercise>> = _exercises
+    private val _exercises = mutableStateOf<List<Exercise>?>(null)
+    val exercises: State<List<Exercise>?> = _exercises
 
     private val _isAssessmentLoading = mutableStateOf(false)
     val isAssessmentLoading: State<Boolean> = _isAssessmentLoading
@@ -43,10 +41,8 @@ class ExerciseViewModel @Inject constructor(
     private val _searchTerm = mutableStateOf("")
     val searchTerm: State<String> = _searchTerm
 
-    private val showFrontCamera = mutableStateOf(true)
-
-    private val _selectedCamera = mutableStateOf(CameraSelector.LENS_FACING_FRONT)
-    val selectedCamera: State<Int> = _selectedCamera
+    private val _showFrontCamera = mutableStateOf(true)
+    val showFrontCamera: State<Boolean> = _showFrontCamera
 
     private var searchCoroutine: Job? = null
 
@@ -72,16 +68,23 @@ class ExerciseViewModel @Inject constructor(
                 _searchTerm.value = ""
             }
             is ExerciseEvent.FlipCamera -> {
-                _selectedCamera.value = if (showFrontCamera.value) {
-                    CameraSelector.LENS_FACING_BACK
-                } else {
-                    CameraSelector.LENS_FACING_FRONT
-                }
-                Log.d(
-                    "CameraIssueAndroidView",
-                    "${showFrontCamera.value} -> ${selectedCamera.value}"
-                )
-                showFrontCamera.value = !showFrontCamera.value
+                _showFrontCamera.value = !showFrontCamera.value
+            }
+            is ExerciseEvent.GoToAssessmentPage -> {
+                _exercises.value = null
+            }
+            is ExerciseEvent.ShowManualTrackingAlertDialogue -> {
+//                ManualTrackingForm(
+//                    exerciseName = event.exerciseName,
+//                    repetitionField = event.repetitionField,
+//                    onRepetitionValueChanged = event.onRepetitionValueChanged,
+//                    setField = event.setField,
+//                    onSetValueChanged = event.onSetValueChanged,
+//                    wrongField = event.wrongField,
+//                    onWrongValueChanged = event.onWrongValueChanged,
+//                    onCloseClicked = { },
+//                    onSaveDataClick = {}
+//                )
             }
         }
     }
@@ -126,13 +129,11 @@ class ExerciseViewModel @Inject constructor(
                         is Resource.Loading -> {
                             _isAssessmentLoading.value = true
                             _showTryAgainButton.value = false
-                            _eventFlow.emit(UIEvent.ShowSnackBar("Loading data from API"))
                         }
                         is Resource.Success -> {
                             _showTryAgainButton.value = false
                             _isAssessmentLoading.value = false
                             _assessments.value = it.data ?: emptyList()
-                            _eventFlow.emit(UIEvent.ShowSnackBar("Successfully loaded data from API"))
                         }
                     }
                 }.launchIn(this)

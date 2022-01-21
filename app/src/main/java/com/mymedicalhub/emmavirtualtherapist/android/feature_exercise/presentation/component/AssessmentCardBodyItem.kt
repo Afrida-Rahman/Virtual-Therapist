@@ -1,4 +1,4 @@
-package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessment_list.component
+package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,7 +23,9 @@ fun AssessmentCardBodyItem(icon: Painter, title: String, value: String) {
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(8.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
         ) {
             Image(
                 painter = icon,

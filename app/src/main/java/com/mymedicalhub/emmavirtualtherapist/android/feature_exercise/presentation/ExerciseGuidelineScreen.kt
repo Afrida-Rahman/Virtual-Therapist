@@ -1,4 +1,4 @@
-package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise_guideline
+package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,11 +11,7 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseViewModel
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ExerciseTopBar
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise_guideline.component.ImageSection
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise_guideline.component.InstructionSection
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise_guideline.component.VideoSection
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.*
 
 @Composable
 fun ExerciseGuidelineScreen(
@@ -37,15 +33,18 @@ fun ExerciseGuidelineScreen(
             )
         }
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
-            exercise?.let {
-                InstructionSection(it.instruction)
-                VideoSection(videoUrl = it.videoURL)
-                ImageSection(it.imageURLs)
+        Column {
+            HeroSection("Rashed Momin")
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+            ) {
+                exercise?.let {
+                    InstructionSection(it.instruction)
+                    VideoSection(videoUrl = it.videoURL)
+                    ImageSection(it.imageURLs)
+                }
             }
         }
     }

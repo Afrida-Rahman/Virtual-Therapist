@@ -1,4 +1,4 @@
-package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise_list
+package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -13,10 +13,8 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -26,23 +24,20 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseEvent
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseViewModel
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ExerciseCard
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ExerciseTopBar
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise_list.component.ExerciseCard
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.HeroSection
 import kotlinx.coroutines.flow.collect
 
 @Composable
 fun ExerciseListScreen(
     testId: String,
+    creationDate: String,
     navController: NavController,
     viewModel: ExerciseViewModel
 ) {
     val scaffoldState = rememberScaffoldState()
     val context = LocalContext.current
-    val focusRequester = remember {
-        FocusRequester()
-    }
     viewModel.searchExercises(testId = testId)
 
     LaunchedEffect(key1 = true) {
@@ -67,8 +62,7 @@ fun ExerciseListScreen(
                         value = viewModel.searchTerm.value,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color.White)
-                            .focusRequester(focusRequester = focusRequester),
+                            .background(Color.White),
                         onValueChange = { searchTerm ->
                             viewModel.onEvent(
                                 ExerciseEvent.SearchTermEntered(
@@ -94,56 +88,77 @@ fun ExerciseListScreen(
                 ExerciseTopBar(
                     title = "Home Exercises",
                     navigationIcon = Icons.Default.ArrowBackIos,
-                    onNavigationIconClicked = { navController.popBackStack() },
+                    onNavigationIconClicked = {
+                        viewModel.onEvent(ExerciseEvent.GoToAssessmentPage)
+                        navController.popBackStack()
+                    },
                     trailingIcon = Icons.Default.Search,
                     onTrailingIconClicked = {
                         viewModel.onEvent(ExerciseEvent.ShowSearchBar)
-                        focusRequester.requestFocus()
                     }
                 )
             }
         }
     ) {
         Column {
-            Row(
-                modifier = Modifier.padding(bottom = 12.dp)
+            HeroSection("Rashed Momin")
+            Column(
+                modifier = Modifier.padding(horizontal = 8.dp)
             ) {
-                Text(text = "Home Exercises", fontWeight = FontWeight.Bold, fontSize = 24.sp)
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            if (viewModel.exercises.value.isNotEmpty()) {
-                LazyColumn {
-                    items(viewModel.exercises.value) {
-                        ExerciseCard(
-                            imageUrl = if (it.imageURLs.isNotEmpty()) {
-                                it.imageURLs[0]
-                            } else null,
-                            name = it.name,
-                            repetition = it.repetition,
-                            set = it.set,
-                            isActive = true,
-                            onGuidelineButtonClicked = {
-                                navController.navigate(
-                                    Screen.ExerciseGuidelineScreen.withArgs(
-                                        testId,
-                                        it.id.toString()
-                                    )
-                                )
-                            },
-                            onStartWorkoutButtonClicked = {
-                                navController.navigate(
-                                    Screen.ExerciseScreen.withArgs(
-                                        testId,
-                                        it.id.toString()
-                                    )
-                                )
-                            },
-                            onManualButtonClicked = {}
-                        )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 12.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Home Exercises",
+                        fontSize = 24.sp
+                    )
+                    Column(
+                        horizontalAlignment = Alignment.End
+                    ) {
+                        Text(text = testId, fontWeight = FontWeight.SemiBold, fontSize = 24.sp)
+                        Text(text = creationDate, fontSize = 14.sp)
                     }
                 }
-            } else {
-                Text(text = "No exercise is assigned yet!", fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.height(8.dp))
+                viewModel.exercises.value?.let { exercises ->
+                    if (exercises.isNotEmpty()) {
+                        LazyColumn {
+                            items(exercises) {
+                                ExerciseCard(
+                                    imageUrl = if (it.imageURLs.isNotEmpty()) {
+                                        it.imageURLs[0]
+                                    } else null,
+                                    name = it.name,
+                                    repetition = it.repetition,
+                                    set = it.set,
+                                    isActive = true,
+                                    onGuidelineButtonClicked = {
+                                        navController.navigate(
+                                            Screen.ExerciseGuidelineScreen.withArgs(
+                                                testId,
+                                                it.id.toString()
+                                            )
+                                        )
+                                    },
+                                    onStartWorkoutButtonClicked = {
+                                        navController.navigate(
+                                            Screen.ExerciseScreen.withArgs(
+                                                testId,
+                                                it.id.toString()
+                                            )
+                                        )
+                                    },
+                                    onManualTrackingButtonClicked = {}
+                                )
+                            }
+                        }
+                    } else {
+                        Text(text = "No exercise is assigned yet!", fontWeight = FontWeight.Bold)
+                    }
+                }
             }
         }
     }

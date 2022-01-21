@@ -1,4 +1,4 @@
-package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise
+package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -28,8 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseEvent
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseViewModel
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ExerciseTopBar
 
 @Composable
@@ -40,15 +38,16 @@ fun ExerciseScreen(
     viewModel: ExerciseViewModel
 ) {
     val exercise = viewModel.getExercise(testId = testId, exerciseId = exerciseId)
-    val context = LocalContext.current
+    val localContext = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val cameraProviderFuture = remember {
-        ProcessCameraProvider.getInstance(context)
+        ProcessCameraProvider.getInstance(localContext)
     }
+    val cameraProvider = cameraProviderFuture.get()
     var hasCamPermission by remember {
         mutableStateOf(
             ContextCompat.checkSelfPermission(
-                context,
+                localContext,
                 Manifest.permission.CAMERA
             ) == PackageManager.PERMISSION_GRANTED
         )
@@ -75,26 +74,55 @@ fun ExerciseScreen(
             contentAlignment = Alignment.BottomCenter
         ) {
             if (hasCamPermission) {
-                AndroidView(
-                    factory = { context ->
-                        val previewView = PreviewView(context)
-                        val preview = Preview.Builder().build()
-                        preview.setSurfaceProvider(previewView.surfaceProvider)
-                        try {
-                            cameraProviderFuture.get().bindToLifecycle(
-                                lifecycleOwner,
-                                CameraSelector.Builder()
-                                    .requireLensFacing(viewModel.selectedCamera.value)
-                                    .build(),
-                                preview
-                            )
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-                        previewView
-                    },
-                    modifier = Modifier.fillMaxSize()
-                )
+                if (viewModel.showFrontCamera.value) {
+                    AndroidView(
+                        factory = { context ->
+                            val previewView = PreviewView(context)
+                            previewView.removeAllViews()
+                            val preview = Preview.Builder().build().also {
+                                it.setSurfaceProvider(previewView.surfaceProvider)
+                            }
+                            try {
+                                cameraProvider.unbindAll()
+                                cameraProvider.bindToLifecycle(
+                                    lifecycleOwner,
+                                    CameraSelector.Builder()
+                                        .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
+                                        .build(),
+                                    preview
+                                )
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                            previewView
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    AndroidView(
+                        factory = { context ->
+                            val previewView = PreviewView(context)
+                            previewView.removeAllViews()
+                            val preview = Preview.Builder().build().also {
+                                it.setSurfaceProvider(previewView.surfaceProvider)
+                            }
+                            try {
+                                cameraProvider.unbindAll()
+                                cameraProvider.bindToLifecycle(
+                                    lifecycleOwner,
+                                    CameraSelector.Builder()
+                                        .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                                        .build(),
+                                    preview
+                                )
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                            previewView
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
                 IconButton(onClick = { viewModel.onEvent(ExerciseEvent.FlipCamera) }) {
                     Icon(
                         imageVector = Icons.Default.FlipCameraAndroid,

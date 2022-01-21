@@ -11,11 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.sign_in.SignInScreen
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseViewModel
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessment_list.AssessmentListScreen
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise.ExerciseScreen
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise_guideline.ExerciseGuidelineScreen
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise_list.ExerciseListScreen
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.*
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,19 +36,25 @@ class MainActivity : ComponentActivity() {
                         AssessmentListScreen(navController = navController, viewModel = viewModel)
                     }
                     composable(
-                        route = Screen.ExerciseListScreen.route + "/{testId}",
+                        route = Screen.ExerciseListScreen.route + "/{testId}/{creationDate}",
                         arguments = listOf(
                             navArgument(name = "testId") {
+                                type = NavType.StringType
+                            },
+                            navArgument(name = "creationDate") {
                                 type = NavType.StringType
                             }
                         )
                     ) {
                         it.arguments?.getString("testId")?.let { testId ->
-                            ExerciseListScreen(
-                                testId = testId,
-                                navController = navController,
-                                viewModel = viewModel
-                            )
+                            it.arguments?.getString("creationDate")?.let { creationDate ->
+                                ExerciseListScreen(
+                                    testId = testId,
+                                    creationDate = creationDate,
+                                    navController = navController,
+                                    viewModel = viewModel
+                                )
+                            }
                         }
                     }
                     composable(

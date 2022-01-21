@@ -23,7 +23,7 @@ fun ExerciseTopBar(
                 Text(
                     text = title,
                     fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.SemiBold
                 )
             },
             navigationIcon = {

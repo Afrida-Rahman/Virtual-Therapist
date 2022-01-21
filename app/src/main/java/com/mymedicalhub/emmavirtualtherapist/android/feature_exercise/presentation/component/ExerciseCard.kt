@@ -1,4 +1,4 @@
-package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise_list.component
+package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -30,7 +30,7 @@ fun ExerciseCard(
     isActive: Boolean,
     onGuidelineButtonClicked: () -> Unit,
     onStartWorkoutButtonClicked: () -> Unit = {},
-    onManualButtonClicked: () -> Unit = {}
+    onManualTrackingButtonClicked: () -> Unit = {}
 ) {
     val statusIconId = if (isActive) {
         R.drawable.ic_exercise_active
@@ -81,17 +81,15 @@ fun ExerciseCard(
                         )
                     }
                     Column(modifier = Modifier.padding(start = 8.dp)) {
-                        Text(text = name, fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                        Text(text = name, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = "Assigned Repetition: $repetition",
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold
+                            fontSize = 14.sp
                         )
                         Text(
                             text = "Assigned Set: $set",
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold
+                            fontSize = 14.sp
                         )
                     }
                 }
@@ -108,7 +106,7 @@ fun ExerciseCard(
                 Button(onClick = { onStartWorkoutButtonClicked() }) {
                     Text(text = "Start Workout")
                 }
-                Button(onClick = { onManualButtonClicked() }) {
+                Button(onClick = { onManualTrackingButtonClicked() }) {
                     Text(text = "Manual Tracking")
                 }
             }
