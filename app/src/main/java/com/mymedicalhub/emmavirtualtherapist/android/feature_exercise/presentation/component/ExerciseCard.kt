@@ -33,9 +33,9 @@ fun ExerciseCard(
     onManualTrackingButtonClicked: () -> Unit = {}
 ) {
     val statusIconId = if (isActive) {
-        R.drawable.ic_exercise_active
+        R.drawable.ic_check1
     } else {
-        R.drawable.ic_exercise_inactive
+        R.drawable.ic_cross
     }
 
     val borderColor = if (isActive) {
@@ -43,9 +43,9 @@ fun ExerciseCard(
     } else {
         Color.Gray
     }
-    var image = painterResource(id = R.drawable.exercise)
+    var image = painterResource(id = R.drawable.ic_cross)
     imageUrl?.let {
-        image = painterResource(id = R.drawable.report)
+        image = painterResource(id = R.drawable.ic_human)
     }
     Card(
         elevation = 8.dp,
@@ -72,12 +72,11 @@ fun ExerciseCard(
                             contentScale = ContentScale.Fit,
                             modifier = Modifier
                                 .size(100.dp)
-                                .border(2.dp, borderColor)
                         )
                         Image(
                             painter = painterResource(id = statusIconId),
                             contentDescription = "Exercise Activation Status",
-                            modifier = Modifier.size(15.dp)
+                            modifier = Modifier.size(20.dp)
                         )
                     }
                     Column(modifier = Modifier.padding(start = 8.dp)) {
@@ -101,7 +100,7 @@ fun ExerciseCard(
             }
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp)
             ) {
                 Button(onClick = { onStartWorkoutButtonClicked() }) {
                     Text(text = "Start Workout")

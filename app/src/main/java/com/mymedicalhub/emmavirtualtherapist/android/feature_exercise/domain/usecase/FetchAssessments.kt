@@ -14,7 +14,6 @@ import javax.inject.Inject
 class FetchAssessments @Inject constructor(
     private val remoteRepository: RemoteAssessmentRepository
 ) {
-
     operator fun invoke(
         tenant: String,
         patientId: String

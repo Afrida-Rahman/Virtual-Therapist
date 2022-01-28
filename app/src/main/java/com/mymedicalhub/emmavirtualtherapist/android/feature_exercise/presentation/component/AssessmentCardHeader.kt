@@ -16,9 +16,9 @@ import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapi
 @Composable
 fun AssessmentCardHeader(testId: String, creationDate: String, isReportReady: Boolean) {
     val reportReadyIcon = if (isReportReady) {
-        painterResource(id = R.drawable.check)
+        painterResource(id = R.drawable.ic_check)
     } else {
-        painterResource(id = R.drawable.crossed)
+        painterResource(id = R.drawable.ic_cross)
     }
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -26,18 +26,18 @@ fun AssessmentCardHeader(testId: String, creationDate: String, isReportReady: Bo
     ) {
         Row {
             Image(
-                painter = painterResource(id = R.drawable.report),
+                painter = painterResource(id = R.drawable.ic_report),
                 contentDescription = null,
                 modifier = Modifier
-                    .padding(top = 6.dp)
+                    .padding(top = 6.dp, start = 10.dp)
                     .size(40.dp)
             )
             Column(
-                modifier = Modifier.padding(start = 8.dp)
+                modifier = Modifier.padding(start = 15.dp)
             ) {
                 Text(
                     text = testId,
-                    fontSize = 24.sp
+                    fontSize = 18.sp
                 )
                 Text(text = creationDate, color = Color.Gray, fontSize = 12.sp)
             }

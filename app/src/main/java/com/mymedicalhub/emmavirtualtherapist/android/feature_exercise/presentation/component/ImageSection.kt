@@ -22,11 +22,11 @@ fun ImageSection(imageURLs: List<String>) {
             .padding(8.dp)
             .fillMaxWidth()
     ) {
-        Text(text = "Exercise Image", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        Text(text = "Exercise Image", fontSize = 22.sp, fontWeight = FontWeight.Bold)
         if (imageURLs.isNotEmpty()) {
             imageURLs.forEach { _ ->
                 Image(
-                    painter = painterResource(id = R.drawable.exercise),
+                    painter = painterResource(id = R.drawable.ic_human),
                     contentDescription = null,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )

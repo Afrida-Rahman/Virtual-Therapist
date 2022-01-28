@@ -16,22 +16,22 @@ fun AssessmentCardBody(
 ) {
     Column {
         AssessmentCardBodyItem(
-            icon = painterResource(R.drawable.medical_doctor),
+            icon = painterResource(R.drawable.ic_doctor),
             title = "Provider Name",
             value = providerName
         )
         AssessmentCardBodyItem(
-            icon = painterResource(R.drawable.torso),
+            icon = painterResource(R.drawable.ic_body_region),
             title = "Body Region",
             value = bodyRegion
         )
         AssessmentCardBodyItem(
-            icon = painterResource(R.drawable.registration),
+            icon = painterResource(R.drawable.ic_registration),
             title = "Registration Type",
             value = registrationType
         )
         AssessmentCardBodyItem(
-            icon = painterResource(R.drawable.dumbbell),
+            icon = painterResource(R.drawable.ic_exercise),
             title = "Total Assigned Home Exercise",
             value = exerciseCount.toString()
         )

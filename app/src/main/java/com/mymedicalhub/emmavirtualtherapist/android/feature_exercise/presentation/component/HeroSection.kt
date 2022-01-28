@@ -22,16 +22,16 @@ fun HeroSection(patientName: String) {
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colors.primary)
-            .padding(horizontal = 8.dp, vertical = 16.dp),
+            .padding(top = 2.dp, bottom = 16.dp, start = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = painterResource(id = R.drawable.logo),
+            painter = painterResource(id = R.drawable.mmh_logo),
             contentDescription = "MyMedicalHUB",
             modifier = Modifier.size(80.dp)
         )
         Column(
-            modifier = Modifier.padding(start = 12.dp)
+            modifier = Modifier.padding(start = 20.dp)
         ) {
             Text(
                 text = "MyMedicalHUB",

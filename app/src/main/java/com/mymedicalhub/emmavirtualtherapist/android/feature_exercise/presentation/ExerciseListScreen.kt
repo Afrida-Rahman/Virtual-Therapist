@@ -108,17 +108,18 @@ fun ExerciseListScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 12.dp),
+                        .padding(bottom = 4.dp, top = 8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
                         text = "Home Exercises",
-                        fontSize = 24.sp
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold
                     )
                     Column(
                         horizontalAlignment = Alignment.End
                     ) {
-                        Text(text = testId, fontWeight = FontWeight.SemiBold, fontSize = 24.sp)
+                        Text(text = testId, fontWeight = FontWeight.SemiBold, fontSize = 22.sp)
                         Text(text = creationDate, fontSize = 14.sp)
                     }
                 }

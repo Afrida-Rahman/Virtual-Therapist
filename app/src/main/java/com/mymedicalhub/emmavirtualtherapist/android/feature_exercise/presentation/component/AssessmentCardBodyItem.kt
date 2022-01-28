@@ -1,7 +1,9 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
@@ -25,7 +27,7 @@ fun AssessmentCardBodyItem(icon: Painter, title: String, value: String) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)
+                .padding(start = 45.dp, bottom = 4.dp, top = 4.dp )
         ) {
             Image(
                 painter = icon,
@@ -33,8 +35,9 @@ fun AssessmentCardBodyItem(icon: Painter, title: String, value: String) {
                 modifier = Modifier
                     .size(40.dp)
                     .clip(CircleShape)
-                    .background(Color.Gray, shape = CircleShape)
-                    .padding(8.dp)
+                    .background(Color(232,246,253), shape = CircleShape)
+                    .border(BorderStroke(color = Color(117,138,223), width = 1.dp), shape = CircleShape)
+                    .padding(6.dp)
             )
             Column(
                 modifier = Modifier.padding(start = 8.dp)
@@ -55,7 +58,7 @@ fun AssessmentCardBodyItem(icon: Painter, title: String, value: String) {
 fun AssessmentCardBodyItemPreview() {
     EmmaVirtualTherapistTheme {
         AssessmentCardBodyItem(
-            icon = painterResource(R.drawable.dumbbell),
+            icon = painterResource(R.drawable.ic_exercise),
             title = "Total Assigned Home Exercise",
             value = "477"
         )

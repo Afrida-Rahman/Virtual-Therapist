@@ -21,7 +21,7 @@ fun VideoSection(videoUrl: String?) {
                     .padding(8.dp)
                     .fillMaxWidth()
             ) {
-                Text(text = "Exercise Video", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                Text(text = "Exercise Video", fontSize = 22.sp, fontWeight = FontWeight.Bold)
             }
         }
     }

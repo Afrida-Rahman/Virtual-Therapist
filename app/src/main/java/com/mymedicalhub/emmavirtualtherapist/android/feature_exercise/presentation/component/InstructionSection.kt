@@ -17,7 +17,7 @@ fun InstructionSection(instruction: String) {
         modifier = Modifier
             .padding(8.dp)
     ) {
-        Text(text = "Exercise Instruction", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        Text(text = "Exercise Instruction", fontSize = 22.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
         Text(text = instruction)
     }
