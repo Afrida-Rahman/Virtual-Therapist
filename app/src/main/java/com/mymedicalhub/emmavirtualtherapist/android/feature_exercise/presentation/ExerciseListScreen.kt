@@ -100,7 +100,9 @@ fun ExerciseListScreen(
             }
         }
     ) {
-        Column {
+        Column(
+            modifier = Modifier.background(MaterialTheme.colors.surface)
+        ) {
             HeroSection("Rashed Momin")
             Column(
                 modifier = Modifier.padding(horizontal = 8.dp)

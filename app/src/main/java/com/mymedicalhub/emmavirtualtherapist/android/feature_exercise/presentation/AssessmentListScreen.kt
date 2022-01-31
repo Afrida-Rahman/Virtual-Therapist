@@ -1,15 +1,13 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -57,7 +55,9 @@ fun AssessmentListScreen(
             )
         }
     ) {
-        Column {
+        Column(
+            modifier = Modifier.background(MaterialTheme.colors.surface)
+        ) {
             HeroSection("Rashed Momin")
             Column(
                 modifier = Modifier.padding(8.dp)
