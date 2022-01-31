@@ -1,6 +1,8 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
 
+import android.os.Build
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,6 +19,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.ImageLoader
+import coil.compose.rememberImagePainter
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
+import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.AssessmentCard
@@ -31,6 +38,15 @@ fun AssessmentListScreen(
 ) {
     val scaffoldState = rememberScaffoldState()
     val context = LocalContext.current
+    val imageLoader = ImageLoader.Builder(context)
+        .componentRegistry {
+            if (Build.VERSION.SDK_INT >= 28) {
+                add(ImageDecoderDecoder(context))
+            } else {
+                add(GifDecoder())
+            }
+        }
+        .build()
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collect { event ->
@@ -92,7 +108,14 @@ fun AssessmentListScreen(
                     ) {
                         when {
                             viewModel.isAssessmentLoading.value -> {
-                                Text(text = "Loading...")
+                                Image(
+                                    painter = rememberImagePainter(
+                                        data = R.drawable.ic_infinite_loading,
+                                        imageLoader = imageLoader
+                                    ),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(150.dp)
+                                )
                             }
                             viewModel.showTryAgain.value -> {
                                 Button(

@@ -1,7 +1,7 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component
 
+import android.os.Build
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,13 +11,17 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.ImageLoader
+import coil.compose.rememberImagePainter
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
 
@@ -37,16 +41,16 @@ fun ExerciseCard(
     } else {
         R.drawable.ic_cross
     }
-
-    val borderColor = if (isActive) {
-        Color.Green
-    } else {
-        Color.Gray
-    }
-    var image = painterResource(id = R.drawable.ic_cross)
-    imageUrl?.let {
-        image = painterResource(id = R.drawable.ic_human)
-    }
+    val context = LocalContext.current
+    val imageLoader = ImageLoader.Builder(context)
+        .componentRegistry {
+            if (Build.VERSION.SDK_INT >= 28) {
+                add(ImageDecoderDecoder(context))
+            } else {
+                add(GifDecoder())
+            }
+        }
+        .build()
     Card(
         elevation = 8.dp,
         modifier = Modifier
@@ -66,13 +70,28 @@ fun ExerciseCard(
                     modifier = Modifier.weight(1f)
                 ) {
                     Box {
-                        Image(
-                            painter = image,
-                            contentDescription = "Exercise Image",
-                            contentScale = ContentScale.Fit,
-                            modifier = Modifier
-                                .size(100.dp)
-                        )
+                        if (imageUrl == null) {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_human),
+                                contentDescription = "Default Exercise Image",
+                                modifier = Modifier.size(150.dp),
+                                contentScale = ContentScale.Fit
+                            )
+                        } else {
+                            Image(
+                                painter = rememberImagePainter(
+                                    data = imageUrl,
+                                    builder = {
+                                        crossfade(true)
+                                        placeholder(R.drawable.ic_loading)
+                                    },
+                                    imageLoader = imageLoader
+                                ),
+                                contentDescription = null,
+                                contentScale = ContentScale.Fit,
+                                modifier = Modifier.size(150.dp)
+                            )
+                        }
                         Image(
                             painter = painterResource(id = statusIconId),
                             contentDescription = "Exercise Activation Status",
@@ -83,7 +102,7 @@ fun ExerciseCard(
                         Text(text = name, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "Assigned Repetition: $repetition",
+                            text = "Assigned Repetition: $repetition per set",
                             fontSize = 14.sp
                         )
                         Text(
@@ -100,7 +119,9 @@ fun ExerciseCard(
             }
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 20.dp, end = 20.dp)
             ) {
                 Button(onClick = { onStartWorkoutButtonClicked() }) {
                     Text(text = "Start Workout")

@@ -13,12 +13,14 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun InstructionSection(instruction: String) {
+    val htmlTagRegex = Regex("<[^>]*>|&nbsp|;")
+    val cleanInstruction = htmlTagRegex.replace(instruction, "").replace("\n", " ")
     Column(
         modifier = Modifier
             .padding(8.dp)
     ) {
         Text(text = "Exercise Instruction", fontSize = 22.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = instruction)
+        Text(text = cleanInstruction)
     }
 }

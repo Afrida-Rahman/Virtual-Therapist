@@ -46,7 +46,9 @@ fun ExerciseGuidelineScreen(
             ) {
                 exercise?.let {
                     InstructionSection(it.instruction)
-                    VideoSection(videoUrl = it.videoURL)
+                    it.videoURL?.let { url ->
+                        VideoSection(videoUrl = url)
+                    }
                     ImageSection(it.imageURLs)
                 }
             }
