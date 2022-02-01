@@ -1,6 +1,9 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.payload
 
+import com.google.gson.annotations.SerializedName
+
 data class AssessmentPayload(
-    val tenant: String,
-    val patientId: String
+    @SerializedName("Tenant") val tenant: String,
+    @SerializedName("PatientId") val patientId: String,
+    @SerializedName("IsSummaryView") val isSummaryView: Boolean
 )

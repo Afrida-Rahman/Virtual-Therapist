@@ -12,7 +12,7 @@ import java.io.IOException
 import javax.inject.Inject
 
 class FetchAssessments @Inject constructor(
-    private val remoteRepository: RemoteAssessmentRepository
+    private val repository: RemoteAssessmentRepository
 ) {
     operator fun invoke(
         tenant: String,
@@ -20,10 +20,11 @@ class FetchAssessments @Inject constructor(
     ): Flow<Resource<List<Assessment>>> = flow {
         emit(Resource.Loading())
         try {
-            val assessmentDto = remoteRepository.fetchAssessments(
+            val assessmentDto = repository.fetchAssessments(
                 payload = AssessmentPayload(
                     tenant = tenant,
-                    patientId = patientId
+                    patientId = patientId,
+                    isSummaryView = false
                 )
             )
             emit(

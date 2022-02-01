@@ -9,8 +9,10 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.doma
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.repository.RemotePatientRepository
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.usecase.*
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.repository.RemoteAssessmentRepository
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.repository.RemoteExerciseTrackingRepository
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.usecase.ExerciseUseCases
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.usecase.FetchAssessments
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.usecase.SaveExerciseData
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -84,11 +86,23 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun providesRemoteExerciseTrackingRepository(): RemoteExerciseTrackingRepository {
+        return Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://api.injurycloud.com")
+            .build()
+            .create(RemoteExerciseTrackingRepository::class.java)
+    }
+
+    @Provides
+    @Singleton
     fun providesExerciseUseCases(
-        remoteAssessmentRepository: RemoteAssessmentRepository
+        remoteAssessmentRepository: RemoteAssessmentRepository,
+        remoteExerciseTrackingRepository: RemoteExerciseTrackingRepository
     ): ExerciseUseCases {
         return ExerciseUseCases(
-            fetchAssessments = FetchAssessments(remoteRepository = remoteAssessmentRepository)
+            fetchAssessments = FetchAssessments(repository = remoteAssessmentRepository),
+            saveExerciseData = SaveExerciseData(repository = remoteExerciseTrackingRepository)
         )
     }
 }

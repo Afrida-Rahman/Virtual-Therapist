@@ -23,19 +23,20 @@ import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapi
 fun ManualTrackingForm(
     exerciseName: String,
     repetitionField: State<String>,
-    onRepetitionValueChanged: (value: Int) -> Unit,
+    onRepetitionValueChanged: (value: String) -> Unit,
     setField: State<String>,
-    onSetValueChanged: (value: Int) -> Unit,
+    onSetValueChanged: (value: String) -> Unit,
     wrongField: State<String>,
-    onWrongValueChanged: (value: Int) -> Unit,
+    onWrongValueChanged: (value: String) -> Unit,
     onCloseClicked: () -> Unit,
-    onSaveDataClick: () -> Unit
+    onSaveDataClick: () -> Unit,
+    saveDataButtonClickState: State<Boolean>
 ) {
     Card(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(12.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -45,42 +46,57 @@ fun ManualTrackingForm(
                 Text(
                     text = exerciseName,
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
+                    modifier = Modifier
+                        .weight(1f)
                 )
-                IconButton(onClick = { onCloseClicked() }) {
+                IconButton(
+                    onClick = { onCloseClicked() },
+                    modifier = Modifier
+                        .size(50.dp)
+                ) {
                     Icon(imageVector = Icons.Default.Close, contentDescription = "Close Icon")
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))
             OutlineInputTextField(
                 field = repetitionField,
-                onValueChange = { onRepetitionValueChanged(it.toInt()) },
+                onValueChange = { onRepetitionValueChanged(it) },
                 placeholder = "Repetition Count",
                 keyboardType = KeyboardType.Number
             )
             Spacer(modifier = Modifier.height(4.dp))
             OutlineInputTextField(
                 field = setField,
-                onValueChange = { onSetValueChanged(it.toInt()) },
+                onValueChange = { onSetValueChanged(it) },
                 placeholder = "Set Count",
                 keyboardType = KeyboardType.Number
             )
             Spacer(modifier = Modifier.height(4.dp))
             OutlineInputTextField(
                 field = wrongField,
-                onValueChange = { onWrongValueChanged(it.toInt()) },
+                onValueChange = { onWrongValueChanged(it) },
                 placeholder = "Wrong Count",
                 keyboardType = KeyboardType.Number
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = { onSaveDataClick() }) {
-                Text(
-                    text = "Save Data",
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(4.dp)
-                )
+            Button(
+                onClick = { onSaveDataClick() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(4.dp)
+            ) {
+                if (saveDataButtonClickState.value) {
+                    CircularProgressIndicator()
+                } else {
+                    Text(
+                        text = "Save Data",
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(4.dp)
+                    )
+                }
             }
         }
     }
@@ -93,8 +109,9 @@ fun ManualTrackingFormPreview() {
         val repetitionField = remember { mutableStateOf("") }
         val setField = remember { mutableStateOf("") }
         val wrongField = remember { mutableStateOf("") }
+        val saveDataButtonClickState = remember { mutableStateOf(false) }
         ManualTrackingForm(
-            exerciseName = "Bird Dog",
+            exerciseName = "AROM Ankle Dorsiflexion in Sitting",
             repetitionField = repetitionField,
             onRepetitionValueChanged = {},
             setField = setField,
@@ -102,7 +119,8 @@ fun ManualTrackingFormPreview() {
             wrongField = wrongField,
             onWrongValueChanged = {},
             onCloseClicked = {},
-            onSaveDataClick = {}
+            onSaveDataClick = {},
+            saveDataButtonClickState = saveDataButtonClickState
         )
     }
 }
