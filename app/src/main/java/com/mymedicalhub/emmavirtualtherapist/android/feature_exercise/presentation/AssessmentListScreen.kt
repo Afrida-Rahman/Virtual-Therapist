@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -29,15 +30,20 @@ import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.AssessmentCard
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ExerciseTopBar
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.HeroSection
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.NavigationDrawer
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @Composable
 fun AssessmentListScreen(
     navController: NavController,
     viewModel: ExerciseViewModel
 ) {
-    val scaffoldState = rememberScaffoldState()
+    val scaffoldState = rememberScaffoldState(
+        drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    )
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     val imageLoader = ImageLoader.Builder(context)
         .componentRegistry {
             if (Build.VERSION.SDK_INT >= 28) {
@@ -67,8 +73,19 @@ fun AssessmentListScreen(
             ExerciseTopBar(
                 title = "My Assessments",
                 navigationIcon = Icons.Default.Menu,
-                onNavigationIconClicked = { }
+                onNavigationIconClicked = {
+                    coroutineScope.launch {
+                        if (scaffoldState.drawerState.isClosed) {
+                            scaffoldState.drawerState.open()
+                        } else {
+                            scaffoldState.drawerState.close()
+                        }
+                    }
+                }
             )
+        },
+        drawerContent = {
+            NavigationDrawer()
         }
     ) {
         Column(
