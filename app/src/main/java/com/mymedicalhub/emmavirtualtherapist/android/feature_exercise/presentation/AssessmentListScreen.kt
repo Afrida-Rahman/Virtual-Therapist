@@ -4,11 +4,14 @@ import android.os.Build
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Dashboard
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -85,7 +88,43 @@ fun AssessmentListScreen(
             )
         },
         drawerContent = {
-            NavigationDrawer()
+            NavigationDrawer(
+                onCloseButtonClicked = {
+                    coroutineScope.launch {
+                        scaffoldState.drawerState.close()
+                    }
+                }
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp)
+                        .clickable {
+                            navController.navigate(Screen.AssessmentListScreen.route)
+                        },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Dashboard,
+                        contentDescription = "My Assessments"
+                    )
+                    Spacer(modifier = Modifier.width(24.dp))
+                    Text(text = "My Assessments")
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp)
+                        .clickable {
+                            navController.navigate(Screen.SignInScreen.route)
+                        },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(imageVector = Icons.Default.Logout, contentDescription = "Logout")
+                    Spacer(modifier = Modifier.width(24.dp))
+                    Text(text = "Logout")
+                }
+            }
         }
     ) {
         Column(
