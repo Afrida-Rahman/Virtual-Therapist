@@ -108,6 +108,9 @@ class ExerciseViewModel @Inject constructor(
             }
             is ExerciseEvent.HideManualTrackingAlertDialogue -> {
                 _showManualTrackingForm.value = false
+                _manualRepetitionCount.value = ""
+                _manualSetCount.value = ""
+                _manualWrongCount.value = ""
             }
             is ExerciseEvent.SaveDataButtonClicked -> {
                 if (!saveDataButtonClicked.value) {
@@ -207,7 +210,11 @@ class ExerciseViewModel @Inject constructor(
                         when (it) {
                             is Resource.Error -> {
                                 _saveDataButtonClicked.value = false
-                                _eventFlow.emit(UIEvent.ShowSnackBar(it.message ?: "Unknown error"))
+                                _eventFlow.emit(
+                                    UIEvent.ShowToastMessage(
+                                        it.message ?: "Unknown error"
+                                    )
+                                )
                             }
                             is Resource.Loading -> {
                                 _saveDataButtonClicked.value = true
