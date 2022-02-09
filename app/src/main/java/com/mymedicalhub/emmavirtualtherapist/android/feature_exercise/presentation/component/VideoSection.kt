@@ -1,6 +1,5 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component
 
-import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -17,11 +16,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
-import com.google.android.exoplayer2.upstream.DataSource
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
-import com.google.android.exoplayer2.util.Util
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
 
 @Composable
@@ -49,7 +44,7 @@ fun VideoSection(videoUrl: String?) {
                         .width(260.dp)
                         .height(480.dp)
                 ) {
-                    playVideo(videoUrl)
+                    PlayVideo(videoUrl)
                 }
             }
         }
@@ -57,7 +52,7 @@ fun VideoSection(videoUrl: String?) {
 }
 
 @Composable
-fun playVideo(url: String){
+fun PlayVideo(url: String){
     val context = LocalContext.current
     val player = SimpleExoPlayer.Builder(context).build()
     val playerView = PlayerView(context)
