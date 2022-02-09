@@ -4,7 +4,10 @@ import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -12,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
@@ -42,8 +46,8 @@ fun VideoSection(videoUrl: String?) {
                 Column(
                     modifier = Modifier
                         .padding(8.dp)
-                        .width(220.dp)
-                        .height(320.dp)
+                        .width(260.dp)
+                        .height(480.dp)
                 ) {
                     playVideo(videoUrl)
                 }
@@ -55,21 +59,21 @@ fun VideoSection(videoUrl: String?) {
 @Composable
 fun playVideo(url: String){
     val context = LocalContext.current
-    val exoPlayer = remember(context) {
-        SimpleExoPlayer.Builder(context).build().apply {
-            val dataSourceFactory : DataSource.Factory = DefaultDataSourceFactory(context,
-                Util.getUserAgent(context, context.packageName))
-
-            val source = ProgressiveMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(Uri.parse(url))
-
-            this.prepare(source)
-        }
+    val player = SimpleExoPlayer.Builder(context).build()
+    val playerView = PlayerView(context)
+    val mediaItem = MediaItem.fromUri(url)
+    val playWhenReady by rememberSaveable {
+        mutableStateOf(false)
     }
-    AndroidView(factory = { context ->
-        PlayerView(context).apply {
-            player = exoPlayer
-        }
+    player.setMediaItem(mediaItem)
+    playerView.player = player
+    LaunchedEffect(player) {
+        player.prepare()
+        player.playWhenReady = playWhenReady
+
+    }
+    AndroidView(factory = {
+        playerView
     })
 }
 
@@ -77,6 +81,6 @@ fun playVideo(url: String){
 @Composable
 fun VideoSectionPreview() {
     EmmaVirtualTherapistTheme {
-        VideoSection(videoUrl = "null")
+        VideoSection(videoUrl = "")
     }
 }
