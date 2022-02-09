@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.*
 
