@@ -3,7 +3,7 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.dom
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.model.Patient
 import kotlinx.coroutines.flow.Flow
 
-interface PatientRepository {
+interface LocalPatientRepository {
 
     fun getPatients(): Flow<List<Patient>>
 

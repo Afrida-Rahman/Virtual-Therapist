@@ -1,13 +1,13 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.usecase
 
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.model.Patient
-import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.repository.PatientRepository
+import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.repository.LocalPatientRepository
 
 class GetLoggedInPatient(
-    private val repository: PatientRepository
+    private val repositoryPatientRepository: LocalPatientRepository
 ) {
 
     suspend operator fun invoke(): Patient? {
-        return repository.getLoggedInPatient()
+        return repositoryPatientRepository.getLoggedInPatient()
     }
 }

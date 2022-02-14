@@ -5,5 +5,5 @@ data class PatientUseCases(
     val getPatients: GetPatients,
     val insertPatient: InsertPatient,
     val deletePatient: DeletePatient,
-    val signInPatient: SignInPatient
+    val patientInformation: PatientInformation
 )
