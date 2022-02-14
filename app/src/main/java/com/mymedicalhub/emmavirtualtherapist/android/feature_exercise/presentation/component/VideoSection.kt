@@ -65,7 +65,7 @@ fun PlayVideo(url: String){
     LaunchedEffect(player) {
         player.prepare()
         player.playWhenReady = playWhenReady
-
+        player.volume = 0f
     }
     AndroidView(factory = {
         playerView
