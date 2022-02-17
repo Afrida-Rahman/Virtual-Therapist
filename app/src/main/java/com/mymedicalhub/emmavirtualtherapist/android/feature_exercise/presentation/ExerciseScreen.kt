@@ -1,6 +1,7 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,6 +31,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ExerciseTopBar
 
+@SuppressLint("UnsafeOptInUsageError")
 @Composable
 fun ExerciseScreen(
     testId: String,
@@ -40,6 +42,7 @@ fun ExerciseScreen(
     val exercise = viewModel.getExercise(testId = testId, exerciseId = exerciseId)
     val localContext = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+   
     val cameraProviderFuture = remember {
         ProcessCameraProvider.getInstance(localContext)
     }
