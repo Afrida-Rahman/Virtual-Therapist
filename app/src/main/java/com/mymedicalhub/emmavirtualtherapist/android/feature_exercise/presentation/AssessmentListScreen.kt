@@ -10,15 +10,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Dashboard
-import androidx.compose.material.icons.filled.Logout
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,7 +34,6 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentati
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ExerciseTopBar
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.HeroSection
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.NavigationDrawer
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @Composable
@@ -73,19 +72,56 @@ fun AssessmentListScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            ExerciseTopBar(
-                title = "My Assessments",
-                navigationIcon = Icons.Default.Menu,
-                onNavigationIconClicked = {
-                    coroutineScope.launch {
-                        if (scaffoldState.drawerState.isClosed) {
-                            scaffoldState.drawerState.open()
-                        } else {
-                            scaffoldState.drawerState.close()
-                        }
-                    }
+            if (viewModel.showAssessmentSearchBar.value) {
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    OutlinedTextField(
+                        value = viewModel.assessmentSearchTerm.value,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color.White),
+                        onValueChange = { searchTerm ->
+                            viewModel.onEvent(
+                                ExerciseEvent.AssessmentSearchTermEntered(searchTerm)
+                            )
+                        },
+                        leadingIcon = ({
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = "Search icon"
+                            )
+                        }),
+                        trailingIcon = ({
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "Close search bar",
+                                modifier = Modifier.clickable {
+                                    viewModel.onEvent(ExerciseEvent.HideAssessmentSearchBar)
+                                }
+                            )
+                        }),
+                        singleLine = true,
+                        textStyle = TextStyle(color = MaterialTheme.colors.primary)
+                    )
                 }
-            )
+            } else {
+                ExerciseTopBar(
+                    title = "Home Exercises",
+                    navigationIcon = Icons.Default.Menu,
+                    onNavigationIconClicked = {
+                        coroutineScope.launch {
+                            if (scaffoldState.drawerState.isClosed) {
+                                scaffoldState.drawerState.open()
+                            } else {
+                                scaffoldState.drawerState.close()
+                            }
+                        }
+                    },
+                    trailingIcon = Icons.Default.Search,
+                    onTrailingIconClicked = {
+                        viewModel.onEvent(ExerciseEvent.ShowAssessmentSearchBar)
+                    }
+                )
+            }
         },
         drawerContent = {
             NavigationDrawer(
@@ -183,7 +219,7 @@ fun AssessmentListScreen(
                                 }
                             }
                             else -> {
-                                Text(text = "This patient do not have any assigned assessment yet.")
+                                Text(text = "Opps! No assessment found.")
                             }
                         }
                     }

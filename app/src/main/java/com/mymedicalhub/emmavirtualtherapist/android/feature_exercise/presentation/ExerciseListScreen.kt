@@ -29,7 +29,6 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentati
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ExerciseTopBar
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.HeroSection
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ManualTrackingForm
-import kotlinx.coroutines.flow.collect
 
 @Composable
 fun ExerciseListScreen(
@@ -58,27 +57,33 @@ fun ExerciseListScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            if (viewModel.showSearchBar.value) {
+            if (viewModel.showExerciseSearchBar.value) {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     OutlinedTextField(
-                        value = viewModel.searchTerm.value,
+                        value = viewModel.exerciseSearchTerm.value,
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(Color.White),
                         onValueChange = { searchTerm ->
                             viewModel.onEvent(
-                                ExerciseEvent.SearchTermEntered(
+                                ExerciseEvent.ExerciseSearchTermEntered(
                                     testId = testId,
                                     searchTerm = searchTerm
                                 )
                             )
                         },
+                        leadingIcon = ({
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = "Search icon"
+                            )
+                        }),
                         trailingIcon = ({
                             Icon(
                                 imageVector = Icons.Default.Close,
                                 contentDescription = "Close search bar",
                                 modifier = Modifier.clickable {
-                                    viewModel.onEvent(ExerciseEvent.HideSearchBar)
+                                    viewModel.onEvent(ExerciseEvent.HideExerciseSearchBar)
                                 }
                             )
                         }),
@@ -96,7 +101,7 @@ fun ExerciseListScreen(
                     },
                     trailingIcon = Icons.Default.Search,
                     onTrailingIconClicked = {
-                        viewModel.onEvent(ExerciseEvent.ShowSearchBar)
+                        viewModel.onEvent(ExerciseEvent.ShowExerciseSearchBar)
                     }
                 )
             }
