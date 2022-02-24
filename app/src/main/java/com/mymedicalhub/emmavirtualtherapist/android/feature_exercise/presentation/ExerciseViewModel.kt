@@ -23,6 +23,8 @@ import javax.inject.Inject
 class ExerciseViewModel @Inject constructor(
     private val exerciseUseCases: ExerciseUseCases
 ) : ViewModel() {
+    private var originalAssessmentList: List<Assessment> = emptyList()
+
     private val _assessments = mutableStateOf<List<Assessment>>(emptyList())
     val assessments: State<List<Assessment>> = _assessments
 
@@ -35,11 +37,17 @@ class ExerciseViewModel @Inject constructor(
     private val _showTryAgainButton = mutableStateOf(false)
     val showTryAgain: State<Boolean> = _showTryAgainButton
 
-    private val _showSearchBar = mutableStateOf(false)
-    val showSearchBar: State<Boolean> = _showSearchBar
+    private val _showAssessmentSearchBar = mutableStateOf(false)
+    val showAssessmentSearchBar: State<Boolean> = _showAssessmentSearchBar
 
-    private val _searchTerm = mutableStateOf("")
-    val searchTerm: State<String> = _searchTerm
+    private val _showExerciseSearchBar = mutableStateOf(false)
+    val showExerciseSearchBar: State<Boolean> = _showExerciseSearchBar
+
+    private val _assessmentSearchTerm = mutableStateOf("")
+    val assessmentSearchTerm: State<String> = _assessmentSearchTerm
+
+    private val _exerciseSearchTerm = mutableStateOf("")
+    val exerciseSearchTerm: State<String> = _exerciseSearchTerm
 
     private val _showManualTrackingForm = mutableStateOf(false)
     val showManualTrackingForm: State<Boolean> = _showManualTrackingForm
@@ -74,16 +82,27 @@ class ExerciseViewModel @Inject constructor(
     fun onEvent(event: ExerciseEvent) {
         when (event) {
             is ExerciseEvent.FetchAssessments -> fetchAssessments()
-            is ExerciseEvent.SearchTermEntered -> {
-                _searchTerm.value = event.searchTerm
+            is ExerciseEvent.AssessmentSearchTermEntered -> {
+                _assessmentSearchTerm.value = event.searchTerm
+                _assessments.value = getAssessments(event.searchTerm)
+            }
+            is ExerciseEvent.ShowExerciseSearchBar -> {
+                _showExerciseSearchBar.value = true
+            }
+            is ExerciseEvent.HideExerciseSearchBar -> {
+                _showExerciseSearchBar.value = false
+                _exerciseSearchTerm.value = ""
+            }
+            is ExerciseEvent.ShowAssessmentSearchBar -> {
+                _showAssessmentSearchBar.value = true
+            }
+            is ExerciseEvent.HideAssessmentSearchBar -> {
+                _showAssessmentSearchBar.value = false
+                _assessmentSearchTerm.value = ""
+            }
+            is ExerciseEvent.ExerciseSearchTermEntered -> {
+                _exerciseSearchTerm.value = event.searchTerm
                 searchExercises(event.testId, event.searchTerm)
-            }
-            is ExerciseEvent.ShowSearchBar -> {
-                _showSearchBar.value = true
-            }
-            is ExerciseEvent.HideSearchBar -> {
-                _showSearchBar.value = false
-                _searchTerm.value = ""
             }
             is ExerciseEvent.FlipCamera -> {
                 _showFrontCamera.value = !showFrontCamera.value
@@ -140,13 +159,22 @@ class ExerciseViewModel @Inject constructor(
 
     private fun getExercises(testId: String, searchTerm: String = ""): List<Exercise> {
         var exercises: List<Exercise> = emptyList()
-        _assessments.value.find { it.testId == testId }?.let {
+        originalAssessmentList.find { it.testId == testId }?.let {
             exercises = it.exercises
         }
         if (searchTerm.isNotEmpty()) {
-            exercises = exercises.filter { it.name.lowercase().startsWith(searchTerm.lowercase()) }
+            exercises = exercises.filter { it.name.contains(searchTerm, ignoreCase = true) }
         }
         return exercises.sortedBy { it.name }
+    }
+
+    private fun getAssessments(searchTerm: String = ""): List<Assessment> {
+        var assessments: List<Assessment> = originalAssessmentList
+        if (searchTerm.isNotEmpty()) {
+            assessments =
+                originalAssessmentList.filter { it.testId.contains(searchTerm, ignoreCase = true) }
+        }
+        return assessments
     }
 
     private fun fetchAssessments() {
@@ -170,7 +198,8 @@ class ExerciseViewModel @Inject constructor(
                         is Resource.Success -> {
                             _showTryAgainButton.value = false
                             _isAssessmentLoading.value = false
-                            _assessments.value = it.data ?: emptyList()
+                            originalAssessmentList = it.data ?: emptyList()
+                            _assessments.value = originalAssessmentList
                         }
                     }
                 }.launchIn(this)

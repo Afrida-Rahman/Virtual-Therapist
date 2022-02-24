@@ -55,7 +55,7 @@ fun ExerciseCard(
         elevation = 8.dp,
         modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
-            .padding(bottom = 8.dp)
+            .padding(4.dp)
     ) {
         Column(
             modifier = Modifier.padding(8.dp)
@@ -121,7 +121,6 @@ fun ExerciseCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 20.dp, end = 20.dp)
             ) {
                 Button(onClick = { onStartWorkoutButtonClicked() }) {
                     Text(text = "Start Workout")
