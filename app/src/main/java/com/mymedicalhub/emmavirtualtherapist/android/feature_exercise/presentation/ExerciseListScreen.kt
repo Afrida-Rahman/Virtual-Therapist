@@ -1,10 +1,12 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
 
 import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -16,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -30,6 +33,7 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentati
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.HeroSection
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ManualTrackingForm
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ExerciseListScreen(
     testId: String,
@@ -39,6 +43,7 @@ fun ExerciseListScreen(
 ) {
     val scaffoldState = rememberScaffoldState()
     val context = LocalContext.current
+    val localConfiguration = LocalConfiguration.current
     viewModel.searchExercises(testId = testId)
 
     LaunchedEffect(key1 = true) {
@@ -171,7 +176,21 @@ fun ExerciseListScreen(
                 }
                 viewModel.exercises.value?.let { exercises ->
                     if (exercises.isNotEmpty()) {
-                        LazyColumn {
+                        val itemsPerRow = when {
+                            localConfiguration.screenWidthDp > 840 -> {
+                                3
+                            }
+                            localConfiguration.screenWidthDp > 600 -> {
+                                2
+                            }
+                            else -> {
+                                1
+                            }
+                        }
+                        LazyVerticalGrid(
+                            cells = GridCells.Fixed(itemsPerRow),
+                            modifier = Modifier.padding(4.dp)
+                        ) {
                             items(exercises) {
                                 ExerciseCard(
                                     imageUrl = if (it.imageURLs.isNotEmpty()) {

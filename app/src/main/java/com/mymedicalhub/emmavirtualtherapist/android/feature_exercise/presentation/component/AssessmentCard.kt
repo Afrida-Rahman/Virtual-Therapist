@@ -19,7 +19,7 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 8.dp)
+            .padding(4.dp)
             .shadow(4.dp, RoundedCornerShape(8.dp))
     ) {
         Column(

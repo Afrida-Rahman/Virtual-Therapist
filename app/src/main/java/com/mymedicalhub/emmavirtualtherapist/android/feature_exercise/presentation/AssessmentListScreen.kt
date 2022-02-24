@@ -2,11 +2,13 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentat
 
 import android.os.Build
 import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -17,6 +19,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -36,6 +39,7 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentati
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.NavigationDrawer
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AssessmentListScreen(
     navController: NavController,
@@ -45,6 +49,7 @@ fun AssessmentListScreen(
         drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     )
     val context = LocalContext.current
+    val localConfiguration = LocalConfiguration.current
     val coroutineScope = rememberCoroutineScope()
     val imageLoader = ImageLoader.Builder(context)
         .componentRegistry {
@@ -167,60 +172,69 @@ fun AssessmentListScreen(
             modifier = Modifier.background(MaterialTheme.colors.surface)
         ) {
             HeroSection("Rashed Momin")
-            Column(
+            Text(
+                text = "My Assessments",
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(8.dp)
-            ) {
-                Text(
-                    text = "My Assessments",
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                if (viewModel.assessments.value.isNotEmpty()) {
-                    LazyColumn(
-                        modifier = Modifier.padding(top = 8.dp)
-                    ) {
-                        items(viewModel.assessments.value) {
-                            AssessmentCard(it) {
-                                navController.navigate(
-                                    Screen.ExerciseListScreen.withArgs(
-                                        it.testId,
-                                        it.creationDate
-                                    )
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            if (viewModel.assessments.value.isNotEmpty()) {
+                val itemsPerRow = when {
+                    localConfiguration.screenWidthDp > 840 -> {
+                        3
+                    }
+                    localConfiguration.screenWidthDp > 600 -> {
+                        2
+                    }
+                    else -> {
+                        1
+                    }
+                }
+                LazyVerticalGrid(
+                    cells = GridCells.Fixed(itemsPerRow),
+                    modifier = Modifier.padding(4.dp)
+                ) {
+                    items(viewModel.assessments.value) {
+                        AssessmentCard(it) {
+                            navController.navigate(
+                                Screen.ExerciseListScreen.withArgs(
+                                    it.testId,
+                                    it.creationDate
                                 )
-                            }
+                            )
                         }
                     }
-                } else {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .weight(1f)
-                    ) {
-                        when {
-                            viewModel.isAssessmentLoading.value -> {
-                                Image(
-                                    painter = rememberImagePainter(
-                                        data = R.drawable.ic_infinite_loading,
-                                        imageLoader = imageLoader
-                                    ),
-                                    contentDescription = null,
-                                    modifier = Modifier.size(150.dp)
-                                )
-                            }
-                            viewModel.showTryAgain.value -> {
-                                Button(
-                                    onClick = {
-                                        viewModel.onEvent(ExerciseEvent.FetchAssessments)
-                                    }
-                                ) {
-                                    Text(text = "Try Again")
+                }
+            } else {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f)
+                ) {
+                    when {
+                        viewModel.isAssessmentLoading.value -> {
+                            Image(
+                                painter = rememberImagePainter(
+                                    data = R.drawable.ic_infinite_loading,
+                                    imageLoader = imageLoader
+                                ),
+                                contentDescription = null,
+                                modifier = Modifier.size(150.dp)
+                            )
+                        }
+                        viewModel.showTryAgain.value -> {
+                            Button(
+                                onClick = {
+                                    viewModel.onEvent(ExerciseEvent.FetchAssessments)
                                 }
+                            ) {
+                                Text(text = "Try Again")
                             }
-                            else -> {
-                                Text(text = "Opps! No assessment found.")
-                            }
+                        }
+                        else -> {
+                            Text(text = "Opps! No assessment found.")
                         }
                     }
                 }
