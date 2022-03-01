@@ -12,6 +12,8 @@ sealed class ExerciseEvent {
     object GoToAssessmentPage : ExerciseEvent()
     object ShowManualTrackingAlertDialogue : ExerciseEvent()
     object HideManualTrackingAlertDialogue : ExerciseEvent()
+    data class ShowExerciseDemo(val exerciseId: Int) : ExerciseEvent()
+    object HideExerciseDemo : ExerciseEvent()
     data class SaveDataButtonClicked(val testId: String, val exercise: Exercise) : ExerciseEvent()
     data class ManualSelectedExerciseId(val exerciseId: Int) : ExerciseEvent()
     data class ManualRepetitionCountEntered(val value: String) : ExerciseEvent()
