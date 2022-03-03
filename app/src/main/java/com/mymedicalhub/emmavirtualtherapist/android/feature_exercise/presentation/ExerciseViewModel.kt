@@ -52,6 +52,9 @@ class ExerciseViewModel @Inject constructor(
     private val _showManualTrackingForm = mutableStateOf(false)
     val showManualTrackingForm: State<Boolean> = _showManualTrackingForm
 
+    private val _showExerciseDemo = mutableStateOf(false)
+    val showExerciseDemo: State<Boolean> = _showExerciseDemo
+
     private val _manualSelectedExercise = mutableStateOf(0)
     val manualSelectedExercise: State<Int> = _manualSelectedExercise
 
@@ -130,6 +133,13 @@ class ExerciseViewModel @Inject constructor(
                 _manualRepetitionCount.value = ""
                 _manualSetCount.value = ""
                 _manualWrongCount.value = ""
+            }
+            is ExerciseEvent.ShowExerciseDemo -> {
+                _manualSelectedExercise.value = event.exerciseId
+                _showExerciseDemo.value = true
+            }
+            is ExerciseEvent.HideExerciseDemo -> {
+                _showExerciseDemo.value = false
             }
             is ExerciseEvent.SaveDataButtonClicked -> {
                 if (!saveDataButtonClicked.value) {

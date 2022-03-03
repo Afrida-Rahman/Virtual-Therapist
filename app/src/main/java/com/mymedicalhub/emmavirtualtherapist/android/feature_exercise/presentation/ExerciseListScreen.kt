@@ -24,14 +24,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ExerciseCard
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ExerciseTopBar
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.HeroSection
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ManualTrackingForm
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.*
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -139,39 +135,56 @@ fun ExerciseListScreen(
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 if (viewModel.showManualTrackingForm.value) {
-                    Dialog(onDismissRequest = { viewModel.onEvent(ExerciseEvent.HideManualTrackingAlertDialogue) }) {
-                        viewModel.getExercise(
-                            testId = testId,
-                            exerciseId = viewModel.manualSelectedExercise.value
-                        )?.let { selectedExercise ->
-                            ManualTrackingForm(
-                                exerciseName = selectedExercise.name,
-                                repetitionField = viewModel.manualRepetitionCount,
-                                onRepetitionValueChanged = {
-                                    viewModel.onEvent(ExerciseEvent.ManualRepetitionCountEntered(it))
-                                },
-                                setField = viewModel.manualSetCount,
-                                onSetValueChanged = {
-                                    viewModel.onEvent(ExerciseEvent.ManualSetCountEntered(it))
-                                },
-                                wrongField = viewModel.manualWrongCount,
-                                onWrongValueChanged = {
-                                    viewModel.onEvent(ExerciseEvent.ManualWrongCountEntered(it))
-                                },
-                                onCloseClicked = {
-                                    viewModel.onEvent(ExerciseEvent.HideManualTrackingAlertDialogue)
-                                },
-                                onSaveDataClick = {
-                                    viewModel.onEvent(
-                                        ExerciseEvent.SaveDataButtonClicked(
-                                            testId = testId,
-                                            exercise = selectedExercise
-                                        )
+                    viewModel.getExercise(
+                        testId = testId,
+                        exerciseId = viewModel.manualSelectedExercise.value
+                    )?.let { selectedExercise ->
+                        ManualTrackingForm(
+                            exerciseName = selectedExercise.name,
+                            repetitionField = viewModel.manualRepetitionCount,
+                            onRepetitionValueChanged = {
+                                viewModel.onEvent(ExerciseEvent.ManualRepetitionCountEntered(it))
+                            },
+                            setField = viewModel.manualSetCount,
+                            onSetValueChanged = {
+                                viewModel.onEvent(ExerciseEvent.ManualSetCountEntered(it))
+                            },
+                            wrongField = viewModel.manualWrongCount,
+                            onWrongValueChanged = {
+                                viewModel.onEvent(ExerciseEvent.ManualWrongCountEntered(it))
+                            },
+                            onCloseClicked = {
+                                viewModel.onEvent(ExerciseEvent.HideManualTrackingAlertDialogue)
+                            },
+                            onSaveDataClick = {
+                                viewModel.onEvent(
+                                    ExerciseEvent.SaveDataButtonClicked(
+                                        testId = testId,
+                                        exercise = selectedExercise
                                     )
-                                },
-                                saveDataButtonClickState = viewModel.saveDataButtonClicked
-                            )
-                        }
+                                )
+                            },
+                            saveDataButtonClickState = viewModel.saveDataButtonClicked
+                        )
+                    }
+                } else if (viewModel.showExerciseDemo.value) {
+                    viewModel.getExercise(
+                        testId = testId,
+                        exerciseId = viewModel.manualSelectedExercise.value
+                    )?.let {
+                        ExerciseDemo(
+                            phases = it.phases,
+                            onStartButtonClicked = {
+                                navController.navigate(
+                                    Screen.ExerciseScreen.withArgs(
+                                        testId,
+                                        it.id.toString()
+                                    )
+                                )
+                                viewModel.onEvent(ExerciseEvent.HideExerciseDemo)
+                            },
+                            onDismiss = { viewModel.onEvent(ExerciseEvent.HideExerciseDemo) }
+                        )
                     }
                 }
                 viewModel.exercises.value?.let { exercises ->
@@ -209,12 +222,7 @@ fun ExerciseListScreen(
                                         )
                                     },
                                     onStartWorkoutButtonClicked = {
-                                        navController.navigate(
-                                            Screen.ExerciseScreen.withArgs(
-                                                testId,
-                                                it.id.toString()
-                                            )
-                                        )
+                                        viewModel.onEvent(ExerciseEvent.ShowExerciseDemo(it.id))
                                     },
                                     onManualTrackingButtonClicked = {
                                         viewModel.onEvent(ExerciseEvent.ManualSelectedExerciseId(it.id))
