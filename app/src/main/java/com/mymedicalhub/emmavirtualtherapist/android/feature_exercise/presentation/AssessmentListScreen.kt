@@ -217,7 +217,7 @@ fun AssessmentListScreen(
                         viewModel.isAssessmentLoading.value -> {
                             Image(
                                 painter = rememberImagePainter(
-                                    data = R.drawable.ic_infinite_loading,
+                                    data = R.drawable.gif_loding_entry,
                                     imageLoader = imageLoader
                                 ),
                                 contentDescription = null,

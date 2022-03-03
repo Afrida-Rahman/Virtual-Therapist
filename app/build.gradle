@@ -108,5 +108,5 @@ dependencies {
     implementation "io.coil-kt:coil-gif:1.4.0"
 
     //ExoPlayer
-    implementation("com.google.android.exoplayer:exoplayer:2.16.1")
+    implementation("com.google.android.exoplayer:exoplayer:2.17.0")
 }
