@@ -72,8 +72,8 @@ object AppModule {
     @Singleton
     fun providesRemoteAssessmentRepository(): RemoteAssessmentRepository {
         val client = OkHttpClient.Builder()
-            .connectTimeout(2, TimeUnit.MINUTES)
-            .readTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(3, TimeUnit.MINUTES)
+            .readTimeout(2, TimeUnit.MINUTES)
             .writeTimeout(30, TimeUnit.SECONDS)
             .build()
         return Retrofit.Builder()

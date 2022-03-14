@@ -19,9 +19,12 @@ import coil.ImageLoader
 import coil.compose.rememberImagePainter
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ImageSection(imageURLs: List<String>) {
     val context = LocalContext.current
@@ -41,7 +44,8 @@ fun ImageSection(imageURLs: List<String>) {
     ) {
         Text(text = "Exercise Image", fontSize = 22.sp, fontWeight = FontWeight.Bold)
         if (imageURLs.isNotEmpty()) {
-            imageURLs.forEach { imageUrl ->
+            HorizontalPager(count = imageURLs.size) { index ->
+                val imageUrl = imageURLs[index]
                 Image(
                     painter = rememberImagePainter(
                         data = imageUrl,

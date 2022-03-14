@@ -34,7 +34,7 @@ data class RemoteConstraint(
     @SerializedName("Direction")
     val direction: String,
     @SerializedName("CapturedImage")
-    val capturedImage: String,
+    val capturedImage: String?,
 )
 
 fun RemoteConstraint.toConstraint(): Constraint {

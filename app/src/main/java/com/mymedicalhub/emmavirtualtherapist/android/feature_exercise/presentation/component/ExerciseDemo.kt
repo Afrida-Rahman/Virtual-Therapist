@@ -1,5 +1,7 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component
 
+import android.os.Build
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Card
@@ -7,10 +9,19 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import coil.ImageLoader
+import coil.compose.rememberImagePainter
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Phase
 
 @OptIn(ExperimentalPagerApi::class)
@@ -20,6 +31,16 @@ fun ExerciseDemo(
     onStartButtonClicked: () -> Unit = {},
     onDismiss: () -> Unit = {}
 ) {
+    val sortedPhases = phases.sortedBy { it.id }
+    val context = LocalContext.current
+    val imageLoader: ImageLoader = ImageLoader.Builder(context)
+        .componentRegistry {
+            if (Build.VERSION.SDK_INT >= 28) {
+                add(ImageDecoderDecoder(context))
+            } else {
+                add(GifDecoder())
+            }
+        }.build()
     Dialog(onDismissRequest = { onDismiss() }) {
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(
@@ -27,14 +48,51 @@ fun ExerciseDemo(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 HorizontalPager(
-                    count = phases.size,
+                    count = sortedPhases.size,
                     modifier = Modifier
-                        .height(300.dp)
+                        .height(400.dp)
                         .padding(12.dp)
                 ) { index ->
-                    val phase = phases[index]
+                    val phase = sortedPhases[index]
                     phase.instruction?.let {
-                        Text(text = "${phase.id}. $it", modifier = Modifier.fillMaxSize())
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            if (phase.imageUrl.isNotBlank()) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .weight(1f)
+                                ) {
+                                    Image(
+                                        painter = rememberImagePainter(
+                                            data = phase.imageUrl,
+                                            builder = {
+                                                crossfade(true)
+                                                placeholder(R.drawable.ic_loading)
+                                            },
+                                            imageLoader = imageLoader
+                                        ),
+                                        contentDescription = "Phase Image ${phase.id}",
+                                        modifier = Modifier
+                                            .fillMaxWidth(),
+                                        contentScale = ContentScale.Fit
+                                    )
+                                    Text(
+                                        text = "${phase.id}",
+                                        fontSize = 36.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        modifier = Modifier.padding(8.dp)
+                                    )
+                                }
+                            }
+                            Text(
+                                text = it,
+                                modifier = Modifier
+                                    .height(30.dp)
+                            )
+                        }
                     }
                 }
                 Button(onClick = { onStartButtonClicked() }) {

@@ -1,9 +1,7 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
 
-import android.os.Build
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -26,11 +24,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import coil.ImageLoader
-import coil.compose.rememberImagePainter
-import coil.decode.GifDecoder
-import coil.decode.ImageDecoderDecoder
-import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.AssessmentCard
@@ -51,15 +44,6 @@ fun AssessmentListScreen(
     val context = LocalContext.current
     val localConfiguration = LocalConfiguration.current
     val coroutineScope = rememberCoroutineScope()
-    val imageLoader = ImageLoader.Builder(context)
-        .componentRegistry {
-            if (Build.VERSION.SDK_INT >= 28) {
-                add(ImageDecoderDecoder(context))
-            } else {
-                add(GifDecoder())
-            }
-        }
-        .build()
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collect { event ->
@@ -215,14 +199,7 @@ fun AssessmentListScreen(
                 ) {
                     when {
                         viewModel.isAssessmentLoading.value -> {
-                            Image(
-                                painter = rememberImagePainter(
-                                    data = R.drawable.gif_loding_entry,
-                                    imageLoader = imageLoader
-                                ),
-                                contentDescription = null,
-                                modifier = Modifier.size(150.dp)
-                            )
+                            CircularProgressIndicator()
                         }
                         viewModel.showTryAgain.value -> {
                             Button(
