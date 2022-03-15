@@ -4,6 +4,13 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.mod
 
 sealed class ExerciseEvent {
     object FetchAssessments : ExerciseEvent()
+    data class FetchExercises(val testId: String, val tenant: String) : ExerciseEvent()
+    data class FetchExerciseConstraints(
+        val tenant: String,
+        val testId: String,
+        val exerciseId: Int
+    ) : ExerciseEvent()
+
     object ShowAssessmentSearchBar : ExerciseEvent()
     object HideAssessmentSearchBar : ExerciseEvent()
     object ShowExerciseSearchBar : ExerciseEvent()

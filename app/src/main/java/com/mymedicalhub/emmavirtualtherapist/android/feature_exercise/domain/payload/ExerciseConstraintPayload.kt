@@ -2,7 +2,7 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.pa
 
 import com.google.gson.annotations.SerializedName
 
-data class AssessmentPayload(
+data class ExerciseConstraintPayload(
     @SerializedName("Tenant") val tenant: String,
-    @SerializedName("PatientId") val patientId: String
+    @SerializedName("ExerciseId") val exerciseId: Int
 )

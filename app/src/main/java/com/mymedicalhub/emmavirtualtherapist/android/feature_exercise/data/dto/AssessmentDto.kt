@@ -4,10 +4,7 @@ import com.google.gson.annotations.SerializedName
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Assessment
 
 data class AssessmentDto(
-    @SerializedName("Assessments")
-    val remoteAssessments: List<RemoteAssessment>,
-    @SerializedName("Tenant")
-    val tenant: String
+    @SerializedName("Assessments") val remoteAssessments: List<RemoteAssessment>
 )
 
 fun AssessmentDto.toAssessmentList(): List<Assessment> = remoteAssessments.map {

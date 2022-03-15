@@ -1,9 +1,9 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.usecase
 
 import com.mymedicalhub.emmavirtualtherapist.android.core.Resource
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.data.dto.toAssessmentList
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Assessment
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.payload.AssessmentPayload
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.data.dto.toPhaseList
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Phase
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.payload.ExerciseConstraintPayload
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.repository.RemoteAssessmentRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -11,24 +11,24 @@ import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
-class FetchAssessments @Inject constructor(
+class FetchExerciseConstraints @Inject constructor(
     private val repository: RemoteAssessmentRepository
 ) {
     operator fun invoke(
         tenant: String,
-        patientId: String
-    ): Flow<Resource<List<Assessment>>> = flow {
+        exerciseId: Int
+    ): Flow<Resource<List<Phase>>> = flow {
         emit(Resource.Loading())
         try {
-            val assessmentDto = repository.fetchAssessments(
-                payload = AssessmentPayload(
+            val exercisePhaseDto = repository.fetchExerciseConstraints(
+                payload = ExerciseConstraintPayload(
                     tenant = tenant,
-                    patientId = patientId
+                    exerciseId = exerciseId
                 )
             )
             emit(
                 Resource.Success(
-                    assessmentDto.toAssessmentList().sortedBy { it.creationDate }.reversed()
+                    exercisePhaseDto.toPhaseList()
                 )
             )
         } catch (e: IOException) {

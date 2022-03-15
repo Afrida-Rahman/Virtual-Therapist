@@ -14,7 +14,8 @@ data class AngleConstraint(
     val lineType: LineType = LineType.SOLID,
     val minValidationValue: Int,
     val maxValidationValue: Int,
-    val isClockwise: Boolean
+    val isClockwise: Boolean,
+    val shouldDrawExtensionFlexion: Boolean
 ) : Constraint {
     override fun draw(draw: Draw) {
         val lineStyle = when (lineType) {

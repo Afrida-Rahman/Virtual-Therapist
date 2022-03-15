@@ -7,34 +7,17 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.mod
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.constraint.LineConstraint
 
 data class RemoteConstraint(
-    @SerializedName("Id")
-    val id: Int,
-    @SerializedName("ExerciseId")
-    val exerciseId: Int,
-    @SerializedName("Phase")
-    val phaseId: Int,
-    @SerializedName("Scale")
-    val scale: String,
-    @SerializedName("NoOfKeyPoints")
-    val noOfKeyPoints: Int,
-    @SerializedName("StartKeyPosition")
-    val startKeyPosition: String,
-    @SerializedName("MiddleKeyPosition")
-    val middleKeyPosition: String,
-    @SerializedName("EndKeyPosition")
-    val endKeyPosition: String,
-    @SerializedName("AngleArea")
-    val angleArea: String,
-    @SerializedName("LineType")
-    val lineType: String,
-    @SerializedName("MaxValidationValue")
-    val maxValidationValue: Int,
-    @SerializedName("MinValidationValue")
-    val minValidationValue: Int,
-    @SerializedName("Direction")
-    val direction: String,
-    @SerializedName("CapturedImage")
-    val capturedImage: String?,
+    @SerializedName("Scale") val scale: String,
+    @SerializedName("LineType") val lineType: String,
+    @SerializedName("NoOfKeyPoints") val noOfKeyPoints: Int,
+    @SerializedName("Direction") val direction: String,
+    @SerializedName("StartKeyPosition") val startKeyPosition: String,
+    @SerializedName("MiddleKeyPosition") val middleKeyPosition: String,
+    @SerializedName("EndKeyPosition") val endKeyPosition: String,
+    @SerializedName("MinValidationValue") val minValidationValue: Int,
+    @SerializedName("MaxValidationValue") val maxValidationValue: Int,
+    @SerializedName("AngleArea") val angleArea: String,
+    @SerializedName("DrawExtensionFlexion") val shouldDrawExtensionFlexion: Boolean
 )
 
 fun RemoteConstraint.toConstraint(): Constraint {
@@ -50,7 +33,8 @@ fun RemoteConstraint.toConstraint(): Constraint {
             },
             minValidationValue = minValidationValue,
             maxValidationValue = maxValidationValue,
-            isClockwise = angleArea == "clockwise"
+            isClockwise = angleArea == "clockwise",
+            shouldDrawExtensionFlexion = shouldDrawExtensionFlexion
         )
         else -> LineConstraint(
             startPointIndex = 0,

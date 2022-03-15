@@ -2,5 +2,7 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.us
 
 data class ExerciseUseCases(
     val fetchAssessments: FetchAssessments,
+    val fetchExercises: FetchExercises,
+    val fetchExerciseConstraints: FetchExerciseConstraints,
     val saveExerciseData: SaveExerciseData
 )

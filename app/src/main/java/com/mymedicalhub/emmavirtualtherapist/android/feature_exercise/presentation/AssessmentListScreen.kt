@@ -41,6 +41,7 @@ fun AssessmentListScreen(
     val scaffoldState = rememberScaffoldState(
         drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     )
+    val tenant = "emma"
     val context = LocalContext.current
     val localConfiguration = LocalConfiguration.current
     val coroutineScope = rememberCoroutineScope()
@@ -183,6 +184,7 @@ fun AssessmentListScreen(
                         AssessmentCard(it) {
                             navController.navigate(
                                 Screen.ExerciseListScreen.withArgs(
+                                    tenant,
                                     it.testId,
                                     it.creationDate
                                 )

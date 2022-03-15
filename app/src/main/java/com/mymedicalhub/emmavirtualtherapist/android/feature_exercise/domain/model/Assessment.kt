@@ -9,5 +9,6 @@ data class Assessment(
     val bodyRegionId: Int,
     val bodyRegionName: String,
     val registrationType: String,
-    val exercises: List<Exercise>
+    val totalExercise: Int,
+    var exercises: List<Exercise> = emptyList()
 )

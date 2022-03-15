@@ -14,8 +14,11 @@ fun NavGraphBuilder.exerciseNav(navController: NavController) {
             AssessmentListScreen(navController = navController, viewModel = viewModel)
         }
         composable(
-            route = Screen.ExerciseListScreen.route + "/{testId}/{creationDate}",
+            route = Screen.ExerciseListScreen.route + "/{tenant}/{testId}/{creationDate}",
             arguments = listOf(
+                navArgument(name = "tenant") {
+                    type = NavType.StringType
+                },
                 navArgument(name = "testId") {
                     type = NavType.StringType
                 },
@@ -24,16 +27,20 @@ fun NavGraphBuilder.exerciseNav(navController: NavController) {
                 }
             )
         ) {
-            it.arguments?.getString("testId")?.let { testId ->
-                it.arguments?.getString("creationDate")?.let { creationDate ->
-                    ExerciseListScreen(
-                        testId = testId,
-                        creationDate = creationDate,
-                        navController = navController,
-                        viewModel = viewModel
-                    )
+            it.arguments?.getString("tenant")?.let { tenant ->
+                it.arguments?.getString("testId")?.let { testId ->
+                    it.arguments?.getString("creationDate")?.let { creationDate ->
+                        ExerciseListScreen(
+                            tenant = tenant,
+                            testId = testId,
+                            creationDate = creationDate,
+                            navController = navController,
+                            viewModel = viewModel
+                        )
+                    }
                 }
             }
+
         }
         composable(
             route = Screen.ExerciseGuidelineScreen.route + "/{testId}/{exerciseId}",
@@ -58,8 +65,11 @@ fun NavGraphBuilder.exerciseNav(navController: NavController) {
             }
         }
         composable(
-            route = Screen.ExerciseScreen.route + "/{testId}/{exerciseId}",
+            route = Screen.ExerciseScreen.route + "/{tenant}/{testId}/{exerciseId}",
             arguments = listOf(
+                navArgument(name = "tenant") {
+                    type = NavType.StringType
+                },
                 navArgument(name = "testId") {
                     type = NavType.StringType
                 },
@@ -68,16 +78,20 @@ fun NavGraphBuilder.exerciseNav(navController: NavController) {
                 }
             )
         ) {
-            it.arguments?.getString("testId")?.also { testId ->
-                it.arguments?.getInt("exerciseId")?.let { exerciseId ->
-                    ExerciseScreen(
-                        testId = testId,
-                        exerciseId = exerciseId,
-                        navController = navController,
-                        viewModel = viewModel
-                    )
+            it.arguments?.getString("tenant")?.let { tenant ->
+                it.arguments?.getString("testId")?.let { testId ->
+                    it.arguments?.getInt("exerciseId")?.let { exerciseId ->
+                        ExerciseScreen(
+                            tenant = tenant,
+                            testId = testId,
+                            exerciseId = exerciseId,
+                            navController = navController,
+                            viewModel = viewModel
+                        )
+                    }
                 }
             }
+
         }
     }
 }

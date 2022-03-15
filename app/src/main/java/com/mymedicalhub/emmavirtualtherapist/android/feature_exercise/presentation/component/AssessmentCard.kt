@@ -35,7 +35,7 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
                 providerName = assessment.providerName,
                 bodyRegion = assessment.bodyRegionName,
                 registrationType = assessment.registrationType,
-                exerciseCount = assessment.exercises.size
+                exerciseCount = assessment.totalExercise
             )
             Spacer(Modifier.height(12.dp))
             Button(
@@ -66,6 +66,7 @@ fun AssessmentCardPreview() {
                 bodyRegionId = 0,
                 bodyRegionName = "Full Body",
                 registrationType = "In Clinic",
+                totalExercise = 478,
                 exercises = emptyList(),
             )
         ) {}
