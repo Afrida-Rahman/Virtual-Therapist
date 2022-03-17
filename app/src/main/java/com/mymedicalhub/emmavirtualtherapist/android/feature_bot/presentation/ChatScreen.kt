@@ -70,7 +70,7 @@ fun ChatScreen(bot: Bot) {
                     onValueChange = {},
                     placeholder = "Your Message",
                     keyboardType = KeyboardType.Text,
-                    icon = painterResource(id = R.drawable.ic_send),
+                    trailingIcon = painterResource(id = R.drawable.ic_send),
                     isEnable = true
                 )
             }
