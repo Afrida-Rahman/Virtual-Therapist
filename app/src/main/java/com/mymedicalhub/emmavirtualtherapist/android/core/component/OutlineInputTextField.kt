@@ -24,7 +24,8 @@ fun OutlineInputTextField(
     onIconPressed: () -> Unit = {},
     placeholder: String,
     keyboardType: KeyboardType,
-    visualTransformation: VisualTransformation = VisualTransformation.None
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    isEnable: Boolean = true
 ) {
     OutlinedTextField(
         value = field.value,
@@ -52,7 +53,8 @@ fun OutlineInputTextField(
         placeholder = { Text(placeholder) },
         label = { Text(placeholder) },
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-        visualTransformation = visualTransformation
+        visualTransformation = visualTransformation,
+        enabled = isEnable
     )
 }
 

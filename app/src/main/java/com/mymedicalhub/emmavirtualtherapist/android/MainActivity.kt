@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.EXERCISE_ROUTE
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.ROOT_ROUTE
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.authenticationNav
+import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.chatBotNav
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseNav
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,6 +28,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     authenticationNav(navController = navController)
                     exerciseNav(navController = navController)
+                    chatBotNav(navController = navController)
                 }
             }
         }

@@ -50,4 +50,16 @@ object Utilities {
         val year = currentDate.get(Calendar.YEAR)
         return "$month/$day/$year"
     }
+
+    fun currentTime(): String {
+        val currentDate = Calendar.getInstance()
+        val hour = currentDate.get(Calendar.HOUR)
+        val minute = currentDate.get(Calendar.MINUTE)
+        val amOrPm = if (currentDate.get(Calendar.AM_PM) == 0) {
+            "AM"
+        } else {
+            "PM"
+        }
+        return "$hour:$minute $amOrPm"
+    }
 }
