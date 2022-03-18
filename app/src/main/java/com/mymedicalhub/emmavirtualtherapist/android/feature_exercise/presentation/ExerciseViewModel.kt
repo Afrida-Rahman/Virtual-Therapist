@@ -1,11 +1,14 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
 
+import android.content.SharedPreferences
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mymedicalhub.emmavirtualtherapist.android.core.Resource
 import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
+import com.mymedicalhub.emmavirtualtherapist.android.core.util.Utilities
+import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.model.Patient
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Assessment
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Exercise
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Phase
@@ -22,12 +25,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ExerciseViewModel @Inject constructor(
-    private val exerciseUseCases: ExerciseUseCases
+    private val exerciseUseCases: ExerciseUseCases,
+    preferences: SharedPreferences
 ) : ViewModel() {
     private var originalAssessmentList: List<Assessment> = emptyList()
 
     private val _assessments = mutableStateOf<List<Assessment>>(emptyList())
     val assessments: State<List<Assessment>> = _assessments
+
+    private val _patient = mutableStateOf<Patient?>(null)
+    val patient: State<Patient?> = _patient
 
     private val _exercises = mutableStateOf<List<Exercise>?>(null)
     val exercises: State<List<Exercise>?> = _exercises
@@ -83,12 +90,19 @@ class ExerciseViewModel @Inject constructor(
     val eventFlow = _eventFlow.asSharedFlow()
 
     init {
-        fetchAssessments()
+        _patient.value = Utilities.getPatient(preferences = preferences)
+        _patient.value?.let {
+            fetchAssessments(it)
+        }
     }
 
     fun onEvent(event: ExerciseEvent) {
         when (event) {
-            is ExerciseEvent.FetchAssessments -> fetchAssessments()
+            is ExerciseEvent.FetchAssessments -> {
+                _patient.value?.let {
+                    fetchAssessments(it)
+                }
+            }
             is ExerciseEvent.FetchExercises -> fetchExercises(
                 tenant = event.tenant,
                 testId = event.testId
@@ -157,12 +171,14 @@ class ExerciseViewModel @Inject constructor(
             is ExerciseEvent.SaveDataButtonClicked -> {
                 if (!saveDataButtonClicked.value) {
                     _saveDataButtonClicked.value = true
-                    saveExerciseData(
-                        tenant = "emma",
-                        testId = event.testId,
-                        patientId = "0fc2e143-5abd-eb11-8236-000d3a33d0fd",
-                        exercise = event.exercise
-                    )
+                    _patient.value?.let {
+                        saveExerciseData(
+                            tenant = it.tenant,
+                            testId = event.testId,
+                            patientId = it.patientId,
+                            exercise = event.exercise
+                        )
+                    }
                 }
             }
         }
@@ -216,9 +232,12 @@ class ExerciseViewModel @Inject constructor(
         return assessments
     }
 
-    private fun fetchAssessments() {
+    private fun fetchAssessments(patient: Patient) {
         viewModelScope.launch {
-            exerciseUseCases.fetchAssessments("emma", "0fc2e143-5abd-eb11-8236-000d3a33d0fd")
+            exerciseUseCases.fetchAssessments(
+                tenant = patient.tenant,
+                patientId = patient.patientId
+            )
                 .onEach {
                     when (it) {
                         is Resource.Error -> {

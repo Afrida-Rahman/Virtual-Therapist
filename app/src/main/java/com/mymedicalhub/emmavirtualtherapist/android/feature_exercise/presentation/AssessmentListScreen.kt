@@ -44,7 +44,7 @@ fun AssessmentListScreen(
     val scaffoldState = rememberScaffoldState(
         drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     )
-    val tenant = "emma"
+    val tenant = viewModel.patient.value?.tenant ?: "emma"
     val context = LocalContext.current
     val localConfiguration = LocalConfiguration.current
     val coroutineScope = rememberCoroutineScope()
@@ -130,7 +130,9 @@ fun AssessmentListScreen(
         Column(
             modifier = Modifier.background(MaterialTheme.colors.surface)
         ) {
-            HeroSection("Rashed Momin")
+            viewModel.patient.value?.let {
+                HeroSection("${it.firstName} ${it.lastName}")
+            }
             Text(
                 text = "My Assessments",
                 fontSize = 22.sp,
@@ -152,17 +154,24 @@ fun AssessmentListScreen(
                 }
                 LazyVerticalGrid(
                     cells = GridCells.Fixed(itemsPerRow),
-                    modifier = Modifier.padding(4.dp)
+                    modifier = Modifier.padding(
+                        start = 4.dp,
+                        top = 4.dp,
+                        end = 4.dp,
+                        bottom = 56.dp
+                    )
                 ) {
                     items(viewModel.assessments.value) {
                         AssessmentCard(it) {
-                            navController.navigate(
-                                Screen.ExerciseListScreen.withArgs(
-                                    tenant,
-                                    it.testId,
-                                    it.creationDate
+                            if (it.totalExercise > 0) {
+                                navController.navigate(
+                                    Screen.ExerciseListScreen.withArgs(
+                                        tenant,
+                                        it.testId,
+                                        it.creationDate
+                                    )
                                 )
-                            )
+                            }
                         }
                     }
                 }

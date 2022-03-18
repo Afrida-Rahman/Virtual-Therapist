@@ -40,7 +40,8 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
             Spacer(Modifier.height(12.dp))
             Button(
                 onClick = { onViewExerciseButtonClicked() },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                enabled = assessment.totalExercise > 0
             ) {
                 Text(
                     text = "View Assigned Exercises",
