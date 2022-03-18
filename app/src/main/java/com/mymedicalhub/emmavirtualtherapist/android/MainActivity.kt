@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.mymedicalhub.emmavirtualtherapist.android.core.util.EXERCISE_ROUTE
+import com.mymedicalhub.emmavirtualtherapist.android.core.util.AUTHENTICATION_ROUTE
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.ROOT_ROUTE
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.authenticationNav
 import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.chatBotNav
@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(
                     navController = navController,
-                    startDestination = EXERCISE_ROUTE,
+                    startDestination = AUTHENTICATION_ROUTE,
                     route = ROOT_ROUTE
                 ) {
                     authenticationNav(navController = navController)

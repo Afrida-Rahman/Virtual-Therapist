@@ -1,11 +1,13 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.sign_in
 
+import android.content.SharedPreferences
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mymedicalhub.emmavirtualtherapist.android.core.Resource
 import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
+import com.mymedicalhub.emmavirtualtherapist.android.core.util.Utilities
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.usecase.PatientUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -17,8 +19,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    private val patientUseCases: PatientUseCases
+    private val patientUseCases: PatientUseCases,
+    private val preferences: SharedPreferences
 ) : ViewModel() {
+
+    private val _isAlreadyLoggedIn = mutableStateOf(false)
+    val isAlreadyLoggedIn: State<Boolean> = _isAlreadyLoggedIn
 
     private val _email = mutableStateOf("")
     val email: State<String> = _email
@@ -37,6 +43,13 @@ class SignInViewModel @Inject constructor(
 
     private val _eventFlow = MutableSharedFlow<UIEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
+
+    init {
+        val data = Utilities.getPatient(preferences = preferences)
+        if (data.firstName.isNotEmpty() and data.patientId.isNotEmpty()) {
+            _isAlreadyLoggedIn.value = true
+        }
+    }
 
     fun onEvent(event: SignInEvent) {
         when (event) {
@@ -72,6 +85,12 @@ class SignInViewModel @Inject constructor(
                                     _email.value = ""
                                     _password.value = ""
                                     _eventFlow.emit(UIEvent.ShowSnackBar(message = "Successfully signed in"))
+                                    it.data?.let { patient ->
+                                        Utilities.savePatient(
+                                            preferences = preferences,
+                                            data = patient
+                                        )
+                                    }
                                     event.onSuccess()
                                 }
                                 is Resource.Error -> {

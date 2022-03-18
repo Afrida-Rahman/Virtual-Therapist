@@ -1,6 +1,8 @@
 package com.mymedicalhub.emmavirtualtherapist.android.di
 
 import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.Room
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Urls
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.data.data_source.PatientDatabase
@@ -104,5 +106,11 @@ object AppModule {
             fetchExerciseConstraints = FetchExerciseConstraints(repository = remoteAssessmentRepository),
             saveExerciseData = SaveExerciseData(repository = remoteExerciseTrackingRepository)
         )
+    }
+
+    @Provides
+    @Singleton
+    fun providesSharedPreference(application: Application): SharedPreferences {
+        return application.getSharedPreferences("patientData", Context.MODE_PRIVATE)
     }
 }

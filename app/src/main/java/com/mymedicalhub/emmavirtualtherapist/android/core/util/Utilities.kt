@@ -1,6 +1,8 @@
 package com.mymedicalhub.emmavirtualtherapist.android.core.util
 
+import android.content.SharedPreferences
 import com.mymedicalhub.emmavirtualtherapist.android.core.model.Point
+import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.model.Patient
 import java.util.*
 import kotlin.math.acos
 import kotlin.math.sqrt
@@ -61,5 +63,24 @@ object Utilities {
             "PM"
         }
         return "$hour:$minute $amOrPm"
+    }
+
+    fun getPatient(preferences: SharedPreferences): Patient {
+        return Patient(
+            firstName = preferences.getString(Patient.FIRST_NAME, "") ?: "",
+            lastName = preferences.getString(Patient.LAST_NAME, "") ?: "",
+            patientId = preferences.getString(Patient.PATIENT_ID, "") ?: "",
+            tenant = preferences.getString(Patient.TENANT, "") ?: ""
+        )
+    }
+
+    fun savePatient(preferences: SharedPreferences, data: Patient) {
+        preferences.edit().apply {
+            putString(Patient.FIRST_NAME, data.firstName)
+            putString(Patient.LAST_NAME, data.lastName)
+            putString(Patient.PATIENT_ID, data.patientId)
+            putString(Patient.TENANT, data.tenant)
+            apply()
+        }
     }
 }
