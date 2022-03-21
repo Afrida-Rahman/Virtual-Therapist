@@ -6,6 +6,7 @@ const val EXERCISE_ROUTE = "exercise"
 const val CHAT_BOT_ROUTE = "chat-bot"
 
 sealed class Screen(val route: String) {
+    object SplashScreen : Screen("splash_screen")
     object SignInScreen : Screen("sign_in_screen")
     object AssessmentListScreen : Screen("assessment_list_screen")
     object ExerciseListScreen : Screen("exercise_list_screen")

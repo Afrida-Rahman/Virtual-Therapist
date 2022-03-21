@@ -91,7 +91,7 @@ fun WelcomeScreen() {
                     tint = Color.Green
                 )
                 Spacer(modifier = Modifier.width(24.dp))
-                Text(text = "Returning Patient", fontSize = 20.sp, color = Color.White)
+                Text(text = "New Patient", fontSize = 20.sp, color = Color.White)
             }
         }
         Spacer(modifier = Modifier.height(24.dp))

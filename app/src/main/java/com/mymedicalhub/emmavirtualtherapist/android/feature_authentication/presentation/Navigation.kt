@@ -7,9 +7,13 @@ import androidx.navigation.navigation
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.AUTHENTICATION_ROUTE
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.sign_in.SignInScreen
+import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.splash.SplashScreen
 
 fun NavGraphBuilder.authenticationNav(navController: NavController) {
-    navigation(startDestination = Screen.SignInScreen.route, route = AUTHENTICATION_ROUTE) {
+    navigation(startDestination = Screen.SplashScreen.route, route = AUTHENTICATION_ROUTE) {
+        composable(route = Screen.SplashScreen.route) {
+            SplashScreen(navController = navController)
+        }
         composable(route = Screen.SignInScreen.route) {
             SignInScreen(navController = navController)
         }

@@ -22,10 +22,6 @@ class SignInViewModel @Inject constructor(
     private val patientUseCases: PatientUseCases,
     private val preferences: SharedPreferences
 ) : ViewModel() {
-
-    private val _isAlreadyLoggedIn = mutableStateOf(false)
-    val isAlreadyLoggedIn: State<Boolean> = _isAlreadyLoggedIn
-
     private val _email = mutableStateOf("")
     val email: State<String> = _email
 
@@ -44,12 +40,6 @@ class SignInViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<UIEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    init {
-        val data = Utilities.getPatient(preferences = preferences)
-        if (data.firstName.isNotEmpty() and data.patientId.isNotEmpty()) {
-            _isAlreadyLoggedIn.value = true
-        }
-    }
 
     fun onEvent(event: SignInEvent) {
         when (event) {
