@@ -26,7 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ExerciseViewModel @Inject constructor(
     private val exerciseUseCases: ExerciseUseCases,
-    preferences: SharedPreferences
+    private val preferences: SharedPreferences
 ) : ViewModel() {
     private var originalAssessmentList: List<Assessment> = emptyList()
 
@@ -112,6 +112,19 @@ class ExerciseViewModel @Inject constructor(
                 testId = event.testId,
                 exerciseId = event.exerciseId
             )
+            is ExerciseEvent.SignOut -> {
+                Utilities.savePatient(
+                    preferences = preferences,
+                    data = Patient(
+                        id = null,
+                        tenant = "",
+                        patientId = "",
+                        firstName = "",
+                        lastName = "",
+                        loggedIn = false
+                    )
+                )
+            }
             is ExerciseEvent.AssessmentSearchTermEntered -> {
                 _assessmentSearchTerm.value = event.searchTerm
                 _assessments.value = getAssessments(event.searchTerm)

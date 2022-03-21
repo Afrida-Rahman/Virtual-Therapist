@@ -31,7 +31,8 @@ import kotlinx.coroutines.launch
 fun NavigationDrawer(
     navController: NavController,
     coroutineScope: CoroutineScope,
-    scaffoldState: ScaffoldState
+    scaffoldState: ScaffoldState,
+    onLogOut: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Box(
@@ -157,8 +158,7 @@ fun NavigationDrawer(
                         coroutineScope.launch {
                             scaffoldState.drawerState.close()
                         }
-                        navController.popBackStack()
-                        navController.navigate(Screen.SignInScreen.route)
+                        onLogOut()
                     },
                 verticalAlignment = Alignment.CenterVertically
             ) {

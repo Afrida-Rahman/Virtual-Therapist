@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.BottomNavigationBar
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.NavigationDrawer
@@ -25,7 +26,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun BotListScreen(navController: NavController) {
+fun BotListScreen(navController: NavController, viewModel: BotViewModel = hiltViewModel()) {
     val botList = BotUtils.getBots()
     val scaffoldState = rememberScaffoldState(
         drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -52,7 +53,11 @@ fun BotListScreen(navController: NavController) {
                 navController = navController,
                 coroutineScope = coroutineScope,
                 scaffoldState = scaffoldState
-            )
+            ) {
+                viewModel.onEvent(BotEvent.SignOut)
+                navController.popBackStack()
+                navController.navigate(Screen.SignInScreen.route)
+            }
         },
         bottomBar = {
             BottomNavigationBar(navController = navController)

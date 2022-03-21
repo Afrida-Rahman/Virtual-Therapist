@@ -121,7 +121,11 @@ fun AssessmentListScreen(
                 navController = navController,
                 coroutineScope = coroutineScope,
                 scaffoldState = scaffoldState
-            )
+            ) {
+                viewModel.onEvent(ExerciseEvent.SignOut)
+                navController.popBackStack()
+                navController.navigate(Screen.SignInScreen.route)
+            }
         },
         bottomBar = {
             BottomNavigationBar(navController = navController)

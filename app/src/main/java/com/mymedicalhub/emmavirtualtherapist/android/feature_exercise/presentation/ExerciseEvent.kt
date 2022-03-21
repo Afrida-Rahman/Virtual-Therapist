@@ -11,6 +11,7 @@ sealed class ExerciseEvent {
         val exerciseId: Int
     ) : ExerciseEvent()
 
+    object SignOut : ExerciseEvent()
     object ShowAssessmentSearchBar : ExerciseEvent()
     object HideAssessmentSearchBar : ExerciseEvent()
     object ShowExerciseSearchBar : ExerciseEvent()
