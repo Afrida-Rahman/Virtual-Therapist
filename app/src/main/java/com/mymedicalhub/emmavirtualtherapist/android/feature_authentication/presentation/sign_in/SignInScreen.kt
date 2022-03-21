@@ -4,28 +4,31 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
@@ -40,6 +43,10 @@ fun SignInScreen(
 ) {
     val scaffoldState = rememberScaffoldState()
     val context = LocalContext.current
+    val tenants = listOf("emma", "npc")
+    var selectedTenant by remember { mutableStateOf("") }
+    var expanded by remember { mutableStateOf(false) }
+    var size by remember { mutableStateOf(Size.Zero) }
 
     LaunchedEffect(key1 = true) {
         if (viewModel.isAlreadyLoggedIn.value) {
@@ -100,15 +107,39 @@ fun SignInScreen(
                         .weight(1f)
                 ) {
                     Text(text = "Select Your Practice")
-                    OutlineInputTextField(
-                        field = viewModel.tenant,
-                        onValueChange = {
-                            viewModel.onEvent(SignInEvent.EnteredTenant(it))
+                    OutlinedTextField(
+                        value = selectedTenant.uppercase(),
+                        onValueChange = {},
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .onGloballyPositioned { position ->
+                                size = position.size.toSize()
+                            },
+                        trailingIcon = {
+                            Icon(
+                                imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                                contentDescription = null,
+                                modifier = Modifier.clickable { expanded = !expanded }
+                            )
                         },
-                        onIconPressed = {},
-                        placeholder = "Tenant",
-                        keyboardType = KeyboardType.Text
+                        placeholder = { Text("Select Your Practice") },
+                        shape = RoundedCornerShape(16.dp),
                     )
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false },
+                        modifier = Modifier.width(with(LocalDensity.current) { size.width.toDp() })
+                    ) {
+                        tenants.forEach {
+                            DropdownMenuItem(onClick = {
+                                selectedTenant = it
+                                expanded = false
+                                viewModel.onEvent(SignInEvent.EnteredTenant(it))
+                            }) {
+                                Text(text = it.uppercase())
+                            }
+                        }
+                    }
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Text(text = "Email Address")
@@ -145,7 +176,8 @@ fun SignInScreen(
                             VisualTransformation.None
                         } else {
                             PasswordVisualTransformation()
-                        }
+                        },
+                        imeAction = ImeAction.Done
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(

@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,7 +29,8 @@ fun OutlineInputTextField(
     placeholder: String,
     keyboardType: KeyboardType,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    isEnable: Boolean = true
+    isEnable: Boolean = true,
+    imeAction: ImeAction = ImeAction.Next
 ) {
     if (leadingIcon != null) {
         OutlinedTextField(
@@ -59,7 +61,10 @@ fun OutlineInputTextField(
             singleLine = true,
             placeholder = { Text(placeholder) },
             label = { Text(placeholder) },
-            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = keyboardType,
+                imeAction = imeAction
+            ),
             visualTransformation = visualTransformation,
             enabled = isEnable,
             shape = RoundedCornerShape(16.dp)
