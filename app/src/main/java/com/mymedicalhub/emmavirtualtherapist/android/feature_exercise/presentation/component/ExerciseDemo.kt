@@ -50,7 +50,7 @@ fun ExerciseDemo(
                 HorizontalPager(
                     count = sortedPhases.size,
                     modifier = Modifier
-                        .height(400.dp)
+                        .height(450.dp)
                         .padding(12.dp)
                 ) { index ->
                     val phase = sortedPhases[index]
@@ -76,7 +76,8 @@ fun ExerciseDemo(
                                         ),
                                         contentDescription = "Phase Image ${phase.id}",
                                         modifier = Modifier
-                                            .fillMaxWidth(),
+                                            .fillMaxWidth()
+                                            .align(Alignment.Center),
                                         contentScale = ContentScale.Fit
                                     )
                                     Text(
@@ -90,7 +91,7 @@ fun ExerciseDemo(
                             Text(
                                 text = it,
                                 modifier = Modifier
-                                    .height(30.dp)
+                                    .height(50.dp)
                             )
                         }
                     }
