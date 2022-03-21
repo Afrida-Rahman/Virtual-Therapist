@@ -3,6 +3,7 @@ package com.mymedicalhub.emmavirtualtherapist.android.core.component
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -30,7 +31,8 @@ fun OutlineInputTextField(
     keyboardType: KeyboardType,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     isEnable: Boolean = true,
-    imeAction: ImeAction = ImeAction.Next
+    imeAction: ImeAction = ImeAction.Next,
+    keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
     if (leadingIcon != null) {
         OutlinedTextField(
@@ -67,7 +69,8 @@ fun OutlineInputTextField(
             ),
             visualTransformation = visualTransformation,
             enabled = isEnable,
-            shape = RoundedCornerShape(16.dp)
+            shape = RoundedCornerShape(16.dp),
+            keyboardActions = keyboardActions
         )
     } else {
         OutlinedTextField(

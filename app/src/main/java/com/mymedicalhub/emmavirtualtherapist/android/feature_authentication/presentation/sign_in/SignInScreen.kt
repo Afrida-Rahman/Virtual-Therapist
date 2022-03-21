@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -177,7 +178,13 @@ fun SignInScreen(
                         } else {
                             PasswordVisualTransformation()
                         },
-                        imeAction = ImeAction.Done
+                        imeAction = ImeAction.Done,
+                        keyboardActions = KeyboardActions(onDone = {
+                            viewModel.onEvent(SignInEvent.SignInButtonClick {
+                                navController.popBackStack()
+                                navController.navigate(Screen.AssessmentListScreen.route)
+                            })
+                        })
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
@@ -189,6 +196,7 @@ fun SignInScreen(
                     Button(
                         onClick = {
                             viewModel.onEvent(SignInEvent.SignInButtonClick {
+                                navController.popBackStack()
                                 navController.navigate(Screen.AssessmentListScreen.route)
                             })
                         },
