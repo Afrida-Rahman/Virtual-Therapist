@@ -15,10 +15,12 @@ class SplashScreenViewModel @Inject constructor(
     private val _isAlreadyLoggedIn = mutableStateOf(false)
     val isAlreadyLoggedIn: State<Boolean> = _isAlreadyLoggedIn
 
+    private val _isWalkThroughShown = mutableStateOf(false)
+    val isWalkThroughShown: State<Boolean> = _isWalkThroughShown
+
     init {
         val data = Utilities.getPatient(preferences = preferences)
-        if (data.firstName.isNotEmpty() and data.patientId.isNotEmpty()) {
-            _isAlreadyLoggedIn.value = true
-        }
+        _isAlreadyLoggedIn.value = data.loggedIn
+        _isWalkThroughShown.value = data.walkThroughPageShown
     }
 }
