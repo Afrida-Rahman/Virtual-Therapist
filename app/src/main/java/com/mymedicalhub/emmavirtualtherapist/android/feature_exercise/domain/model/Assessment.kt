@@ -5,7 +5,7 @@ data class Assessment(
     val creationDate: String,
     val isReportReady: Boolean,
     val providerId: String,
-    val providerName: String,
+    val providerName: String?,
     val bodyRegionId: Int,
     val bodyRegionName: String,
     val registrationType: String,
