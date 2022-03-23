@@ -112,7 +112,9 @@ fun ExerciseListScreen(
         Column(
             modifier = Modifier.background(MaterialTheme.colors.surface)
         ) {
-            HeroSection("Rashed Momin")
+            viewModel.patient.value?.let {
+                HeroSection("${it.firstName} ${it.lastName}")
+            }
             Column(
                 modifier = Modifier.padding(horizontal = 8.dp)
             ) {
@@ -190,77 +192,87 @@ fun ExerciseListScreen(
                     }
                 }
 
-                if (viewModel.isExerciseLoading.value) {
-                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                        CircularProgressIndicator()
-                    }
-                } else if (viewModel.showTryAgain.value) {
-                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                        Button(onClick = {
-                            viewModel.onEvent(
-                                ExerciseEvent.FetchExercises(
-                                    testId = testId,
-                                    tenant = tenant
-                                )
-                            )
-                        }) {
-                            Text(text = "Try Again")
+                when {
+                    viewModel.isExerciseLoading.value -> {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            CircularProgressIndicator()
                         }
                     }
-                } else {
-                    viewModel.exercises.value?.let { exercises ->
-                        if (exercises.isNotEmpty()) {
-                            val itemsPerRow = when {
-                                localConfiguration.screenWidthDp > 840 -> {
-                                    3
-                                }
-                                localConfiguration.screenWidthDp > 600 -> {
-                                    2
-                                }
-                                else -> {
-                                    1
-                                }
-                            }
-                            LazyVerticalGrid(
-                                cells = GridCells.Fixed(itemsPerRow),
-                                modifier = Modifier.padding(4.dp)
-                            ) {
-                                items(exercises) {
-                                    ExerciseCard(
-                                        imageUrl = if (it.imageURLs.isNotEmpty()) {
-                                            it.imageURLs[0]
-                                        } else null,
-                                        name = it.name,
-                                        repetition = it.repetition,
-                                        set = it.set,
-                                        isActive = true,
-                                        onGuidelineButtonClicked = {
-                                            navController.navigate(
-                                                Screen.ExerciseGuidelineScreen.withArgs(
-                                                    testId,
-                                                    it.id.toString()
-                                                )
-                                            )
-                                        },
-                                        onStartWorkoutButtonClicked = {
-                                            viewModel.onEvent(ExerciseEvent.ShowExerciseDemo(it.id))
-                                        },
-                                        onManualTrackingButtonClicked = {
-                                            viewModel.onEvent(
-                                                ExerciseEvent.ManualSelectedExerciseId(
-                                                    it.id
-                                                )
-                                            )
-                                            viewModel.onEvent(ExerciseEvent.ShowManualTrackingAlertDialogue)
-                                        }
+                    viewModel.showTryAgain.value -> {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            Button(onClick = {
+                                viewModel.onEvent(
+                                    ExerciseEvent.FetchExercises(
+                                        testId = testId,
+                                        tenant = tenant
                                     )
-                                }
+                                )
+                            }) {
+                                Text(text = "Try Again")
                             }
-                        } else {
-                            Text(
-                                text = "No exercise is assigned yet!",
-                                fontWeight = FontWeight.Bold
-                            )
+                        }
+                    }
+                    else -> {
+                        viewModel.exercises.value?.let { exercises ->
+                            if (exercises.isNotEmpty()) {
+                                val itemsPerRow = when {
+                                    localConfiguration.screenWidthDp > 840 -> {
+                                        3
+                                    }
+                                    localConfiguration.screenWidthDp > 600 -> {
+                                        2
+                                    }
+                                    else -> {
+                                        1
+                                    }
+                                }
+                                LazyVerticalGrid(
+                                    cells = GridCells.Fixed(itemsPerRow),
+                                    modifier = Modifier.padding(4.dp)
+                                ) {
+                                    items(exercises) {
+                                        ExerciseCard(
+                                            imageUrl = if (it.imageURLs.isNotEmpty()) {
+                                                it.imageURLs[0]
+                                            } else null,
+                                            name = it.name,
+                                            repetition = it.repetition,
+                                            set = it.set,
+                                            isActive = true,
+                                            onGuidelineButtonClicked = {
+                                                navController.navigate(
+                                                    Screen.ExerciseGuidelineScreen.withArgs(
+                                                        testId,
+                                                        it.id.toString()
+                                                    )
+                                                )
+                                            },
+                                            onStartWorkoutButtonClicked = {
+                                                viewModel.onEvent(ExerciseEvent.ShowExerciseDemo(it.id))
+                                            },
+                                            onManualTrackingButtonClicked = {
+                                                viewModel.onEvent(
+                                                    ExerciseEvent.ManualSelectedExerciseId(
+                                                        it.id
+                                                    )
+                                                )
+                                                viewModel.onEvent(ExerciseEvent.ShowManualTrackingAlertDialogue)
+                                            }
+                                        )
+                                    }
+                                }
+                            } else {
+                                Text(
+                                    text = "No exercise is assigned yet!",
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
                         }
                     }
                 }

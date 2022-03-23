@@ -250,30 +250,29 @@ class ExerciseViewModel @Inject constructor(
             exerciseUseCases.fetchAssessments(
                 tenant = patient.tenant,
                 patientId = patient.patientId
-            )
-                .onEach {
-                    when (it) {
-                        is Resource.Error -> {
-                            _showTryAgainButton.value = true
-                            _isAssessmentLoading.value = false
-                            _eventFlow.emit(
-                                UIEvent.ShowSnackBar(
-                                    it.message ?: "Failed to load assessments! Please try again."
-                                )
+            ).onEach {
+                when (it) {
+                    is Resource.Error -> {
+                        _showTryAgainButton.value = true
+                        _isAssessmentLoading.value = false
+                        _eventFlow.emit(
+                            UIEvent.ShowSnackBar(
+                                it.message ?: "Failed to load assessments! Please try again."
                             )
-                        }
-                        is Resource.Loading -> {
-                            _isAssessmentLoading.value = true
-                            _showTryAgainButton.value = false
-                        }
-                        is Resource.Success -> {
-                            _showTryAgainButton.value = false
-                            _isAssessmentLoading.value = false
-                            originalAssessmentList = it.data ?: emptyList()
-                            _assessments.value = originalAssessmentList
-                        }
+                        )
                     }
-                }.launchIn(this)
+                    is Resource.Loading -> {
+                        _isAssessmentLoading.value = true
+                        _showTryAgainButton.value = false
+                    }
+                    is Resource.Success -> {
+                        _showTryAgainButton.value = false
+                        _isAssessmentLoading.value = false
+                        originalAssessmentList = it.data ?: emptyList()
+                        _assessments.value = originalAssessmentList
+                    }
+                }
+            }.launchIn(this)
         }
     }
 

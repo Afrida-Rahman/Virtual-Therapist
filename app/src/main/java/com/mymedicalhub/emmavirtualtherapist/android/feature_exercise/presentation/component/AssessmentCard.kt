@@ -32,7 +32,7 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
             )
             Spacer(Modifier.height(12.dp))
             AssessmentCardBody(
-                providerName = assessment.providerName,
+                providerName = assessment.providerName ?: "Self Assessment",
                 bodyRegion = assessment.bodyRegionName,
                 registrationType = assessment.registrationType,
                 exerciseCount = assessment.totalExercise

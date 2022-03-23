@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalTextInputService
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -44,6 +45,7 @@ fun SignInScreen(
 ) {
     val scaffoldState = rememberScaffoldState()
     val context = LocalContext.current
+    val keyboardService = LocalTextInputService.current
     val tenants = listOf("emma", "npc")
     var selectedTenant by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
@@ -171,6 +173,7 @@ fun SignInScreen(
                     },
                     imeAction = ImeAction.Done,
                     keyboardActions = KeyboardActions(onDone = {
+                        keyboardService?.hideSoftwareKeyboard()
                         viewModel.onEvent(SignInEvent.SignInButtonClick {
                             navController.popBackStack()
                             navController.navigate(Screen.AssessmentListScreen.route)

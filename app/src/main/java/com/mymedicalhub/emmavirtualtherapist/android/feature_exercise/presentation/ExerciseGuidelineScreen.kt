@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.*
@@ -36,35 +37,45 @@ fun ExerciseGuidelineScreen(
         Column(
             modifier = Modifier.background(MaterialTheme.colors.surface)
         ) {
-            HeroSection("Rashed Momin")
+            viewModel.patient.value?.let {
+                HeroSection("${it.firstName} ${it.lastName}")
+            }
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
             ) {
-                exercise?.let {
+                exercise?.let { exercise ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = it.name, style = MaterialTheme.typography.h1)
+                        Text(
+                            text = exercise.name,
+                            style = MaterialTheme.typography.h1,
+                            overflow = TextOverflow.Ellipsis
+                        )
                         Button(onClick = {
-                            navController.popBackStack()
-                            navController.navigate(
-                                Screen.ExerciseScreen.withArgs(
-                                    testId,
-                                    it.id.toString()
+                            viewModel.patient.value?.let { patient ->
+                                navController.popBackStack()
+                                navController.navigate(
+                                    Screen.ExerciseScreen.withArgs(
+                                        patient.tenant,
+                                        testId,
+                                        exercise.id.toString()
+                                    )
                                 )
-                            )
+                            }
+
                         }) {
                             Text(text = "Start Workout")
                         }
                     }
-                    InstructionSection(it.instruction)
-                    it.videoURL?.let { url ->
+                    InstructionSection(exercise.instruction)
+                    exercise.videoURL?.let { url ->
                         VideoSection(videoUrl = url)
                     }
-                    ImageSection(it.imageURLs)
+                    ImageSection(exercise.imageURLs)
                 }
             }
         }
