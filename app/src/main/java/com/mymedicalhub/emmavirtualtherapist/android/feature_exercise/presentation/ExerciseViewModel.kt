@@ -1,13 +1,17 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
 
+import android.content.SharedPreferences
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mymedicalhub.emmavirtualtherapist.android.core.Resource
 import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
+import com.mymedicalhub.emmavirtualtherapist.android.core.util.Utilities
+import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.model.Patient
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Assessment
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Exercise
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Phase
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.usecase.ExerciseUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -21,18 +25,25 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ExerciseViewModel @Inject constructor(
-    private val exerciseUseCases: ExerciseUseCases
+    private val exerciseUseCases: ExerciseUseCases,
+    private val preferences: SharedPreferences
 ) : ViewModel() {
     private var originalAssessmentList: List<Assessment> = emptyList()
 
     private val _assessments = mutableStateOf<List<Assessment>>(emptyList())
     val assessments: State<List<Assessment>> = _assessments
 
+    private val _patient = mutableStateOf<Patient?>(null)
+    val patient: State<Patient?> = _patient
+
     private val _exercises = mutableStateOf<List<Exercise>?>(null)
     val exercises: State<List<Exercise>?> = _exercises
 
     private val _isAssessmentLoading = mutableStateOf(false)
     val isAssessmentLoading: State<Boolean> = _isAssessmentLoading
+
+    private val _isExerciseLoading = mutableStateOf(true)
+    val isExerciseLoading: State<Boolean> = _isExerciseLoading
 
     private val _showTryAgainButton = mutableStateOf(false)
     val showTryAgain: State<Boolean> = _showTryAgainButton
@@ -51,6 +62,9 @@ class ExerciseViewModel @Inject constructor(
 
     private val _showManualTrackingForm = mutableStateOf(false)
     val showManualTrackingForm: State<Boolean> = _showManualTrackingForm
+
+    private val _showExerciseDemo = mutableStateOf(false)
+    val showExerciseDemo: State<Boolean> = _showExerciseDemo
 
     private val _manualSelectedExercise = mutableStateOf(0)
     val manualSelectedExercise: State<Int> = _manualSelectedExercise
@@ -76,12 +90,41 @@ class ExerciseViewModel @Inject constructor(
     val eventFlow = _eventFlow.asSharedFlow()
 
     init {
-        fetchAssessments()
+        _patient.value = Utilities.getPatient(preferences = preferences)
+        _patient.value?.let {
+            fetchAssessments(it)
+        }
     }
 
     fun onEvent(event: ExerciseEvent) {
         when (event) {
-            is ExerciseEvent.FetchAssessments -> fetchAssessments()
+            is ExerciseEvent.FetchAssessments -> {
+                _patient.value?.let {
+                    fetchAssessments(it)
+                }
+            }
+            is ExerciseEvent.FetchExercises -> fetchExercises(
+                tenant = event.tenant,
+                testId = event.testId
+            )
+            is ExerciseEvent.FetchExerciseConstraints -> fetchExerciseConstraints(
+                tenant = event.tenant,
+                testId = event.testId,
+                exerciseId = event.exerciseId
+            )
+            is ExerciseEvent.SignOut -> {
+                Utilities.savePatient(
+                    preferences = preferences,
+                    data = Patient(
+                        id = null,
+                        tenant = "",
+                        patientId = "",
+                        firstName = "",
+                        lastName = "",
+                        loggedIn = false
+                    )
+                )
+            }
             is ExerciseEvent.AssessmentSearchTermEntered -> {
                 _assessmentSearchTerm.value = event.searchTerm
                 _assessments.value = getAssessments(event.searchTerm)
@@ -131,15 +174,24 @@ class ExerciseViewModel @Inject constructor(
                 _manualSetCount.value = ""
                 _manualWrongCount.value = ""
             }
+            is ExerciseEvent.ShowExerciseDemo -> {
+                _manualSelectedExercise.value = event.exerciseId
+                _showExerciseDemo.value = true
+            }
+            is ExerciseEvent.HideExerciseDemo -> {
+                _showExerciseDemo.value = false
+            }
             is ExerciseEvent.SaveDataButtonClicked -> {
                 if (!saveDataButtonClicked.value) {
                     _saveDataButtonClicked.value = true
-                    saveExerciseData(
-                        tenant = "emma",
-                        testId = event.testId,
-                        patientId = "0fc2e143-5abd-eb11-8236-000d3a33d0fd",
-                        exercise = event.exercise
-                    )
+                    _patient.value?.let {
+                        saveExerciseData(
+                            tenant = it.tenant,
+                            testId = event.testId,
+                            patientId = it.patientId,
+                            exercise = event.exercise
+                        )
+                    }
                 }
             }
         }
@@ -149,7 +201,23 @@ class ExerciseViewModel @Inject constructor(
         return getExercises(testId = testId).find { it.id == exerciseId }
     }
 
-    fun searchExercises(testId: String, searchTerm: String = "") {
+    fun loadExercises(tenant: String, testId: String) {
+        if (getExercises(testId = testId).isEmpty()) {
+            fetchExercises(testId = testId, tenant = tenant)
+        } else {
+            searchExercises(testId = testId)
+        }
+    }
+
+    fun loadExerciseConstraints(tenant: String, testId: String, exerciseId: Int) {
+        getExercise(testId = testId, exerciseId = exerciseId)?.let { exercise ->
+            if (exercise.phases.isNullOrEmpty()) {
+                fetchExerciseConstraints(tenant = tenant, testId = testId, exerciseId = exerciseId)
+            }
+        }
+    }
+
+    private fun searchExercises(testId: String, searchTerm: String = "") {
         searchCoroutine?.cancel()
         searchCoroutine = viewModelScope.launch {
             delay(500L)
@@ -177,32 +245,119 @@ class ExerciseViewModel @Inject constructor(
         return assessments
     }
 
-    private fun fetchAssessments() {
+    private fun fetchAssessments(patient: Patient) {
         viewModelScope.launch {
-            exerciseUseCases.fetchAssessments("emma", "0fc2e143-5abd-eb11-8236-000d3a33d0fd")
+            exerciseUseCases.fetchAssessments(
+                tenant = patient.tenant,
+                patientId = patient.patientId
+            ).onEach {
+                when (it) {
+                    is Resource.Error -> {
+                        _showTryAgainButton.value = true
+                        _isAssessmentLoading.value = false
+                        _eventFlow.emit(
+                            UIEvent.ShowSnackBar(
+                                it.message ?: "Failed to load assessments! Please try again."
+                            )
+                        )
+                    }
+                    is Resource.Loading -> {
+                        _isAssessmentLoading.value = true
+                        _showTryAgainButton.value = false
+                    }
+                    is Resource.Success -> {
+                        _showTryAgainButton.value = false
+                        _isAssessmentLoading.value = false
+                        originalAssessmentList = it.data ?: emptyList()
+                        _assessments.value = originalAssessmentList
+                    }
+                }
+            }.launchIn(this)
+        }
+    }
+
+    private fun fetchExercises(tenant: String, testId: String) {
+        viewModelScope.launch {
+            exerciseUseCases.fetchExercises(testId = testId, tenant = tenant)
                 .onEach {
                     when (it) {
                         is Resource.Error -> {
+                            _isExerciseLoading.value = false
                             _showTryAgainButton.value = true
-                            _isAssessmentLoading.value = false
                             _eventFlow.emit(
                                 UIEvent.ShowSnackBar(
-                                    it.message ?: "Failed to load assessments! Please try again."
+                                    it.message ?: "Failed to load exercise list. Please try again."
                                 )
                             )
                         }
                         is Resource.Loading -> {
-                            _isAssessmentLoading.value = true
-                            _showTryAgainButton.value = false
+                            _isExerciseLoading.value = true
                         }
                         is Resource.Success -> {
-                            _showTryAgainButton.value = false
-                            _isAssessmentLoading.value = false
-                            originalAssessmentList = it.data ?: emptyList()
-                            _assessments.value = originalAssessmentList
+                            it.data?.let { exercises ->
+                                setExerciseList(testId = testId, exercises = exercises)
+                            }
+                            _isExerciseLoading.value = false
                         }
                     }
                 }.launchIn(this)
+        }
+    }
+
+    private fun fetchExerciseConstraints(tenant: String, testId: String, exerciseId: Int) {
+        viewModelScope.launch {
+            exerciseUseCases.fetchExerciseConstraints(tenant = tenant, exerciseId = exerciseId)
+                .onEach {
+                    when (it) {
+                        is Resource.Error -> {
+                            _isExerciseLoading.value = false
+                            _showTryAgainButton.value = true
+                            _eventFlow.emit(
+                                UIEvent.ShowSnackBar(
+                                    it.message
+                                        ?: "Failed to load exercise constraints. Please try again."
+                                )
+                            )
+                        }
+                        is Resource.Loading -> {
+                            _isExerciseLoading.value = true
+                        }
+                        is Resource.Success -> {
+                            it.data?.let { phases ->
+                                setExerciseConstraints(
+                                    testId = testId,
+                                    exerciseId = exerciseId,
+                                    phases = phases
+                                )
+                            }
+                            _isExerciseLoading.value = false
+                        }
+                    }
+                }.launchIn(this)
+        }
+    }
+
+    private fun setExerciseList(testId: String, exercises: List<Exercise>) {
+        for (index in 0.._assessments.value.size) {
+            if (_assessments.value[index].testId == testId) {
+                _assessments.value[index].exercises = exercises
+                _exercises.value = exercises.sortedBy { it.name }
+                break
+            }
+        }
+    }
+
+    private fun setExerciseConstraints(testId: String, exerciseId: Int, phases: List<Phase>) {
+        for (index1 in 0.._assessments.value.size) {
+            if (_assessments.value[index1].testId == testId) {
+                for (index2 in 0.._assessments.value[index1].exercises.size) {
+                    if (_assessments.value[index1].exercises[index2].id == exerciseId) {
+                        _assessments.value[index1].exercises[index2].phases = phases
+                        break
+                    }
+                }
+                break
+            }
         }
     }
 

@@ -1,6 +1,8 @@
 package com.mymedicalhub.emmavirtualtherapist.android.core.util
 
+import android.content.SharedPreferences
 import com.mymedicalhub.emmavirtualtherapist.android.core.model.Point
+import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.model.Patient
 import java.util.*
 import kotlin.math.acos
 import kotlin.math.sqrt
@@ -49,5 +51,40 @@ object Utilities {
         val month = currentDate.get(Calendar.MONTH)
         val year = currentDate.get(Calendar.YEAR)
         return "$month/$day/$year"
+    }
+
+    fun currentTime(): String {
+        val currentDate = Calendar.getInstance()
+        val hour = currentDate.get(Calendar.HOUR)
+        val minute = currentDate.get(Calendar.MINUTE)
+        val amOrPm = if (currentDate.get(Calendar.AM_PM) == 0) {
+            "AM"
+        } else {
+            "PM"
+        }
+        return "$hour:$minute $amOrPm"
+    }
+
+    fun getPatient(preferences: SharedPreferences): Patient {
+        return Patient(
+            firstName = preferences.getString(Patient.FIRST_NAME, "") ?: "",
+            lastName = preferences.getString(Patient.LAST_NAME, "") ?: "",
+            patientId = preferences.getString(Patient.PATIENT_ID, "") ?: "",
+            tenant = preferences.getString(Patient.TENANT, "") ?: "",
+            loggedIn = preferences.getBoolean(Patient.LOGGED_IN, false),
+            walkThroughPageShown = preferences.getBoolean(Patient.WALK_THROUGH_SHOWN, false),
+        )
+    }
+
+    fun savePatient(preferences: SharedPreferences, data: Patient) {
+        preferences.edit().apply {
+            putString(Patient.FIRST_NAME, data.firstName)
+            putString(Patient.LAST_NAME, data.lastName)
+            putString(Patient.PATIENT_ID, data.patientId)
+            putString(Patient.TENANT, data.tenant)
+            putBoolean(Patient.LOGGED_IN, data.loggedIn)
+            putBoolean(Patient.WALK_THROUGH_SHOWN, data.walkThroughPageShown)
+            apply()
+        }
     }
 }

@@ -1,19 +1,17 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
+import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.*
 
 @Composable
@@ -39,18 +37,45 @@ fun ExerciseGuidelineScreen(
         Column(
             modifier = Modifier.background(MaterialTheme.colors.surface)
         ) {
-            HeroSection("Rashed Momin")
+            viewModel.patient.value?.let {
+                HeroSection("${it.firstName} ${it.lastName}")
+            }
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
             ) {
-                exercise?.let {
-                    InstructionSection(it.instruction)
-                    it.videoURL?.let { url ->
+                exercise?.let { exercise ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = exercise.name,
+                            style = MaterialTheme.typography.h1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        Button(onClick = {
+                            viewModel.patient.value?.let { patient ->
+                                navController.popBackStack()
+                                navController.navigate(
+                                    Screen.ExerciseScreen.withArgs(
+                                        patient.tenant,
+                                        testId,
+                                        exercise.id.toString()
+                                    )
+                                )
+                            }
+
+                        }) {
+                            Text(text = "Start Workout")
+                        }
+                    }
+                    InstructionSection(exercise.instruction)
+                    exercise.videoURL?.let { url ->
                         VideoSection(videoUrl = url)
                     }
-                    ImageSection(it.imageURLs)
+                    ImageSection(exercise.imageURLs)
                 }
             }
         }

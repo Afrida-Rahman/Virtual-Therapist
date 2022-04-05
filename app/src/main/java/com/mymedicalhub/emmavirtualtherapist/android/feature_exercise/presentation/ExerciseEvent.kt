@@ -4,6 +4,14 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.mod
 
 sealed class ExerciseEvent {
     object FetchAssessments : ExerciseEvent()
+    data class FetchExercises(val testId: String, val tenant: String) : ExerciseEvent()
+    data class FetchExerciseConstraints(
+        val tenant: String,
+        val testId: String,
+        val exerciseId: Int
+    ) : ExerciseEvent()
+
+    object SignOut : ExerciseEvent()
     object ShowAssessmentSearchBar : ExerciseEvent()
     object HideAssessmentSearchBar : ExerciseEvent()
     object ShowExerciseSearchBar : ExerciseEvent()
@@ -12,6 +20,8 @@ sealed class ExerciseEvent {
     object GoToAssessmentPage : ExerciseEvent()
     object ShowManualTrackingAlertDialogue : ExerciseEvent()
     object HideManualTrackingAlertDialogue : ExerciseEvent()
+    data class ShowExerciseDemo(val exerciseId: Int) : ExerciseEvent()
+    object HideExerciseDemo : ExerciseEvent()
     data class SaveDataButtonClicked(val testId: String, val exercise: Exercise) : ExerciseEvent()
     data class ManualSelectedExerciseId(val exerciseId: Int) : ExerciseEvent()
     data class ManualRepetitionCountEntered(val value: String) : ExerciseEvent()

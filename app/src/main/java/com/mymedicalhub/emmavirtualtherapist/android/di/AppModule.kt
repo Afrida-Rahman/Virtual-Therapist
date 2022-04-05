@@ -1,6 +1,8 @@
 package com.mymedicalhub.emmavirtualtherapist.android.di
 
 import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.Room
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Urls
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.data.data_source.PatientDatabase
@@ -10,9 +12,7 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.doma
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.usecase.*
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.repository.RemoteAssessmentRepository
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.repository.RemoteExerciseTrackingRepository
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.usecase.ExerciseUseCases
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.usecase.FetchAssessments
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.usecase.SaveExerciseData
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.usecase.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -72,8 +72,8 @@ object AppModule {
     @Singleton
     fun providesRemoteAssessmentRepository(): RemoteAssessmentRepository {
         val client = OkHttpClient.Builder()
-            .connectTimeout(2, TimeUnit.MINUTES)
-            .readTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(3, TimeUnit.MINUTES)
+            .readTimeout(2, TimeUnit.MINUTES)
             .writeTimeout(30, TimeUnit.SECONDS)
             .build()
         return Retrofit.Builder()
@@ -102,7 +102,15 @@ object AppModule {
     ): ExerciseUseCases {
         return ExerciseUseCases(
             fetchAssessments = FetchAssessments(repository = remoteAssessmentRepository),
+            fetchExercises = FetchExercises(repository = remoteAssessmentRepository),
+            fetchExerciseConstraints = FetchExerciseConstraints(repository = remoteAssessmentRepository),
             saveExerciseData = SaveExerciseData(repository = remoteExerciseTrackingRepository)
         )
+    }
+
+    @Provides
+    @Singleton
+    fun providesSharedPreference(application: Application): SharedPreferences {
+        return application.getSharedPreferences("patientData", Context.MODE_PRIVATE)
     }
 }

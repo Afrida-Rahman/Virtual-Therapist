@@ -4,10 +4,11 @@ data class Assessment(
     val testId: String,
     val creationDate: String,
     val isReportReady: Boolean,
-    val providerId: String,
-    val providerName: String,
+    val providerId: String?,
+    val providerName: String?,
     val bodyRegionId: Int,
     val bodyRegionName: String,
     val registrationType: String,
-    val exercises: List<Exercise>
+    val totalExercise: Int,
+    var exercises: List<Exercise> = emptyList()
 )

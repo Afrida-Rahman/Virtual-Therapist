@@ -32,15 +32,16 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
             )
             Spacer(Modifier.height(12.dp))
             AssessmentCardBody(
-                providerName = assessment.providerName,
+                providerName = assessment.providerName ?: "Self Assessment",
                 bodyRegion = assessment.bodyRegionName,
                 registrationType = assessment.registrationType,
-                exerciseCount = assessment.exercises.size
+                exerciseCount = assessment.totalExercise
             )
             Spacer(Modifier.height(12.dp))
             Button(
                 onClick = { onViewExerciseButtonClicked() },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                enabled = assessment.totalExercise > 0
             ) {
                 Text(
                     text = "View Assigned Exercises",
@@ -66,6 +67,7 @@ fun AssessmentCardPreview() {
                 bodyRegionId = 0,
                 bodyRegionName = "Full Body",
                 registrationType = "In Clinic",
+                totalExercise = 478,
                 exercises = emptyList(),
             )
         ) {}

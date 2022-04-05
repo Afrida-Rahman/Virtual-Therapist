@@ -10,5 +10,5 @@ data class Exercise(
     val set: Int,
     val protocolId: Int,
     val instruction: String,
-    val phases: List<Phase>
+    var phases: List<Phase>
 )

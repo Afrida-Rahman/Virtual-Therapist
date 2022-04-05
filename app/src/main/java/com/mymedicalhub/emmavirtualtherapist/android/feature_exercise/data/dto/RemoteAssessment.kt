@@ -4,36 +4,28 @@ import com.google.gson.annotations.SerializedName
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Assessment
 
 data class RemoteAssessment(
-    @SerializedName("BodyRegionId")
-    val bodyRegionId: Int,
-    @SerializedName("BodyRegionName")
-    val bodyRegionName: String,
-    @SerializedName("CreatedOnUtc")
-    val createdOnUtc: String,
-    @SerializedName("Exercises")
-    val remoteExercises: List<RemoteExercise>,
-    @SerializedName("IsReportReady")
-    val isReportReady: Boolean,
-    @SerializedName("ProviderId")
-    val providerId: String,
-    @SerializedName("ProviderName")
-    val providerName: String,
-    @SerializedName("RegistrationType")
-    val registrationType: String,
-    @SerializedName("TestId")
-    val testId: String
+    @SerializedName("TestId") val testId: String,
+    @SerializedName("BodyRegionId") val bodyRegionId: Int,
+    @SerializedName("BodyRegionName") val bodyRegionName: String,
+    @SerializedName("ProviderName") val providerName: String,
+    @SerializedName("ProviderId") val providerId: String,
+    @SerializedName("CreatedOnUtc") val createdOnUtc: String,
+    @SerializedName("IsReportReady") val isReportReady: Boolean,
+    @SerializedName("RegistrationType") val registrationType: String,
+    @SerializedName("TotalExercise") val totalExercise: Int
 )
 
 fun RemoteAssessment.toAssessment(): Assessment {
     return Assessment(
         testId = testId,
-        creationDate = createdOnUtc,
+        creationDate = createdOnUtc.split("T")[0],
         isReportReady = isReportReady,
         providerId = providerId,
         providerName = providerName,
         bodyRegionId = bodyRegionId,
         bodyRegionName = bodyRegionName,
         registrationType = registrationType,
-        exercises = remoteExercises.map { it.toExercise() },
+        totalExercise = totalExercise,
+        exercises = emptyList(),
     )
 }

@@ -4,5 +4,6 @@ data class Phase(
     val id: Int,
     val instruction: String?,
     val holdTime: Int,
+    val imageUrl: String,
     val constraints: List<Constraint>
 )

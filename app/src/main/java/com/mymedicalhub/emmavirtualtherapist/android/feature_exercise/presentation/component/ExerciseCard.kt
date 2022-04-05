@@ -9,6 +9,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -89,7 +90,9 @@ fun ExerciseCard(
                                 ),
                                 contentDescription = null,
                                 contentScale = ContentScale.Fit,
-                                modifier = Modifier.size(150.dp)
+                                modifier = Modifier
+                                    .size(150.dp)
+                                    .align(Alignment.Center)
                             )
                         }
                         Image(

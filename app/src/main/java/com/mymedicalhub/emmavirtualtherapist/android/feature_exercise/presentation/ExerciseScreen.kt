@@ -13,9 +13,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Scaffold
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.FlipCameraAndroid
@@ -34,15 +32,17 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentati
 @SuppressLint("UnsafeOptInUsageError")
 @Composable
 fun ExerciseScreen(
+    tenant: String,
     testId: String,
     exerciseId: Int,
     navController: NavController,
     viewModel: ExerciseViewModel
 ) {
+    viewModel.loadExerciseConstraints(tenant = tenant, testId = testId, exerciseId = exerciseId)
     val exercise = viewModel.getExercise(testId = testId, exerciseId = exerciseId)
     val localContext = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-   
+
     val cameraProviderFuture = remember {
         ProcessCameraProvider.getInstance(localContext)
     }
@@ -125,6 +125,31 @@ fun ExerciseScreen(
                         },
                         modifier = Modifier.fillMaxSize()
                     )
+                }
+                if (viewModel.isExerciseLoading.value) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                } else if (viewModel.showTryAgain.value) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Button(onClick = {
+                            viewModel.onEvent(
+                                ExerciseEvent.FetchExerciseConstraints(
+                                    testId = testId,
+                                    tenant = tenant,
+                                    exerciseId = exerciseId
+                                )
+                            )
+                        }) {
+                            Text(text = "Try Again")
+                        }
+                    }
                 }
                 IconButton(onClick = { viewModel.onEvent(ExerciseEvent.FlipCamera) }) {
                     Icon(

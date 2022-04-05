@@ -1,9 +1,7 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
 
-import android.os.Build
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,7 +10,9 @@ import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -26,17 +26,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import coil.ImageLoader
-import coil.compose.rememberImagePainter
-import coil.decode.GifDecoder
-import coil.decode.ImageDecoderDecoder
-import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
+import com.mymedicalhub.emmavirtualtherapist.android.core.component.BottomNavigationBar
+import com.mymedicalhub.emmavirtualtherapist.android.core.component.NavigationDrawer
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.AssessmentCard
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ExerciseTopBar
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.HeroSection
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.NavigationDrawer
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -48,18 +44,10 @@ fun AssessmentListScreen(
     val scaffoldState = rememberScaffoldState(
         drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     )
+    val tenant = viewModel.patient.value?.tenant ?: "emma"
     val context = LocalContext.current
     val localConfiguration = LocalConfiguration.current
     val coroutineScope = rememberCoroutineScope()
-    val imageLoader = ImageLoader.Builder(context)
-        .componentRegistry {
-            if (Build.VERSION.SDK_INT >= 28) {
-                add(ImageDecoderDecoder(context))
-            } else {
-                add(GifDecoder())
-            }
-        }
-        .build()
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collect { event ->
@@ -130,48 +118,25 @@ fun AssessmentListScreen(
         },
         drawerContent = {
             NavigationDrawer(
-                onCloseButtonClicked = {
-                    coroutineScope.launch {
-                        scaffoldState.drawerState.close()
-                    }
-                }
+                navController = navController,
+                coroutineScope = coroutineScope,
+                scaffoldState = scaffoldState
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp)
-                        .clickable {
-                            navController.navigate(Screen.AssessmentListScreen.route)
-                        },
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Dashboard,
-                        contentDescription = "My Assessments"
-                    )
-                    Spacer(modifier = Modifier.width(24.dp))
-                    Text(text = "My Assessments")
-                }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp)
-                        .clickable {
-                            navController.navigate(Screen.SignInScreen.route)
-                        },
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(imageVector = Icons.Default.Logout, contentDescription = "Logout")
-                    Spacer(modifier = Modifier.width(24.dp))
-                    Text(text = "Logout")
-                }
+                viewModel.onEvent(ExerciseEvent.SignOut)
+                navController.popBackStack()
+                navController.navigate(Screen.SignInScreen.route)
             }
+        },
+        bottomBar = {
+            BottomNavigationBar(navController = navController)
         }
     ) {
         Column(
             modifier = Modifier.background(MaterialTheme.colors.surface)
         ) {
-            HeroSection("Rashed Momin")
+            viewModel.patient.value?.let {
+                HeroSection("${it.firstName} ${it.lastName}")
+            }
             Text(
                 text = "My Assessments",
                 fontSize = 22.sp,
@@ -193,16 +158,24 @@ fun AssessmentListScreen(
                 }
                 LazyVerticalGrid(
                     cells = GridCells.Fixed(itemsPerRow),
-                    modifier = Modifier.padding(4.dp)
+                    modifier = Modifier.padding(
+                        start = 4.dp,
+                        top = 4.dp,
+                        end = 4.dp,
+                        bottom = 56.dp
+                    )
                 ) {
                     items(viewModel.assessments.value) {
                         AssessmentCard(it) {
-                            navController.navigate(
-                                Screen.ExerciseListScreen.withArgs(
-                                    it.testId,
-                                    it.creationDate
+                            if (it.totalExercise > 0) {
+                                navController.navigate(
+                                    Screen.ExerciseListScreen.withArgs(
+                                        tenant,
+                                        it.testId,
+                                        it.creationDate
+                                    )
                                 )
-                            )
+                            }
                         }
                     }
                 }
@@ -215,14 +188,7 @@ fun AssessmentListScreen(
                 ) {
                     when {
                         viewModel.isAssessmentLoading.value -> {
-                            Image(
-                                painter = rememberImagePainter(
-                                    data = R.drawable.ic_infinite_loading,
-                                    imageLoader = imageLoader
-                                ),
-                                contentDescription = null,
-                                modifier = Modifier.size(150.dp)
-                            )
+                            CircularProgressIndicator()
                         }
                         viewModel.showTryAgain.value -> {
                             Button(

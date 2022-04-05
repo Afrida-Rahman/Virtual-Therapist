@@ -23,13 +23,12 @@ class FetchAssessments @Inject constructor(
             val assessmentDto = repository.fetchAssessments(
                 payload = AssessmentPayload(
                     tenant = tenant,
-                    patientId = patientId,
-                    isSummaryView = false
+                    patientId = patientId
                 )
             )
             emit(
                 Resource.Success(
-                    assessmentDto.toAssessmentList().sortedBy { it.creationDate }
+                    assessmentDto.toAssessmentList().sortedBy { it.totalExercise }.reversed()
                 )
             )
         } catch (e: IOException) {
