@@ -31,7 +31,7 @@ fun Page(page: WalkThroughPage) {
             painter = painterResource(id = page.image),
             contentDescription = "Page Image",
             modifier = Modifier
-                .fillMaxWidth(0.5f)
+                .fillMaxWidth()
                 .fillMaxSize(0.7f)
         )
         Text(
@@ -57,7 +57,7 @@ fun PagePreview() {
     EmmaVirtualTherapistTheme {
         Page(
             page = WalkThroughPage(
-                image = R.drawable.chest_pain,
+                image = R.drawable.walkthrough,
                 title = "Providing a revolutionary approach to musculoskeletal",
                 description = "Our health technology solution enables physicians to identify patient risk for injuring any of the ove 350 joints in the human body"
             )
