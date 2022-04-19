@@ -73,7 +73,7 @@ fun SignInScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { }) {
+                IconButton(onClick = { navController.popBackStack() }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBackIosNew,
                         contentDescription = "Back",
@@ -220,7 +220,7 @@ fun SignInScreen(
                     Text(text = "Don't have account? ")
                     Text(
                         text = "Sign Up",
-                        color = Color.Blue,
+                        color = Color(0xFF1176B4),
                         fontWeight = FontWeight.Bold
                     )
                 }

@@ -31,16 +31,12 @@ fun SplashScreen(navController: NavController, viewModel: SplashScreenViewModel 
         startAnimation = true
         delay((duration - 100).toLong())
         navController.popBackStack()
-        when {
-            viewModel.isAlreadyLoggedIn.value -> {
-                navController.navigate(Screen.AssessmentListScreen.route)
-            }
-            viewModel.isWalkThroughShown.value -> {
-                navController.navigate(Screen.SignInScreen.route)
-            }
-            else -> {
-                navController.navigate(Screen.WalkThroughScreen.route)
-            }
+        if (!viewModel.isWalkThroughShown.value) {
+            navController.navigate(Screen.WalkThroughScreen.route)
+        } else if (viewModel.isAlreadyLoggedIn.value) {
+            navController.navigate(Screen.AssessmentListScreen.route)
+        } else {
+            navController.navigate(Screen.WelcomeScreen.route)
         }
     }
     Box(
