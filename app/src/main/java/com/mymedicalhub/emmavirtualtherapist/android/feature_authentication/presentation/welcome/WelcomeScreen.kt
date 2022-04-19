@@ -61,7 +61,11 @@ fun WelcomeScreen(
         Spacer(modifier = Modifier.height(24.dp))
         Row {
             Text(text = "Don't have account?")
-            Text(text = "Sign Up")
+            Text(
+                text = "Sign Up",
+                color = Color(0xFF1176B4),
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }
