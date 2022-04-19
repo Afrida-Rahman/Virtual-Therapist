@@ -16,6 +16,7 @@ fun PatientDto.toPatient(tenant: String): Patient {
         patientId = contactData.patientId,
         firstName = contactData.firstName,
         lastName = contactData.lastName,
-        loggedIn = true
+        loggedIn = true,
+        walkThroughPageShown = true
     )
 }

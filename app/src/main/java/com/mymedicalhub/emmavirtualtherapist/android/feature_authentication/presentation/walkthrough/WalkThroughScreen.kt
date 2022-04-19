@@ -76,7 +76,7 @@ fun WalkThroughScreen(
                 onClick = {
                     viewModel.onEvent(WalkThroughScreenEvent.Finish)
                     navController.popBackStack()
-                    navController.navigate(Screen.SignInScreen.route)
+                    navController.navigate(Screen.WelcomeScreen.route)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
