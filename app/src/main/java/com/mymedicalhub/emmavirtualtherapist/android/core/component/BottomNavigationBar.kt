@@ -7,7 +7,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.Dashboard
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -41,13 +40,8 @@ fun BottomNavigationBar(navController: NavController) {
                 Icon(
                     imageVector = Icons.Default.Chat,
                     contentDescription = "Chat Bots"
-
                 )
             }
         )
-
-
-     
-
     }
 }
