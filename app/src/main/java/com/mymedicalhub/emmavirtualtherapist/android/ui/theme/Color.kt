@@ -2,10 +2,12 @@ package com.mymedicalhub.emmavirtualtherapist.android.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Red = Color(0xFFF44336)
-val LimeGreen = Color(0xFF66BB6A)
-val LightBlue = Color(0xFF0089FF)
 val Blue = Color(0xFF1176B4)
+val Red = Color(0xFFF80F1B)
+val Yellow = Color(0xFFFFC000)
+val Green = Color(0xFF19A04F)
+val DarkCharcoal = Color(0xFF797A79)
+val MediumCharcoal = Color(0xFF585859)
+val Dark = Color(0xFF00121C)
+val LightBlue = Color(0xFF0089FF)
 val DarkBlue = Color(0xFF081859)
-val LightGray = Color(0xFFEEF7FB)
-val DarkGreen = Color(0xFF19A04F)

@@ -1,17 +1,15 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.sign_in
 
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,7 +20,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalTextInputService
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -35,6 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
+import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.OutlineInputTextField
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 
@@ -64,7 +62,12 @@ fun SignInScreen(
         }
     }
 
-    Scaffold(scaffoldState = scaffoldState) {
+    Scaffold(
+        scaffoldState = scaffoldState,
+        topBar = {
+            CustomTopAppBar(navController = navController)
+        }
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -72,29 +75,6 @@ fun SignInScreen(
                 .padding(24.dp),
             verticalArrangement = Arrangement.Center
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBackIosNew,
-                        contentDescription = "Back",
-                        modifier = Modifier
-                            .border(
-                                width = 1.dp,
-                                color = Color.LightGray,
-                                shape = CircleShape
-                            )
-                            .size(40.dp)
-                            .padding(12.dp)
-                    )
-                }
-                Image(
-                    painter = painterResource(id = R.drawable.mmh),
-                    contentDescription = "MyMedicalHub",
-                    modifier = Modifier
-                        .height(50.dp)
-                        .weight(1f)
-                )
-            }
             Spacer(modifier = Modifier.height(32.dp))
             Column(
                 modifier = Modifier
@@ -139,7 +119,7 @@ fun SignInScreen(
                 Text(text = "Email Address")
                 OutlineInputTextField(
                     field = viewModel.email,
-                    leadingIcon = Icons.Default.Email,
+                    leadingIcon = R.drawable.email_gray,
                     onValueChange = {
                         viewModel.onEvent(SignInEvent.EnteredEmail(it))
                     },
@@ -155,11 +135,11 @@ fun SignInScreen(
                     onValueChange = {
                         viewModel.onEvent(SignInEvent.EnteredPassword(it))
                     },
-                    leadingIcon = Icons.Default.Lock,
+                    leadingIcon = R.drawable.lock_gray,
                     trailingIcon = if (viewModel.showPassword.value) {
-                        painterResource(id = R.drawable.ic_eye_open)
+                        R.drawable.eye_open_gray
                     } else {
-                        painterResource(id = R.drawable.ic_eye_closed)
+                        R.drawable.eye_close_gray
                     },
                     onIconPressed = {
                         viewModel.onEvent(SignInEvent.ShowPassword)
