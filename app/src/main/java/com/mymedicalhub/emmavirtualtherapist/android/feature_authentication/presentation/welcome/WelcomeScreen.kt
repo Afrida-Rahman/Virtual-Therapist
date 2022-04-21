@@ -56,7 +56,7 @@ fun WelcomeScreen(
             icon = R.drawable.user,
             text = "New Patient",
             backgroundColor = MaterialTheme.colors.secondary,
-            onClick = { }
+            onClick = { navController.navigate(Screen.SignUpScreen.route) }
         )
         Spacer(modifier = Modifier.height(24.dp))
         Row {
