@@ -50,13 +50,13 @@ fun SignUpScreen(navController: NavController) {
                 OutlineInputTextField(
                     field = field,
                     placeholder = "Enter your first name",
-                    label = "First name",
+                    label = "First Name",
                     leadingIcon = R.drawable.user_gray
                 )
                 OutlineInputTextField(
                     field = field,
                     placeholder = "Enter your Last name",
-                    label = "Last name",
+                    label = "Last Name",
                     leadingIcon = R.drawable.user_gray
                 )
                 OutlineInputTextField(

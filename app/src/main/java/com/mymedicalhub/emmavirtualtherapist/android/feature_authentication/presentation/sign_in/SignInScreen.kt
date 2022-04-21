@@ -99,6 +99,7 @@ fun SignInScreen(
                     placeholder = { Text("Select Your Practice") },
                     shape = RoundedCornerShape(16.dp),
                 )
+                
                 DropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { expanded = false },
