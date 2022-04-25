@@ -114,4 +114,9 @@ dependencies {
     def pager_version = "0.23.0"
     implementation "com.google.accompanist:accompanist-pager:${pager_version}"
     implementation "com.google.accompanist:accompanist-pager-indicators:${pager_version}"
+
+    //Tensorflow
+    implementation 'org.tensorflow:tensorflow-lite:2.5.0'
+    implementation 'org.tensorflow:tensorflow-lite-gpu:2.5.0'
+    implementation 'org.tensorflow:tensorflow-lite-support:0.2.0'
 }
