@@ -1,0 +1,4 @@
+package com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.reset_password
+
+class ResetPasswordScreenViewModel {
+}

@@ -61,7 +61,6 @@ fun SignInScreen(
             }
         }
     }
-
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
@@ -99,7 +98,7 @@ fun SignInScreen(
                     placeholder = { Text("Select Your Practice") },
                     shape = RoundedCornerShape(16.dp),
                 )
-                
+
                 DropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { expanded = false },
@@ -165,7 +164,11 @@ fun SignInScreen(
                 Text(
                     text = "Forget Password?",
                     textAlign = TextAlign.Right,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            navController.navigate(Screen.ResetPasswordScreen.route)
+                        }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
@@ -202,10 +205,15 @@ fun SignInScreen(
                     Text(
                         text = "Sign Up",
                         color = Color(0xFF1176B4),
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .clickable {
+                                navController.navigate(Screen.SignUpScreen.route)
+                            }
                     )
                 }
             }
         }
     }
 }
+

@@ -1,6 +1,7 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.welcome
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -64,7 +65,11 @@ fun WelcomeScreen(
             Text(
                 text = "Sign Up",
                 color = Color(0xFF1176B4),
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .clickable {
+                        navController.navigate(Screen.SignUpScreen.route)
+                    }
             )
         }
     }
