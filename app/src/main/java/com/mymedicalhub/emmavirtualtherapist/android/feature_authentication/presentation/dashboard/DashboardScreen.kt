@@ -4,8 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,9 +19,6 @@ import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapi
 @Composable
 fun DashboardScreen(navController: NavController) {
     val scaffoldState = rememberScaffoldState()
-    val field = remember {
-        mutableStateOf("")
-    }
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
