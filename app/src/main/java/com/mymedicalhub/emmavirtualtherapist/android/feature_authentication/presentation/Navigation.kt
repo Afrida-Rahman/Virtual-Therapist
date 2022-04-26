@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.AUTHENTICATION_ROUTE
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
+import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.dashboard.DashboardScreen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.reset_password.ResetPasswordScreen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.sign_in.SignInScreen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.sign_up.SignUpScreen
@@ -32,6 +33,9 @@ fun NavGraphBuilder.authenticationNav(navController: NavController) {
         }
         composable(route = Screen.ResetPasswordScreen.route) {
             ResetPasswordScreen(navController = navController)
+        }
+        composable(route = Screen.DashboardScreen.route) {
+            DashboardScreen(navController = navController)
         }
     }
 }

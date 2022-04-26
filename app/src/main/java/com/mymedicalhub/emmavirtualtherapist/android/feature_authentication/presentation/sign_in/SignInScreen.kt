@@ -79,6 +79,7 @@ fun SignInScreen(
                 modifier = Modifier
                     .weight(1f)
             ) {
+
                 Text(text = "Select Your Practice")
                 OutlinedTextField(
                     value = selectedTenant.uppercase(),
@@ -175,7 +176,7 @@ fun SignInScreen(
                     onClick = {
                         viewModel.onEvent(SignInEvent.SignInButtonClick {
                             navController.popBackStack()
-                            navController.navigate(Screen.AssessmentListScreen.route)
+                            navController.navigate(Screen.DashboardScreen.route)
                         })
                     },
                     modifier = Modifier
