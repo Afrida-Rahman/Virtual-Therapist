@@ -160,7 +160,7 @@ fun SignInScreen(
                         keyboardService?.hideSoftwareKeyboard()
                         viewModel.onEvent(SignInEvent.SignInButtonClick {
                             navController.popBackStack()
-                            navController.navigate(Screen.AssessmentListScreen.route)
+                            navController.navigate(Screen.DashboardScreen.route)
                         })
                     })
                 )

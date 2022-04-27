@@ -4,12 +4,11 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Chat
-import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 
 @Composable
@@ -24,7 +23,7 @@ fun BottomNavigationBarModified(navController: NavController) {
             label = { Text(text = "Home") },
             icon = {
                 Icon(
-                    imageVector = Icons.Default.Dashboard,
+                    painter = painterResource(id = R.drawable.home_new),
                     contentDescription = "Home"
                 )
             }
@@ -38,7 +37,7 @@ fun BottomNavigationBarModified(navController: NavController) {
             label = { Text(text = "Assessments") },
             icon = {
                 Icon(
-                    imageVector = Icons.Default.Chat,
+                    painter = painterResource(id = R.drawable.assessments),
                     contentDescription = "Assessments"
                 )
             }
@@ -51,7 +50,7 @@ fun BottomNavigationBarModified(navController: NavController) {
             label = { Text(text = "Calendar") },
             icon = {
                 Icon(
-                    imageVector = Icons.Default.Chat,
+                    painter = painterResource(id = R.drawable.calendar),
                     contentDescription = "Calendar"
                 )
             }
@@ -64,11 +63,11 @@ fun BottomNavigationBarModified(navController: NavController) {
             label = { Text(text = "Report") },
             icon = {
                 Icon(
-                    imageVector = Icons.Default.Chat,
+                    painter = painterResource(id = R.drawable.report),
                     contentDescription = "Report"
                 )
             }
         )
-
     }
 }
+

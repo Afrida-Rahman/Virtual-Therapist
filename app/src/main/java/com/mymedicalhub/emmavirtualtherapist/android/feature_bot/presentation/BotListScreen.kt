@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.mymedicalhub.emmavirtualtherapist.android.core.component.BottomNavigationBar
+import com.mymedicalhub.emmavirtualtherapist.android.core.component.BottomNavigationBarModified
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.NavigationDrawer
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.components.BotCard
@@ -60,7 +60,7 @@ fun BotListScreen(navController: NavController, viewModel: BotViewModel = hiltVi
             }
         },
         bottomBar = {
-            BottomNavigationBar(navController = navController)
+            BottomNavigationBarModified(navController = navController)
         }
     ) {
         Column(
