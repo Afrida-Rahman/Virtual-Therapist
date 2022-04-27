@@ -12,7 +12,7 @@ import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 
 @Composable
-fun BottomNavigationBarModified(navController: NavController) {
+fun BottomNavigationBar(navController: NavController) {
     BottomNavigation(elevation = 8.dp) {
         BottomNavigationItem(
             selected = true,

@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
-import com.mymedicalhub.emmavirtualtherapist.android.core.component.BottomNavigationBarModified
+import com.mymedicalhub.emmavirtualtherapist.android.core.component.BottomNavigationBar
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.welcome.components.ActionCard
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
@@ -31,7 +31,7 @@ fun DashboardScreen(navController: NavController) {
             )
         },
         bottomBar = {
-            BottomNavigationBarModified(navController = navController)
+            BottomNavigationBar(navController = navController)
         }
     ) {
         Column(
