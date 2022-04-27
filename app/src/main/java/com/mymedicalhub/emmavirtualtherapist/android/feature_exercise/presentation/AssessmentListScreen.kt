@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
-import com.mymedicalhub.emmavirtualtherapist.android.core.component.BottomNavigationBar
+import com.mymedicalhub.emmavirtualtherapist.android.core.component.BottomNavigationBarModified
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.NavigationDrawer
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.AssessmentCard
@@ -128,7 +128,7 @@ fun AssessmentListScreen(
             }
         },
         bottomBar = {
-            BottomNavigationBar(navController = navController)
+            BottomNavigationBarModified(navController = navController)
         }
     ) {
         Column(

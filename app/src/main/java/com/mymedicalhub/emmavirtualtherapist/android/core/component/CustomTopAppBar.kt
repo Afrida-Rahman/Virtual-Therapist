@@ -11,6 +11,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,7 +23,10 @@ import com.mymedicalhub.emmavirtualtherapist.android.R
 
 
 @Composable
-fun CustomTopAppBar(navController: NavController) {
+fun CustomTopAppBar(
+    navController: NavController,
+    showNotificationIcon: Boolean = false
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
@@ -48,5 +52,21 @@ fun CustomTopAppBar(navController: NavController) {
                 .height(50.dp)
                 .weight(1f)
         )
+        if (showNotificationIcon) {
+            IconButton(onClick = { }) {
+                Icon(
+                    imageVector = Icons.Default.Notifications,
+                    contentDescription = "Notifications",
+                    modifier = Modifier
+                        .border(
+                            width = 1.dp,
+                            color = Color.LightGray,
+                            shape = CircleShape
+                        )
+                        .size(40.dp)
+                        .padding(12.dp)
+                )
+            }
+        }
     }
 }

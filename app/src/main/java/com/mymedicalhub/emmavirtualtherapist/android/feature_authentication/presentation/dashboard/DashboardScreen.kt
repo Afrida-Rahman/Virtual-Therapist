@@ -23,7 +23,10 @@ fun DashboardScreen(navController: NavController) {
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            CustomTopAppBar(navController = navController)
+            CustomTopAppBar(
+                navController = navController,
+                showNotificationIcon = true
+            )
         },
         bottomBar = {
             BottomNavigationBarModified(navController = navController)

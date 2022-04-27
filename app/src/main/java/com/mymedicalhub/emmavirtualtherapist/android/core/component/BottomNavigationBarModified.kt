@@ -19,7 +19,7 @@ fun BottomNavigationBarModified(navController: NavController) {
             selected = true,
             onClick = {
                 navController.popBackStack()
-                navController.navigate(Screen.AssessmentListScreen.route)
+                navController.navigate(Screen.DashboardScreen.route)
             },
             label = { Text(text = "Home") },
             icon = {
@@ -33,7 +33,7 @@ fun BottomNavigationBarModified(navController: NavController) {
             selected = true,
             onClick = {
                 navController.popBackStack()
-                navController.navigate(Screen.BotListScreen.route)
+                navController.navigate(Screen.AssessmentListScreen.route)
             },
             label = { Text(text = "Assessments") },
             icon = {
@@ -47,7 +47,6 @@ fun BottomNavigationBarModified(navController: NavController) {
             selected = true,
             onClick = {
                 navController.popBackStack()
-                navController.navigate(Screen.BotListScreen.route)
             },
             label = { Text(text = "Calendar") },
             icon = {
@@ -61,7 +60,6 @@ fun BottomNavigationBarModified(navController: NavController) {
             selected = true,
             onClick = {
                 navController.popBackStack()
-                navController.navigate(Screen.BotListScreen.route)
             },
             label = { Text(text = "Report") },
             icon = {
