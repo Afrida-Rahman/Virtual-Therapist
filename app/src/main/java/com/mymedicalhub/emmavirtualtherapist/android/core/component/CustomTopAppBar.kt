@@ -1,5 +1,6 @@
 package com.mymedicalhub.emmavirtualtherapist.android.core.component
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
@@ -17,24 +18,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
 
 
 @Composable
 fun CustomTopAppBar(
-    navController: NavController,
-    showNotificationIcon: Boolean = false
+    @DrawableRes leadingIcon: Int,
+    onClickLeadingIcon: () -> Unit = {},
+    @DrawableRes trailingIcon: Int? = null,
+    onClickTrailingIcon: () -> Unit = {}
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
     ) {
-        IconButton(onClick = { navController.popBackStack() }) {
+        IconButton(onClick = { onClickLeadingIcon() }) {
             Icon(
-                imageVector = Icons.Default.ArrowBackIosNew,
-                contentDescription = "Back",
+                painter = painterResource(id = leadingIcon),
+                contentDescription = "Leading Icon",
                 modifier = Modifier
                     .border(
                         width = 1.dp,
@@ -52,11 +58,11 @@ fun CustomTopAppBar(
                 .height(50.dp)
                 .weight(1f)
         )
-        if (showNotificationIcon) {
-            IconButton(onClick = { }) {
+        trailingIcon?.let {
+            IconButton(onClick = { onClickTrailingIcon() }) {
                 Icon(
-                    imageVector = Icons.Default.Notifications,
-                    contentDescription = "Notifications",
+                    painter = painterResource(id = it),
+                    contentDescription = "Trailing Icon",
                     modifier = Modifier
                         .border(
                             width = 1.dp,
@@ -68,5 +74,13 @@ fun CustomTopAppBar(
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CustomTopAppBarPreview() {
+    EmmaVirtualTherapistTheme {
+        CustomTopAppBar(leadingIcon = R.drawable.menu_new)
     }
 }

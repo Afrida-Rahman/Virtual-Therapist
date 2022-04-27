@@ -64,7 +64,10 @@ fun SignInScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            CustomTopAppBar(navController = navController)
+            CustomTopAppBar(
+                leadingIcon = R.drawable.ic_arrow_back,
+                onClickLeadingIcon = { navController.popBackStack() }
+            )
         }
     ) {
         Column(

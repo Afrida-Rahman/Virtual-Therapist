@@ -24,8 +24,10 @@ fun DashboardScreen(navController: NavController) {
         scaffoldState = scaffoldState,
         topBar = {
             CustomTopAppBar(
-                navController = navController,
-                showNotificationIcon = true
+                leadingIcon = R.drawable.menu_new,
+                onClickLeadingIcon = {},
+                trailingIcon = R.drawable.notification_bell,
+                onClickTrailingIcon = {}
             )
         },
         bottomBar = {
