@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
+import com.mymedicalhub.emmavirtualtherapist.android.core.component.BottomNavigationBar
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.welcome.components.ActionCard
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
@@ -22,7 +23,15 @@ fun DashboardScreen(navController: NavController) {
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            CustomTopAppBar(navController = navController)
+            CustomTopAppBar(
+                leadingIcon = R.drawable.menu_new,
+                onClickLeadingIcon = {},
+                trailingIcon = R.drawable.notification_bell,
+                onClickTrailingIcon = {}
+            )
+        },
+        bottomBar = {
+            BottomNavigationBar(navController = navController)
         }
     ) {
         Column(
@@ -32,7 +41,6 @@ fun DashboardScreen(navController: NavController) {
                 .fillMaxSize()
                 .padding(24.dp)
         ) {
-
             Spacer(modifier = Modifier.height(24.dp))
             ActionCard(
                 icon = R.drawable.posture_screening,
@@ -62,6 +70,7 @@ fun DashboardScreen(navController: NavController) {
         }
     }
 }
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

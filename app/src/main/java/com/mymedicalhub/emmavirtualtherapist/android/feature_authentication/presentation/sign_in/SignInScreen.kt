@@ -64,7 +64,10 @@ fun SignInScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            CustomTopAppBar(navController = navController)
+            CustomTopAppBar(
+                leadingIcon = R.drawable.ic_arrow_back,
+                onClickLeadingIcon = { navController.popBackStack() }
+            )
         }
     ) {
         Column(
@@ -79,6 +82,7 @@ fun SignInScreen(
                 modifier = Modifier
                     .weight(1f)
             ) {
+
                 Text(text = "Select Your Practice")
                 OutlinedTextField(
                     value = selectedTenant.uppercase(),
@@ -156,7 +160,7 @@ fun SignInScreen(
                         keyboardService?.hideSoftwareKeyboard()
                         viewModel.onEvent(SignInEvent.SignInButtonClick {
                             navController.popBackStack()
-                            navController.navigate(Screen.AssessmentListScreen.route)
+                            navController.navigate(Screen.DashboardScreen.route)
                         })
                     })
                 )
@@ -175,7 +179,7 @@ fun SignInScreen(
                     onClick = {
                         viewModel.onEvent(SignInEvent.SignInButtonClick {
                             navController.popBackStack()
-                            navController.navigate(Screen.AssessmentListScreen.route)
+                            navController.navigate(Screen.DashboardScreen.route)
                         })
                     },
                     modifier = Modifier
