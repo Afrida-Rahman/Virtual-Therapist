@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,6 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,7 +29,7 @@ fun AssessmentCardBodyItem(icon: Painter, title: String, value: String) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 45.dp, bottom = 4.dp, top = 4.dp )
+                .padding(start = 8.dp, bottom = 4.dp, top = 4.dp)
         ) {
             Image(
                 painter = icon,
@@ -35,19 +37,32 @@ fun AssessmentCardBodyItem(icon: Painter, title: String, value: String) {
                 modifier = Modifier
                     .size(40.dp)
                     .clip(CircleShape)
-                    .background(Color(232,246,253), shape = CircleShape)
-                    .border(BorderStroke(color = Color(117,138,223), width = 1.dp), shape = CircleShape)
-                    .padding(6.dp)
+                    .background(Color(232, 246, 253), shape = CircleShape)
+                    .border(
+                        BorderStroke(color = Color(117, 138, 223), width = 1.dp),
+                        shape = CircleShape
+                    )
+                    .padding(10.dp)
             )
-            Column(
-                modifier = Modifier.padding(start = 8.dp)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 8.dp, top = 8.dp, end = 4.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+
             ) {
                 Text(
                     text = title,
                     fontSize = 14.sp,
-                    color = Color.Gray
+                    color = Color(0xFF000000),
+                    style = MaterialTheme.typography.h2,
                 )
-                Text(text = value, fontSize = 14.sp)
+                Text(
+                    text = value,
+                    textAlign = TextAlign.End,
+                    fontSize = 14.sp
+                )
+
             }
         }
     }

@@ -22,9 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.BottomNavigationBar
@@ -32,7 +30,6 @@ import com.mymedicalhub.emmavirtualtherapist.android.core.component.NavigationDr
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.AssessmentCard
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ExerciseTopBar
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.HeroSection
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -98,7 +95,7 @@ fun AssessmentListScreen(
                 }
             } else {
                 ExerciseTopBar(
-                    title = "Home Exercises",
+                    title = "My Assessments",
                     navigationIcon = Icons.Default.Menu,
                     onNavigationIconClicked = {
                         coroutineScope.launch {
@@ -110,10 +107,9 @@ fun AssessmentListScreen(
                         }
                     },
                     trailingIcon = Icons.Default.Search,
-                    onTrailingIconClicked = {
-                        viewModel.onEvent(ExerciseEvent.ShowAssessmentSearchBar)
-                    }
-                )
+                ) {
+                    viewModel.onEvent(ExerciseEvent.ShowAssessmentSearchBar)
+                }
             }
         },
         drawerContent = {
@@ -131,81 +127,72 @@ fun AssessmentListScreen(
             BottomNavigationBar(navController = navController)
         }
     ) {
-        Column(
-            modifier = Modifier.background(MaterialTheme.colors.surface)
-        ) {
-            viewModel.patient.value?.let {
-                HeroSection("${it.firstName} ${it.lastName}")
+        Spacer(modifier = Modifier.height(12.dp))
+        if (viewModel.assessments.value.isNotEmpty()) {
+            val itemsPerRow = when {
+                localConfiguration.screenWidthDp > 840 -> {
+                    3
+                }
+                localConfiguration.screenWidthDp > 600 -> {
+                    2
+                }
+                else -> {
+                    1
+                }
             }
-            Text(
-                text = "My Assessments",
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(8.dp)
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            if (viewModel.assessments.value.isNotEmpty()) {
-                val itemsPerRow = when {
-                    localConfiguration.screenWidthDp > 840 -> {
-                        3
+            LazyVerticalGrid(
+                cells = GridCells.Fixed(itemsPerRow),
+                modifier = Modifier.padding(
+                    start = 4.dp,
+                    top = 4.dp,
+                    end = 4.dp,
+                    bottom = 56.dp
+                )
+            ) {
+                items(viewModel.assessments.value) {
+                    AssessmentCard(it) {
+                        if (it.totalExercise > 0) {
+                            navController.navigate(
+                                Screen.ExerciseListScreen.withArgs(
+                                    tenant,
+                                    it.testId,
+                                    it.creationDate
+                                )
+                            )
+                        }
                     }
-                    localConfiguration.screenWidthDp > 600 -> {
-                        2
+                }
+            }
+        } else {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxSize()
+
+            ) {
+                when {
+                    viewModel.isAssessmentLoading.value -> {
+                        CircularProgressIndicator()
+                    }
+                    viewModel.showTryAgain.value -> {
+                        Button(
+                            onClick = {
+                                viewModel.onEvent(ExerciseEvent.FetchAssessments)
+                            }
+                        ) {
+                            Text(text = "Try Again")
+                        }
                     }
                     else -> {
-                        1
-                    }
-                }
-                LazyVerticalGrid(
-                    cells = GridCells.Fixed(itemsPerRow),
-                    modifier = Modifier.padding(
-                        start = 4.dp,
-                        top = 4.dp,
-                        end = 4.dp,
-                        bottom = 56.dp
-                    )
-                ) {
-                    items(viewModel.assessments.value) {
-                        AssessmentCard(it) {
-                            if (it.totalExercise > 0) {
-                                navController.navigate(
-                                    Screen.ExerciseListScreen.withArgs(
-                                        tenant,
-                                        it.testId,
-                                        it.creationDate
-                                    )
-                                )
-                            }
-                        }
-                    }
-                }
-            } else {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f)
-                ) {
-                    when {
-                        viewModel.isAssessmentLoading.value -> {
-                            CircularProgressIndicator()
-                        }
-                        viewModel.showTryAgain.value -> {
-                            Button(
-                                onClick = {
-                                    viewModel.onEvent(ExerciseEvent.FetchAssessments)
-                                }
-                            ) {
-                                Text(text = "Try Again")
-                            }
-                        }
-                        else -> {
-                            Text(text = "Opps! No assessment found.")
-                        }
+                        Text(text = "Opps! No assessment found.")
                     }
                 }
             }
         }
     }
 }
+
+
+
+
 

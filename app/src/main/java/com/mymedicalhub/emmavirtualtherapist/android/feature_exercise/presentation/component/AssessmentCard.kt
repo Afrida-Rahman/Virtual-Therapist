@@ -25,16 +25,10 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
         Column(
             modifier = Modifier.padding(8.dp)
         ) {
-            AssessmentCardHeader(
-                assessment.testId,
-                assessment.creationDate,
-                assessment.isReportReady
-            )
-            Spacer(Modifier.height(12.dp))
             AssessmentCardBody(
-                providerName = assessment.providerName ?: "Self Assessment",
+                testId = assessment.testId,
                 bodyRegion = assessment.bodyRegionName,
-                registrationType = assessment.registrationType,
+                Date = assessment.creationDate,
                 exerciseCount = assessment.totalExercise
             )
             Spacer(Modifier.height(12.dp))

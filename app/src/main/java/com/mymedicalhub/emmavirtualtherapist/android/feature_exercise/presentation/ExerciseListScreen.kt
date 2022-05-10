@@ -10,8 +10,8 @@ import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -96,16 +96,15 @@ fun ExerciseListScreen(
             } else {
                 ExerciseTopBar(
                     title = "Home Exercises",
-                    navigationIcon = Icons.Default.ArrowBackIos,
+                    navigationIcon = Icons.Default.Menu,
                     onNavigationIconClicked = {
                         viewModel.onEvent(ExerciseEvent.GoToAssessmentPage)
                         navController.popBackStack()
                     },
-                    trailingIcon = Icons.Default.Search,
-                    onTrailingIconClicked = {
-                        viewModel.onEvent(ExerciseEvent.ShowExerciseSearchBar)
-                    }
-                )
+                    trailingIcon = Icons.Default.Search
+                ) {
+                    viewModel.onEvent(ExerciseEvent.ShowExerciseSearchBar)
+                }
             }
         }
     ) {
