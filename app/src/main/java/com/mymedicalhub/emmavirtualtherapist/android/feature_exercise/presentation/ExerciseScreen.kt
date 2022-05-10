@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.FlipCameraAndroid
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -27,7 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ExerciseTopBar
+import com.mymedicalhub.emmavirtualtherapist.android.R
+import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 
 @SuppressLint("UnsafeOptInUsageError")
 @Composable
@@ -66,10 +66,12 @@ fun ExerciseScreen(
     }
     Scaffold(
         topBar = {
-            ExerciseTopBar(
-                title = exercise?.name ?: "Exercise Screen",
-                navigationIcon = Icons.Default.ArrowBackIos,
-                onNavigationIconClicked = { navController.popBackStack() })
+            CustomTopAppBar(
+                leadingIcon = R.drawable.ic_arrow_back,
+                onClickLeadingIcon = { navController.popBackStack() }
+            ) {
+                Text(text = exercise?.name ?: "Exercise Screen")
+            }
         }
     ) {
         Box(

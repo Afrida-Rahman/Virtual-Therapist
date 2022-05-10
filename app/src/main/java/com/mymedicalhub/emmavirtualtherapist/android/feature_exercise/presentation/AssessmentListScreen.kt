@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,12 +23,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.BottomNavigationBar
+import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.NavigationDrawer
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.AssessmentCard
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ExerciseTopBar
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -94,10 +94,9 @@ fun AssessmentListScreen(
                     )
                 }
             } else {
-                ExerciseTopBar(
-                    title = "My Assessments",
-                    navigationIcon = Icons.Default.Menu,
-                    onNavigationIconClicked = {
+                CustomTopAppBar(
+                    leadingIcon = R.drawable.menu_new,
+                    onClickLeadingIcon = {
                         coroutineScope.launch {
                             if (scaffoldState.drawerState.isClosed) {
                                 scaffoldState.drawerState.open()
@@ -106,9 +105,12 @@ fun AssessmentListScreen(
                             }
                         }
                     },
-                    trailingIcon = Icons.Default.Search,
+                    trailingIcon = R.drawable.filter,
+                    onClickTrailingIcon = {
+                        viewModel.onEvent(ExerciseEvent.ShowAssessmentSearchBar)
+                    }
                 ) {
-                    viewModel.onEvent(ExerciseEvent.ShowAssessmentSearchBar)
+                    Text(text = "My Assessments")
                 }
             }
         },
@@ -124,7 +126,7 @@ fun AssessmentListScreen(
             }
         },
         bottomBar = {
-            BottomNavigationBar(navController = navController)
+            BottomNavigationBar(navController = navController, selectedIndex = 2)
         }
     ) {
         Spacer(modifier = Modifier.height(12.dp))
@@ -191,8 +193,3 @@ fun AssessmentListScreen(
         }
     }
 }
-
-
-
-
-

@@ -34,7 +34,7 @@ fun SplashScreen(navController: NavController, viewModel: SplashScreenViewModel 
         if (!viewModel.isWalkThroughShown.value) {
             navController.navigate(Screen.WalkThroughScreen.route)
         } else if (viewModel.isAlreadyLoggedIn.value) {
-            navController.navigate(Screen.AssessmentListScreen.route)
+            navController.navigate(Screen.DashboardScreen.route)
         } else {
             navController.navigate(Screen.WelcomeScreen.route)
         }
