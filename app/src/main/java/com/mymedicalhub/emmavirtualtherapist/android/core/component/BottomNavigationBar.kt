@@ -50,7 +50,13 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
             label = { Text(text = "Assessments") },
             icon = {
                 Icon(
-                    painter = painterResource(id = R.drawable.assessments),
+                    painter = painterResource(
+                        id = if (selectedIndex == 2) {
+                            R.drawable.assessment_filled
+                        } else {
+                            R.drawable.assessments
+                        }
+                    ),
                     contentDescription = "Assessments"
                 )
             },
@@ -58,14 +64,20 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
             unselectedContentColor = DarkCharcoal
         )
         BottomNavigationItem(
-            selected = selectedIndex == 4,
+            selected = selectedIndex == 3,
             onClick = {
                 navController.popBackStack()
             },
             label = { Text(text = "Calendar") },
             icon = {
                 Icon(
-                    painter = painterResource(id = R.drawable.calendar),
+                    painter = painterResource(
+                        id = if (selectedIndex == 3) {
+                            R.drawable.calendar_filled
+                        } else {
+                            R.drawable.calendar
+                        }
+                    ),
                     contentDescription = "Calendar"
                 )
             },
