@@ -20,7 +20,7 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
         modifier = Modifier.padding(horizontal = 8.dp)
     ) {
         BottomNavigationItem(
-            selected = true,
+            selected = selectedIndex == 1,
             onClick = {
                 navController.popBackStack()
                 navController.navigate(Screen.DashboardScreen.route)
@@ -35,13 +35,14 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
                             R.drawable.home_outline
                         }
                     ),
-                    contentDescription = "Home",
-                    tint = if (selectedIndex == 1) MaterialTheme.colors.primaryVariant else DarkCharcoal
+                    contentDescription = "Home"
                 )
-            }
+            },
+            selectedContentColor = MaterialTheme.colors.primaryVariant,
+            unselectedContentColor = DarkCharcoal
         )
         BottomNavigationItem(
-            selected = true,
+            selected = selectedIndex == 2,
             onClick = {
                 navController.popBackStack()
                 navController.navigate(Screen.AssessmentListScreen.route)
@@ -50,13 +51,14 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
             icon = {
                 Icon(
                     painter = painterResource(id = R.drawable.assessments),
-                    contentDescription = "Assessments",
-                    tint = if (selectedIndex == 2) MaterialTheme.colors.primaryVariant else DarkCharcoal
+                    contentDescription = "Assessments"
                 )
-            }
+            },
+            selectedContentColor = MaterialTheme.colors.primaryVariant,
+            unselectedContentColor = DarkCharcoal
         )
         BottomNavigationItem(
-            selected = true,
+            selected = selectedIndex == 4,
             onClick = {
                 navController.popBackStack()
             },
@@ -64,13 +66,14 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
             icon = {
                 Icon(
                     painter = painterResource(id = R.drawable.calendar),
-                    contentDescription = "Calendar",
-                    tint = if (selectedIndex == 4) MaterialTheme.colors.primaryVariant else DarkCharcoal
+                    contentDescription = "Calendar"
                 )
-            }
+            },
+            selectedContentColor = MaterialTheme.colors.primaryVariant,
+            unselectedContentColor = DarkCharcoal
         )
         BottomNavigationItem(
-            selected = true,
+            selected = selectedIndex == 5,
             onClick = {
                 navController.popBackStack()
             },
@@ -78,10 +81,11 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
             icon = {
                 Icon(
                     painter = painterResource(id = R.drawable.report),
-                    contentDescription = "Report",
-                    tint = if (selectedIndex == 5) MaterialTheme.colors.primaryVariant else DarkCharcoal
+                    contentDescription = "Report"
                 )
-            }
+            },
+            selectedContentColor = MaterialTheme.colors.primaryVariant,
+            unselectedContentColor = DarkCharcoal
         )
     }
 }
