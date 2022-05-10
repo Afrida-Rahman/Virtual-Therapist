@@ -1,6 +1,7 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.sign_up
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,6 +21,7 @@ import androidx.navigation.compose.rememberNavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.OutlineInputTextField
+import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
 
 @Composable
@@ -32,7 +34,10 @@ fun SignUpScreen(navController: NavController) {
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            CustomTopAppBar(navController = navController)
+            CustomTopAppBar(
+                leadingIcon = R.drawable.ic_arrow_back,
+                onClickLeadingIcon = { navController.popBackStack() }
+            )
         }
     ) {
         Column(
@@ -130,7 +135,6 @@ fun SignUpScreen(navController: NavController) {
                     )
                 }
             }
-
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(bottom = 12.dp)
@@ -145,6 +149,10 @@ fun SignUpScreen(navController: NavController) {
                     color = MaterialTheme.colors.primaryVariant,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.body1,
+                    modifier = Modifier
+                        .clickable {
+                            navController.navigate(Screen.SignInScreen.route)
+                        }
                 )
             }
             Box(

@@ -4,12 +4,11 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Chat
-import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 
 @Composable
@@ -19,13 +18,13 @@ fun BottomNavigationBar(navController: NavController) {
             selected = true,
             onClick = {
                 navController.popBackStack()
-                navController.navigate(Screen.AssessmentListScreen.route)
+                navController.navigate(Screen.DashboardScreen.route)
             },
-            label = { Text(text = "My Assessments") },
+            label = { Text(text = "Home") },
             icon = {
                 Icon(
-                    imageVector = Icons.Default.Dashboard,
-                    contentDescription = "My Assessment"
+                    painter = painterResource(id = R.drawable.home_new),
+                    contentDescription = "Home"
                 )
             }
         )
@@ -33,15 +32,42 @@ fun BottomNavigationBar(navController: NavController) {
             selected = true,
             onClick = {
                 navController.popBackStack()
-                navController.navigate(Screen.BotListScreen.route)
+                navController.navigate(Screen.AssessmentListScreen.route)
             },
-            label = { Text(text = "Chat Bots") },
+            label = { Text(text = "Assessments") },
             icon = {
                 Icon(
-                    imageVector = Icons.Default.Chat,
-                    contentDescription = "Chat Bots"
+                    painter = painterResource(id = R.drawable.assessments),
+                    contentDescription = "Assessments"
+                )
+            }
+        )
+        BottomNavigationItem(
+            selected = true,
+            onClick = {
+                navController.popBackStack()
+            },
+            label = { Text(text = "Calendar") },
+            icon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.calendar),
+                    contentDescription = "Calendar"
+                )
+            }
+        )
+        BottomNavigationItem(
+            selected = true,
+            onClick = {
+                navController.popBackStack()
+            },
+            label = { Text(text = "Report") },
+            icon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.report),
+                    contentDescription = "Report"
                 )
             }
         )
     }
 }
+

@@ -61,11 +61,13 @@ fun SignInScreen(
             }
         }
     }
-
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            CustomTopAppBar(navController = navController)
+            CustomTopAppBar(
+                leadingIcon = R.drawable.ic_arrow_back,
+                onClickLeadingIcon = { navController.popBackStack() }
+            )
         }
     ) {
         Column(
@@ -80,6 +82,7 @@ fun SignInScreen(
                 modifier = Modifier
                     .weight(1f)
             ) {
+
                 Text(text = "Select Your Practice")
                 OutlinedTextField(
                     value = selectedTenant.uppercase(),
@@ -99,7 +102,7 @@ fun SignInScreen(
                     placeholder = { Text("Select Your Practice") },
                     shape = RoundedCornerShape(16.dp),
                 )
-                
+
                 DropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { expanded = false },
@@ -157,7 +160,7 @@ fun SignInScreen(
                         keyboardService?.hideSoftwareKeyboard()
                         viewModel.onEvent(SignInEvent.SignInButtonClick {
                             navController.popBackStack()
-                            navController.navigate(Screen.AssessmentListScreen.route)
+                            navController.navigate(Screen.DashboardScreen.route)
                         })
                     })
                 )
@@ -165,14 +168,18 @@ fun SignInScreen(
                 Text(
                     text = "Forget Password?",
                     textAlign = TextAlign.Right,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            navController.navigate(Screen.ResetPasswordScreen.route)
+                        }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
                     onClick = {
                         viewModel.onEvent(SignInEvent.SignInButtonClick {
                             navController.popBackStack()
-                            navController.navigate(Screen.AssessmentListScreen.route)
+                            navController.navigate(Screen.DashboardScreen.route)
                         })
                     },
                     modifier = Modifier
@@ -202,10 +209,15 @@ fun SignInScreen(
                     Text(
                         text = "Sign Up",
                         color = Color(0xFF1176B4),
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .clickable {
+                                navController.navigate(Screen.SignUpScreen.route)
+                            }
                     )
                 }
             }
         }
     }
 }
+
