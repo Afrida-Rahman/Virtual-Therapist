@@ -142,6 +142,7 @@ class ExerciseViewModel @Inject constructor(
             is ExerciseEvent.HideAssessmentSearchBar -> {
                 _showAssessmentSearchBar.value = false
                 _assessmentSearchTerm.value = ""
+                _assessments.value = originalAssessmentList
             }
             is ExerciseEvent.ExerciseSearchTermEntered -> {
                 _exerciseSearchTerm.value = event.searchTerm
@@ -211,7 +212,7 @@ class ExerciseViewModel @Inject constructor(
 
     fun loadExerciseConstraints(tenant: String, testId: String, exerciseId: Int) {
         getExercise(testId = testId, exerciseId = exerciseId)?.let { exercise ->
-            if (exercise.phases.isNullOrEmpty()) {
+            if (exercise.phases.isEmpty()) {
                 fetchExerciseConstraints(tenant = tenant, testId = testId, exerciseId = exerciseId)
             }
         }

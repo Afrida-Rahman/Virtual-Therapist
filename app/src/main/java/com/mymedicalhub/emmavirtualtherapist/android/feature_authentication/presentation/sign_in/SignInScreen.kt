@@ -1,6 +1,7 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.sign_in
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -20,6 +21,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalTextInputService
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -67,7 +69,14 @@ fun SignInScreen(
             CustomTopAppBar(
                 leadingIcon = R.drawable.ic_arrow_back,
                 onClickLeadingIcon = { navController.popBackStack() }
-            )
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.mmh),
+                    contentDescription = "MyMedicalHub",
+                    modifier = Modifier
+                        .height(50.dp)
+                )
+            }
         }
     ) {
         Column(

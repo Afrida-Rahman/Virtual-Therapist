@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
@@ -25,9 +24,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
+import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.*
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ExerciseCard
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ExerciseDemo
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ManualTrackingForm
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -94,27 +97,25 @@ fun ExerciseListScreen(
                     )
                 }
             } else {
-                ExerciseTopBar(
-                    title = "Home Exercises",
-                    navigationIcon = Icons.Default.ArrowBackIos,
-                    onNavigationIconClicked = {
+                CustomTopAppBar(
+                    leadingIcon = R.drawable.ic_arrow_back,
+                    onClickLeadingIcon = {
                         viewModel.onEvent(ExerciseEvent.GoToAssessmentPage)
                         navController.popBackStack()
                     },
-                    trailingIcon = Icons.Default.Search,
-                    onTrailingIconClicked = {
+                    trailingIcon = R.drawable.filter,
+                    onClickTrailingIcon = {
                         viewModel.onEvent(ExerciseEvent.ShowExerciseSearchBar)
                     }
-                )
+                ) {
+                    Text(text = "Home Exercises")
+                }
             }
         }
     ) {
         Column(
             modifier = Modifier.background(MaterialTheme.colors.surface)
         ) {
-            viewModel.patient.value?.let {
-                HeroSection("${it.firstName} ${it.lastName}")
-            }
             Column(
                 modifier = Modifier.padding(horizontal = 8.dp)
             ) {

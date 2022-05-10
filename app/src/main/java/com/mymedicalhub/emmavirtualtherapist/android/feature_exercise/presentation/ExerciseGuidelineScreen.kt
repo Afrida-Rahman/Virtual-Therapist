@@ -5,14 +5,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
+import com.mymedicalhub.emmavirtualtherapist.android.R
+import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.*
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ImageSection
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.InstructionSection
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.VideoSection
 
 @Composable
 fun ExerciseGuidelineScreen(
@@ -27,19 +29,17 @@ fun ExerciseGuidelineScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            ExerciseTopBar(
-                title = "Exercise Guideline",
-                navigationIcon = Icons.Default.ArrowBackIos,
-                onNavigationIconClicked = { navController.popBackStack() }
-            )
+            CustomTopAppBar(
+                leadingIcon = R.drawable.ic_arrow_back,
+                onClickLeadingIcon = { navController.popBackStack() }
+            ) {
+                Text(text = "Exercise Guideline")
+            }
         }
     ) {
         Column(
             modifier = Modifier.background(MaterialTheme.colors.surface)
         ) {
-            viewModel.patient.value?.let {
-                HeroSection("${it.firstName} ${it.lastName}")
-            }
             Column(
                 modifier = Modifier
                     .fillMaxSize()

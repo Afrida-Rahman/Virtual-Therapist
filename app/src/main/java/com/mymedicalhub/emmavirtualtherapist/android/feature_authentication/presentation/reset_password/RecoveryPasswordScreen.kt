@@ -8,8 +8,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,17 +25,20 @@ import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapi
 @Composable
 fun RecoveryPasswordScreen(navController: NavController) {
     val scaffoldState = rememberScaffoldState()
-    val isButtonEnable = false
-    val field = remember {
-        mutableStateOf("")
-    }
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
             CustomTopAppBar(
                 leadingIcon = R.drawable.ic_arrow_back,
                 onClickLeadingIcon = { navController.popBackStack() }
-            )
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.mmh),
+                    contentDescription = "MyMedicalHub",
+                    modifier = Modifier
+                        .height(50.dp)
+                )
+            }
         }
     ) {
         Column(

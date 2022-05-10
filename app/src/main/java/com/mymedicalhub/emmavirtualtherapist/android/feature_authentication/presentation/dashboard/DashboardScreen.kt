@@ -1,12 +1,13 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.dashboard
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -15,7 +16,10 @@ import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.BottomNavigationBar
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.welcome.components.ActionCard
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Blue
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Green
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Yellow
 
 @Composable
 fun DashboardScreen(navController: NavController) {
@@ -28,7 +32,14 @@ fun DashboardScreen(navController: NavController) {
                 onClickLeadingIcon = {},
                 trailingIcon = R.drawable.notification_bell,
                 onClickTrailingIcon = {}
-            )
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.mmh),
+                    contentDescription = "MyMedicalHub",
+                    modifier = Modifier
+                        .height(50.dp)
+                )
+            }
         },
         bottomBar = {
             BottomNavigationBar(navController = navController)
@@ -45,7 +56,7 @@ fun DashboardScreen(navController: NavController) {
             ActionCard(
                 icon = R.drawable.posture_screening,
                 text = "Posture Screening",
-                backgroundColor = Color(0xFF1176B4),
+                backgroundColor = Blue,
                 onClick = { }
             )
 
@@ -54,7 +65,7 @@ fun DashboardScreen(navController: NavController) {
                 icon = R.drawable.user,
                 text = "Fysical Score™  \n" +
                         "Screening",
-                backgroundColor = Color(0xFF19A04F),
+                backgroundColor = Green,
                 onClick = { }
             )
 
@@ -64,7 +75,7 @@ fun DashboardScreen(navController: NavController) {
                 text = "Posture or \n" +
                         "Fysical Score™  \n" +
                         "Results",
-                backgroundColor = Color(0xFFFFCC00),
+                backgroundColor = Yellow,
                 onClick = { }
             )
         }

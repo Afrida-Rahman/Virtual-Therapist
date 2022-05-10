@@ -9,26 +9,33 @@ import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapi
 
 @Composable
 fun AssessmentCardBody(
-    providerName: String,
+    testId: String,
     bodyRegion: String,
-    registrationType: String,
-    exerciseCount: Int
+    Date: String,
+    exerciseCount: Int,
+    isReportReady: Boolean,
 ) {
     Column {
         AssessmentCardBodyItem(
-            icon = painterResource(R.drawable.ic_doctor),
-            title = "Provider Name",
-            value = providerName
+            icon = painterResource(R.drawable.assessments),
+            title = "Test ID",
+            value = testId
         )
         AssessmentCardBodyItem(
-            icon = painterResource(R.drawable.ic_body_region),
+            icon = painterResource(R.drawable.body_region),
             title = "Body Region",
             value = bodyRegion
         )
         AssessmentCardBodyItem(
-            icon = painterResource(R.drawable.ic_registration),
-            title = "Registration Type",
-            value = registrationType
+            icon = painterResource(R.drawable.calendar),
+            title = "Date",
+            value = Date
+        )
+
+        AssessmentCardBodyItem(
+            icon = painterResource(R.drawable.report),
+            title = "Report",
+            value = isReportReady.toString()
         )
         AssessmentCardBodyItem(
             icon = painterResource(R.drawable.ic_exercise),
@@ -43,10 +50,11 @@ fun AssessmentCardBody(
 fun AssessmentCardBodyPreview() {
     EmmaVirtualTherapistTheme {
         AssessmentCardBody(
-            providerName = "Rashed Monin",
+            testId = "467",
             bodyRegion = "Full Body",
-            registrationType = "In Clinic",
-            exerciseCount = 477
+            Date = "09 Feb, 2022",
+            exerciseCount = 477,
+            isReportReady = false,
         )
     }
 }
