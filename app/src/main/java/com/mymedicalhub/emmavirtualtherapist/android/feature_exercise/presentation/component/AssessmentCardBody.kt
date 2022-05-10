@@ -12,7 +12,8 @@ fun AssessmentCardBody(
     testId: String,
     bodyRegion: String,
     Date: String,
-    exerciseCount: Int
+    exerciseCount: Int,
+    isReportReady: Boolean,
 ) {
     Column {
         AssessmentCardBodyItem(
@@ -30,9 +31,15 @@ fun AssessmentCardBody(
             title = "Date",
             value = Date
         )
+
         AssessmentCardBodyItem(
             icon = painterResource(R.drawable.report),
             title = "Report",
+            value = isReportReady.toString()
+        )
+        AssessmentCardBodyItem(
+            icon = painterResource(R.drawable.ic_exercise),
+            title = "Total Assigned Home Exercise",
             value = exerciseCount.toString()
         )
     }
@@ -46,7 +53,8 @@ fun AssessmentCardBodyPreview() {
             testId = "467",
             bodyRegion = "Full Body",
             Date = "09 Feb, 2022",
-            exerciseCount = 477
+            exerciseCount = 477,
+            isReportReady = false,
         )
     }
 }
