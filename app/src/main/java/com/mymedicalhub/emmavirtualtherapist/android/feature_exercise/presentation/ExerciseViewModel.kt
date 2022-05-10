@@ -258,7 +258,8 @@ class ExerciseViewModel @Inject constructor(
                         _isAssessmentLoading.value = false
                         _eventFlow.emit(
                             UIEvent.ShowSnackBar(
-                                it.message ?: "Failed to load assessments! Please try again."
+                                it.message
+                                    ?: "Failed to load assessments_outlined! Please try again."
                             )
                         )
                     }
