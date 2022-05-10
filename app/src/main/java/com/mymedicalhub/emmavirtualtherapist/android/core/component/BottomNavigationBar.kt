@@ -64,7 +64,7 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
             unselectedContentColor = DarkCharcoal
         )
         BottomNavigationItem(
-            selected = selectedIndex == 3,
+            selected = selectedIndex == 4,
             onClick = {
                 navController.popBackStack()
             },
@@ -72,7 +72,7 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
             icon = {
                 Icon(
                     painter = painterResource(
-                        id = if (selectedIndex == 3) {
+                        id = if (selectedIndex == 4) {
                             R.drawable.calendar_filled
                         } else {
                             R.drawable.calendar
