@@ -17,7 +17,7 @@ fun AssessmentCardBody(
 ) {
     Column {
         AssessmentCardBodyItem(
-            icon = painterResource(R.drawable.assessments),
+            icon = painterResource(R.drawable.assessments_outlined),
             title = "Test ID",
             value = testId
         )
@@ -27,7 +27,7 @@ fun AssessmentCardBody(
             value = bodyRegion
         )
         AssessmentCardBodyItem(
-            icon = painterResource(R.drawable.calendar),
+            icon = painterResource(R.drawable.calendar_outlined),
             title = "Date",
             value = Date
         )

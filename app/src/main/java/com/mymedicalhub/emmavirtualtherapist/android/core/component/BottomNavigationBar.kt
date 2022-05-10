@@ -52,9 +52,9 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
                 Icon(
                     painter = painterResource(
                         id = if (selectedIndex == 2) {
-                            R.drawable.assessment_filled
+                            R.drawable.assessments_filled
                         } else {
-                            R.drawable.assessments
+                            R.drawable.assessments_outlined
                         }
                     ),
                     contentDescription = "Assessments"
@@ -75,7 +75,7 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
                         id = if (selectedIndex == 4) {
                             R.drawable.calendar_filled
                         } else {
-                            R.drawable.calendar
+                            R.drawable.calendar_outlined
                         }
                     ),
                     contentDescription = "Calendar"
