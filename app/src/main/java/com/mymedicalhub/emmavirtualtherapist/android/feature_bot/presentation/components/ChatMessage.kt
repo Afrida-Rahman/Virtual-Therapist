@@ -74,7 +74,7 @@ fun ChatMessagePreview() {
     EmmaVirtualTherapistTheme {
         ChatMessage(
             message = Message(
-                message = "Very Goof Morning...! We are growing gradually. Here is the complete growth report.",
+                message = "Very Goof Morning...! We are growing gradually. Here is the complete growth report_outlined.",
                 userIcon = R.drawable.chest_pain
             )
         )
