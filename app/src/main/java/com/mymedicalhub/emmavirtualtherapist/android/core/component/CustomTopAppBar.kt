@@ -51,20 +51,22 @@ fun CustomTopAppBar(
         ) {
             content()
         }
-        trailingIcon?.let {
-            IconButton(onClick = { onClickTrailingIcon() }) {
-                Icon(
-                    painter = painterResource(id = it),
-                    contentDescription = "Trailing Icon",
-                    modifier = Modifier
-                        .border(
-                            width = 1.dp,
-                            color = Color.LightGray,
-                            shape = CircleShape
-                        )
-                        .size(40.dp)
-                        .padding(12.dp)
-                )
+        Box(modifier = Modifier.size(40.dp)) {
+            trailingIcon?.let {
+                IconButton(onClick = { onClickTrailingIcon() }) {
+                    Icon(
+                        painter = painterResource(id = it),
+                        contentDescription = "Trailing Icon",
+                        modifier = Modifier
+                            .border(
+                                width = 1.dp,
+                                color = Color.LightGray,
+                                shape = CircleShape
+                            )
+                            .fillMaxSize()
+                            .padding(12.dp)
+                    )
+                }
             }
         }
     }
