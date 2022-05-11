@@ -34,7 +34,9 @@ fun DashboardScreen(navController: NavController) {
                     navController.navigate(Screen.SettingsScreen.route)
                 },
                 trailingIcon = R.drawable.notification_bell,
-                onClickTrailingIcon = {}
+                onClickTrailingIcon = {
+                    navController.navigate(Screen.NotificationScreen.route)
+                }
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.mmh),
