@@ -3,7 +3,6 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.pre
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,6 +16,8 @@ import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.welcome.components.ActionCard
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Blue
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Green
 
 @Composable
 fun WelcomeScreen(
@@ -47,18 +48,16 @@ fun WelcomeScreen(
         ActionCard(
             icon = R.drawable.user_tick,
             text = "Returning Patient",
-            backgroundColor = Color(0xFF1176B4),
-            onClick = {
-                navController.navigate(Screen.SignInScreen.route)
-            }
-        )
+            backgroundColor = Blue
+        ) {
+            navController.navigate(Screen.SignInScreen.route)
+        }
         Spacer(modifier = Modifier.height(24.dp))
         ActionCard(
             icon = R.drawable.user,
             text = "New Patient",
-            backgroundColor = MaterialTheme.colors.secondary,
-            onClick = { navController.navigate(Screen.SignUpScreen.route) }
-        )
+            backgroundColor = Green
+        ) { navController.navigate(Screen.SignUpScreen.route) }
         Spacer(modifier = Modifier.height(24.dp))
         Row {
             Text(text = "Don't have account?")

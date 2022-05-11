@@ -92,7 +92,13 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
             label = { Text(text = "Report") },
             icon = {
                 Icon(
-                    painter = painterResource(id = R.drawable.report),
+                    painter = painterResource(
+                        id = if (selectedIndex == 5) {
+                            R.drawable.report_filled
+                        } else {
+                            R.drawable.report_outlined
+                        }
+                    ),
                     contentDescription = "Report"
                 )
             },

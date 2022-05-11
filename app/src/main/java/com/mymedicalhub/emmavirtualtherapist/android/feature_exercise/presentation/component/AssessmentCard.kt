@@ -115,6 +115,9 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
                 onClick = { },
                 modifier = Modifier.width(150.dp),
                 shape = CircleShape,
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color(0xFF00121C)
+                )
             ) {
                 Text(
                     text = "Movements",

@@ -33,7 +33,7 @@ fun AssessmentCardBody(
         )
 
         AssessmentCardBodyItem(
-            icon = painterResource(R.drawable.report),
+            icon = painterResource(R.drawable.report_outlined),
             title = "Report",
             value = isReportReady.toString()
         )

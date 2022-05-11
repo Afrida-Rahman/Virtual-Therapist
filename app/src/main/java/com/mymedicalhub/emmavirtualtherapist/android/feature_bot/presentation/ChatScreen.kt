@@ -31,7 +31,7 @@ fun ChatScreen(bot: Bot) {
         mutableStateOf<List<Message>>(
             listOf(
                 Message(
-                    message = "Very Goof Morning...! We are growing gradually. Here is the complete growth report.",
+                    message = "Very Goof Morning...! We are growing gradually. Here is the complete growth report_outlined.",
                     userIcon = R.drawable.chest_pain
                 )
             )
