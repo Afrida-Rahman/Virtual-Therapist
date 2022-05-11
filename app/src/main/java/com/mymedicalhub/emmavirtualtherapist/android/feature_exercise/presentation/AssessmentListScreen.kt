@@ -30,7 +30,6 @@ import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopApp
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.NavigationDrawer
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.AssessmentCard
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -97,13 +96,7 @@ fun AssessmentListScreen(
                 CustomTopAppBar(
                     leadingIcon = R.drawable.menu_new,
                     onClickLeadingIcon = {
-                        coroutineScope.launch {
-                            if (scaffoldState.drawerState.isClosed) {
-                                scaffoldState.drawerState.open()
-                            } else {
-                                scaffoldState.drawerState.close()
-                            }
-                        }
+                        navController.navigate(Screen.SettingsScreen.route)
                     },
                     trailingIcon = R.drawable.filter,
                     onClickTrailingIcon = {

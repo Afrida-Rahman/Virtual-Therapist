@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.BottomNavigationBar
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
+import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.welcome.components.ActionCard
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Blue
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
@@ -29,7 +30,9 @@ fun DashboardScreen(navController: NavController) {
         topBar = {
             CustomTopAppBar(
                 leadingIcon = R.drawable.menu_new,
-                onClickLeadingIcon = {},
+                onClickLeadingIcon = {
+                    navController.navigate(Screen.SettingsScreen.route)
+                },
                 trailingIcon = R.drawable.notification_bell,
                 onClickTrailingIcon = {}
             ) {

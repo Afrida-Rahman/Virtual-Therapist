@@ -77,7 +77,7 @@ fun RecoveryPasswordScreen(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.height(80.dp))
                 Button(
-                    onClick = { },
+                    onClick = { navController.popBackStack() },
                     enabled = true,
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(
