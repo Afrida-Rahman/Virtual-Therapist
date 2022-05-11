@@ -23,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.OutlineInputTextField
+import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
 
 @Composable
@@ -83,7 +84,10 @@ fun ResetPasswordScreen(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.height(80.dp))
                 Button(
-                    onClick = { },
+                    onClick = {
+                        navController.popBackStack()
+                        navController.navigate(Screen.RecoveryPasswordScreen.route)
+                    },
                     enabled = true,
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(
