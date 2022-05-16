@@ -1,9 +1,6 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
@@ -36,25 +33,19 @@ fun ChatCardBodyItem(icon: Painter, title: String) {
                 modifier = Modifier
                     .size(40.dp)
                     .clip(CircleShape)
-                    .background(Color(232, 246, 253), shape = CircleShape)
-                    .border(
-                        BorderStroke(color = Color(117, 138, 223), width = 1.dp),
-                        shape = CircleShape
-                    )
-                    .padding(10.dp)
             )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 8.dp, top = 8.dp, end = 4.dp),
+                    .padding(start = 6.dp, top = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
 
             ) {
                 Text(
                     text = title,
-                    fontSize = 16.sp,
+                    fontSize = 14.sp,
                     color = Color(0xFF000000),
-                    style = MaterialTheme.typography.body1,
+                    style = MaterialTheme.typography.h2,
                 )
             }
         }
@@ -66,7 +57,7 @@ fun ChatCardBodyItem(icon: Painter, title: String) {
 fun ChatCardBodyItemPreview() {
     EmmaVirtualTherapistTheme {
         ChatCardBodyItem(
-            icon = painterResource(R.drawable.ic_exercise),
+            icon = painterResource(R.drawable.mmh_logo),
             title = "EMMA",
         )
     }

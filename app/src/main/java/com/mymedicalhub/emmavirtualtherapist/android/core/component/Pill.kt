@@ -14,9 +14,7 @@ import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Green
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Green150
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.*
 
 @OptIn(ExperimentalUnitApi::class)
 @Composable
@@ -28,7 +26,7 @@ fun Pill(text: String, textColor: Color, backgroundColor: Color) {
         fontWeight = FontWeight.W700,
         fontSize = TextUnit(12f, TextUnitType.Sp),
         modifier = Modifier
-            .padding(8.dp)
+            .padding(4.dp)
             .background(color = backgroundColor, shape = RoundedCornerShape(5.dp))
             .padding(horizontal = 6.dp, vertical = 3.dp)
     )
@@ -36,12 +34,36 @@ fun Pill(text: String, textColor: Color, backgroundColor: Color) {
 
 @Preview(showBackground = false)
 @Composable
-fun PillPreview() {
+fun GreenPillPreview() {
     EmmaVirtualTherapistTheme {
         Pill(
             "General",
             textColor = Green,
             backgroundColor = Green150
+        )
+    }
+}
+
+@Preview(showBackground = false)
+@Composable
+fun RedPillPreview() {
+    EmmaVirtualTherapistTheme {
+        Pill(
+            "General",
+            textColor = Red,
+            backgroundColor = Red200
+        )
+    }
+}
+
+@Preview(showBackground = false)
+@Composable
+fun YellowPillPreview() {
+    EmmaVirtualTherapistTheme {
+        Pill(
+            "General",
+            textColor = Color.Black,
+            backgroundColor = Yellow
         )
     }
 }

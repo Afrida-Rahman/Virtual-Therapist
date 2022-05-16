@@ -9,17 +9,16 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mymedicalhub.emmavirtualtherapist.android.R
+import com.mymedicalhub.emmavirtualtherapist.android.core.component.Pill
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.model.Notification
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.model.NotificationType
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Gray100
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Gray500
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Green
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.*
 
 @Composable
 fun NotificationItem(notification: Notification) {
@@ -61,7 +60,11 @@ fun NotificationItem(notification: Notification) {
             if (notification.tags.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(6.dp))
                 notification.tags.forEach {
-                    Pill(text = it)
+                    Pill(
+                        text = it,
+                        textColor = Color.Black,
+                        backgroundColor = Yellow
+                    )
                 }
             }
             notification.date?.let {
