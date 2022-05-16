@@ -7,6 +7,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.ExperimentalUnitApi
@@ -19,7 +20,7 @@ import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Green150
 
 @OptIn(ExperimentalUnitApi::class)
 @Composable
-fun PillBot(text: String) {
+fun Pill(text: String, textColor: Color, backgroundColor: Color) {
     Text(
         text = text,
         color = Green,
@@ -28,7 +29,7 @@ fun PillBot(text: String) {
         fontSize = TextUnit(12f, TextUnitType.Sp),
         modifier = Modifier
             .padding(8.dp)
-            .background(color = Green150, shape = RoundedCornerShape(0.dp))
+            .background(color = Green150, shape = RoundedCornerShape(5.dp))
             .padding(horizontal = 6.dp, vertical = 3.dp)
     )
 }
@@ -37,6 +38,10 @@ fun PillBot(text: String) {
 @Composable
 fun PillPreview() {
     EmmaVirtualTherapistTheme {
-        PillBot("General")
+        Pill(
+            "General",
+            textColor = Green,
+            backgroundColor = Green150
+        )
     }
 }
