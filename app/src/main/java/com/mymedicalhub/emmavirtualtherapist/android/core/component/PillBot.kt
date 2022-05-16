@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Green
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.GreenBackground
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Green150
 
 @OptIn(ExperimentalUnitApi::class)
 @Composable
@@ -28,7 +28,7 @@ fun PillBot(text: String) {
         fontSize = TextUnit(12f, TextUnitType.Sp),
         modifier = Modifier
             .padding(8.dp)
-            .background(color = GreenBackground, shape = RoundedCornerShape(0.dp))
+            .background(color = Green150, shape = RoundedCornerShape(0.dp))
             .padding(horizontal = 6.dp, vertical = 3.dp)
     )
 }
