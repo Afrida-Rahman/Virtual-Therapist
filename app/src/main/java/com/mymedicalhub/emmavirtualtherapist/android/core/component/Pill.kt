@@ -23,13 +23,13 @@ import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Green150
 fun Pill(text: String, textColor: Color, backgroundColor: Color) {
     Text(
         text = text,
-        color = Green,
+        color = textColor,
         style = MaterialTheme.typography.caption,
         fontWeight = FontWeight.W700,
         fontSize = TextUnit(12f, TextUnitType.Sp),
         modifier = Modifier
             .padding(8.dp)
-            .background(color = Green150, shape = RoundedCornerShape(5.dp))
+            .background(color = backgroundColor, shape = RoundedCornerShape(5.dp))
             .padding(horizontal = 6.dp, vertical = 3.dp)
     )
 }
