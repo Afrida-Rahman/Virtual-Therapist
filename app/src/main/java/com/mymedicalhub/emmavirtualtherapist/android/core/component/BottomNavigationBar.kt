@@ -1,9 +1,7 @@
 package com.mymedicalhub.emmavirtualtherapist.android.core.component
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -16,8 +14,7 @@ import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.DarkCharcoal
 fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
     BottomNavigation(
         elevation = 8.dp,
-        backgroundColor = Color.White,
-        modifier = Modifier.padding(horizontal = 8.dp)
+        backgroundColor = Color.White
     ) {
         BottomNavigationItem(
             selected = selectedIndex == 1,
@@ -28,6 +25,7 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
             label = {
                 Text(
                     text = "Home",
+                    maxLines = 1
                 )
             },
             icon = {
@@ -54,6 +52,7 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
             label = {
                 Text(
                     text = "Assessments",
+                    maxLines = 1
                 )
             },
             icon = {
@@ -79,6 +78,7 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
             label = {
                 Text(
                     text = "Calendar",
+                    maxLines = 1
                 )
             },
             icon = {
@@ -104,6 +104,7 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
             label = {
                 Text(
                     text = "Report",
+                    maxLines = 1
                 )
             },
             icon = {

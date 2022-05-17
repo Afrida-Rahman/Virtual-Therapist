@@ -50,9 +50,9 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
                 ) {
                     Icon(
                         painter = painterResource(
-                            id = R.drawable.calendar_white
+                            id = R.drawable.edit_white
                         ),
-                        contentDescription = "Calendar"
+                        contentDescription = "Edit"
                     )
                     Text(
                         text = "Edit",
@@ -75,7 +75,7 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
                         painter = painterResource(
                             id = R.drawable.run
                         ),
-                        contentDescription = "Calendar"
+                        contentDescription = "Track"
                     )
                     Text(
                         text = "Track",
@@ -102,7 +102,7 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
                         painter = painterResource(
                             id = R.drawable.calendar_white
                         ),
-                        contentDescription = "Calendar"
+                        contentDescription = "Followup"
                     )
                     Text(
                         text = "Followup",
@@ -122,9 +122,9 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
                 ) {
                     Icon(
                         painter = painterResource(
-                            id = R.drawable.calendar_white
+                            id = R.drawable.report_new
                         ),
-                        contentDescription = "Calendar"
+                        contentDescription = "Report"
                     )
 
                     Text(
@@ -147,7 +147,7 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
                     painter = painterResource(
                         id = R.drawable.calendar_white
                     ),
-                    contentDescription = "Calendar"
+                    contentDescription = "Movements"
                 )
                 Text(
                     text = "Movements",
