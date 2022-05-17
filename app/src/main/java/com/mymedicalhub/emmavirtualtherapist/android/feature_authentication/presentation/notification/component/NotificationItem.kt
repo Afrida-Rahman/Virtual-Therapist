@@ -60,11 +60,13 @@ fun NotificationItem(notification: Notification) {
             if (notification.tags.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(6.dp))
                 notification.tags.forEach {
+                    Spacer(modifier = Modifier.height(2.dp))
                     Pill(
                         text = it,
                         textColor = Color.Black,
                         backgroundColor = Yellow
                     )
+                    Spacer(modifier = Modifier.height(2.dp))
                 }
             }
             notification.date?.let {

@@ -1,4 +1,4 @@
-package com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.components
+package com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.chat.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
