@@ -3,17 +3,16 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentat
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Card
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Assessment
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
 
@@ -43,12 +42,18 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
             ) {
                 Button(
                     onClick = { },
-                    modifier = Modifier.width(150.dp),
+                    modifier = Modifier.width(160.dp),
                     shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Color(0xFF19A04F),
                     )
                 ) {
+                    Icon(
+                        painter = painterResource(
+                            id = R.drawable.calendar_white
+                        ),
+                        contentDescription = "Calendar"
+                    )
                     Text(
                         text = "Edit",
                         color = Color.White,
@@ -59,13 +64,19 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
                 Spacer(Modifier.height(12.dp))
                 Button(
                     onClick = { onViewExerciseButtonClicked() },
-                    modifier = Modifier.width(150.dp),
+                    modifier = Modifier.width(160.dp),
                     shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Color(0xFFF80F1B),
                     )
 
                 ) {
+                    Icon(
+                        painter = painterResource(
+                            id = R.drawable.run
+                        ),
+                        contentDescription = "Calendar"
+                    )
                     Text(
                         text = "Track",
                         color = Color.White,
@@ -81,12 +92,18 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
             ) {
                 Button(
                     onClick = { },
-                    modifier = Modifier.width(150.dp),
+                    modifier = Modifier.width(160.dp),
                     shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Color(0xFF1176B4),
                     )
                 ) {
+                    Icon(
+                        painter = painterResource(
+                            id = R.drawable.calendar_white
+                        ),
+                        contentDescription = "Calendar"
+                    )
                     Text(
                         text = "Followup",
                         color = Color.White,
@@ -97,12 +114,19 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
                 Spacer(Modifier.height(12.dp))
                 Button(
                     onClick = { },
-                    modifier = Modifier.width(150.dp),
+                    modifier = Modifier.width(160.dp),
                     shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Color(0xFFFFC000),
                     )
                 ) {
+                    Icon(
+                        painter = painterResource(
+                            id = R.drawable.calendar_white
+                        ),
+                        contentDescription = "Calendar"
+                    )
+
                     Text(
                         text = "Report",
                         textAlign = TextAlign.Center,
@@ -113,12 +137,18 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
             Spacer(Modifier.height(12.dp))
             Button(
                 onClick = { },
-                modifier = Modifier.width(150.dp),
+                modifier = Modifier.width(160.dp),
                 shape = CircleShape,
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color(0xFF00121C)
                 )
             ) {
+                Icon(
+                    painter = painterResource(
+                        id = R.drawable.calendar_white
+                    ),
+                    contentDescription = "Calendar"
+                )
                 Text(
                     text = "Movements",
                     color = Color.White,

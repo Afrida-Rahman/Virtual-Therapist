@@ -25,7 +25,11 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
                 navController.popBackStack()
                 navController.navigate(Screen.DashboardScreen.route)
             },
-            label = { Text(text = "Home") },
+            label = {
+                Text(
+                    text = "Home",
+                )
+            },
             icon = {
                 Icon(
                     painter = painterResource(
@@ -47,7 +51,11 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
                 navController.popBackStack()
                 navController.navigate(Screen.AssessmentListScreen.route)
             },
-            label = { Text(text = "Assessments") },
+            label = {
+                Text(
+                    text = "Assessments",
+                )
+            },
             icon = {
                 Icon(
                     painter = painterResource(
@@ -57,7 +65,7 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
                             R.drawable.assessments_outlined
                         }
                     ),
-                    contentDescription = "Assessments"
+                    contentDescription = "Assessments",
                 )
             },
             selectedContentColor = MaterialTheme.colors.primaryVariant,
@@ -68,7 +76,11 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
             onClick = {
                 navController.popBackStack()
             },
-            label = { Text(text = "Calendar") },
+            label = {
+                Text(
+                    text = "Calendar",
+                )
+            },
             icon = {
                 Icon(
                     painter = painterResource(
@@ -89,7 +101,11 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
             onClick = {
                 navController.popBackStack()
             },
-            label = { Text(text = "Report") },
+            label = {
+                Text(
+                    text = "Report",
+                )
+            },
             icon = {
                 Icon(
                     painter = painterResource(
