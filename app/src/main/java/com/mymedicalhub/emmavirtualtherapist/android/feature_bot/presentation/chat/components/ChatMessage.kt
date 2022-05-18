@@ -26,6 +26,7 @@ fun ChatMessage(chatResponse: ChatResponse) {
         PillSection(pills = tags.filter { it.isNotEmpty() })
         Spacer(modifier = Modifier.height(6.dp))
         Text(text = response.dialogue)
+        Spacer(modifier = Modifier.height(6.dp))
     }
 }
 
@@ -41,8 +42,8 @@ fun ChatMessagePreview() {
                     questionId = 43,
                     text = "How often do you perform activities that require bending or twisting of your torso, such as gardening or golf?",
                     bodyLocation = "",
-                    header1 = "Activities or Hobbies",
-                    header2 = "",
+                    header1 = "General",
+                    header2 = "Activities or Hobbies",
                     intent = "",
                     title = "",
                     buttonText = "",
@@ -64,9 +65,9 @@ fun ChatMessagePreview() {
                     responses = listOf(
                         Response(
                             id = 89,
-                            name = "None",
+                            name = "",
                             hint = "",
-                            title = "",
+                            title = "None",
                             description = "",
                             color = "",
                             icon = "",
@@ -123,3 +124,4 @@ fun ChatMessagePreview() {
         )
     }
 }
+
