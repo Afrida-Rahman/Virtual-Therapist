@@ -10,12 +10,13 @@ import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.domain.model.ChatResponse
 import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.domain.model.Response
 import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.domain.model.ResponseData
+import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.domain.model.ResponseType
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
 
 @Composable
 fun ChatMessage(chatResponse: ChatResponse) {
-    val response = chatResponse.responseData
-    val tags = listOf(response.header1, response.header2, response.typeName)
+    val responseData = chatResponse.responseData
+    val tags = listOf(responseData.header1, responseData.header2, responseData.typeName)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -25,8 +26,18 @@ fun ChatMessage(chatResponse: ChatResponse) {
         Spacer(modifier = Modifier.height(12.dp))
         PillSection(pills = tags.filter { it.isNotEmpty() })
         Spacer(modifier = Modifier.height(6.dp))
-        Text(text = response.dialogue)
+        Text(text = responseData.dialogue)
         Spacer(modifier = Modifier.height(6.dp))
+        when (responseData.responseType) {
+            ResponseType.BUTTON -> {
+                AnswerButtonSection(responses = responseData.responses)
+            }
+            ResponseType.TEXT -> {}
+            ResponseType.CHECKBOX -> {}
+            ResponseType.AUTOCOMPLETE -> {}
+            ResponseType.DATE -> {}
+            ResponseType.DATETIME -> {}
+        }
     }
 }
 
@@ -53,7 +64,7 @@ fun ChatMessagePreview() {
                     typeId = 3,
                     typeName = "Activities of Daily Living",
                     lastQuestionInGroup = false,
-                    responseType = "BUTTON",
+                    responseType = ResponseType.BUTTON,
                     tenant = "stg",
                     pageCaption = "How often do you perform any of the following activities or hobbies?",
                     saveAnswer = true,
@@ -65,9 +76,9 @@ fun ChatMessagePreview() {
                     responses = listOf(
                         Response(
                             id = 89,
-                            name = "",
+                            name = "None",
                             hint = "",
-                            title = "None",
+                            title = "",
                             description = "",
                             color = "",
                             icon = "",

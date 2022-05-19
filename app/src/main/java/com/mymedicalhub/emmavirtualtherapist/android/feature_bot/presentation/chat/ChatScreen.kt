@@ -17,10 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.OutlineInputTextField
-import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.domain.model.Bot
-import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.domain.model.ChatResponse
-import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.domain.model.Response
-import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.domain.model.ResponseData
+import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.domain.model.*
 import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.chat.components.ChatMessage
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
 
@@ -50,7 +47,7 @@ fun ChatScreen(bot: Bot) {
                         typeId = 3,
                         typeName = "Activities of Daily Living",
                         lastQuestionInGroup = false,
-                        responseType = "BUTTON",
+                        responseType = ResponseType.BUTTON,
                         tenant = "stg",
                         pageCaption = "How often do you perform any of the following activities or hobbies?",
                         saveAnswer = true,

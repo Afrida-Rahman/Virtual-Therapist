@@ -26,6 +26,7 @@ fun Pill(text: String, textColor: Color, backgroundColor: Color) {
         fontWeight = FontWeight.W700,
         fontSize = TextUnit(12f, TextUnitType.Sp),
         modifier = Modifier
+            .padding(vertical = 3.dp)
             .background(color = backgroundColor, shape = RoundedCornerShape(5.dp))
             .padding(horizontal = 6.dp, vertical = 3.dp)
     )

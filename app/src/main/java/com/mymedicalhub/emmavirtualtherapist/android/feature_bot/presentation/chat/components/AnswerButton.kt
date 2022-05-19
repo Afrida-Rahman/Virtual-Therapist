@@ -1,6 +1,5 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.chat.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
@@ -19,19 +18,19 @@ import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.MediumCharcoal
 
 @Composable
 fun AnswerButton(text: String, textColor: Color) {
-
     Button(
         onClick = { },
         shape = CircleShape,
         modifier = Modifier
+            .padding(vertical = 4.dp, horizontal = 1.dp)
             .border(
-                BorderStroke(color = Gray200, width = 1.dp)
+                width = 1.dp,
+                shape = CircleShape,
+                color = Gray200
             ),
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color(0xFFFFFFFF),
+            backgroundColor = Color.White
         )
-
-
     ) {
         Text(
             text = text,

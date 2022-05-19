@@ -19,7 +19,7 @@ data class ResponseData(
     val lastQuestionInGroup: Boolean,
     val pageCaption: String,
     val questionId: Int,
-    val responseType: String,
+    val responseType: ResponseType,
     val responses: List<Response>,
     val saveAnswer: Boolean,
     val selectedBodyRegions: List<Any>,
