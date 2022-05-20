@@ -46,7 +46,7 @@ fun AnswerButton(text: String, textColor: Color) {
 fun AnswerButtonPreview() {
     EmmaVirtualTherapistTheme {
         AnswerButton(
-            text = "Occasionally",
+            text = "None",
             textColor = MediumCharcoal,
         )
     }
@@ -57,7 +57,7 @@ fun AnswerButtonPreview() {
 fun AnswerButtonOnePreview() {
     EmmaVirtualTherapistTheme {
         AnswerButton(
-            text = "None",
+            text = "Occasionally",
             textColor = MediumCharcoal,
         )
     }
