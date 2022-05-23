@@ -3,9 +3,11 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentat
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
@@ -28,6 +30,8 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
+import com.mymedicalhub.emmavirtualtherapist.android.feature_ml.domain.model.posedetector.PoseDetectorProcessor
+import com.mymedicalhub.emmavirtualtherapist.android.feature_ml.domain.utils.PreferenceUtils
 
 @SuppressLint("UnsafeOptInUsageError")
 @Composable
@@ -83,17 +87,55 @@ fun ExerciseScreen(
                     AndroidView(
                         factory = { context ->
                             val previewView = PreviewView(context)
+                            val executor = ContextCompat.getMainExecutor(context)
                             previewView.removeAllViews()
                             val preview = Preview.Builder().build().also {
                                 it.setSurfaceProvider(previewView.surfaceProvider)
+                            }
+                            val cameraSelector = CameraSelector.Builder()
+                                .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
+                                .build()
+                            val imageAnalyzer = ImageAnalysis.Builder()
+                                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                                .build()
+                                .apply {
+                                    viewModel.analyzer.value?.let { imageAnalyzer ->
+                                        setAnalyzer(executor, imageAnalyzer)
+                                    }
+                                }
+                            
+                            viewModel.imageProcessor = try {
+                                val poseDetectorOptions =
+                                    PreferenceUtils.getPoseDetectorOptionsForLivePreview(context = context)
+                                PoseDetectorProcessor(
+                                    context = context,
+                                    poseDetectorOptions,
+                                    showInFrameLikelihood = true,
+                                    visualizeZ = false,
+                                    rescaleZForVisualization = false
+                                )
+                            } catch (e: Exception) {
+                                Toast.makeText(
+                                    context,
+                                    "Can not create image processor for pose model: " + e.localizedMessage,
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                val poseDetectorOptions =
+                                    PreferenceUtils.getPoseDetectorOptionsForLivePreview(context = context)
+                                PoseDetectorProcessor(
+                                    context = context,
+                                    poseDetectorOptions,
+                                    showInFrameLikelihood = true,
+                                    visualizeZ = false,
+                                    rescaleZForVisualization = false
+                                )
                             }
                             try {
                                 cameraProvider.unbindAll()
                                 cameraProvider.bindToLifecycle(
                                     lifecycleOwner,
-                                    CameraSelector.Builder()
-                                        .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
-                                        .build(),
+                                    cameraSelector,
+                                    imageAnalyzer,
                                     preview
                                 )
                             } catch (e: Exception) {
@@ -167,3 +209,4 @@ fun ExerciseScreen(
         }
     }
 }
+
