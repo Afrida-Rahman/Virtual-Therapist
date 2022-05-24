@@ -1,9 +1,7 @@
 package com.mymedicalhub.emmavirtualtherapist.android.core.component
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -16,8 +14,7 @@ import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.DarkCharcoal
 fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
     BottomNavigation(
         elevation = 8.dp,
-        backgroundColor = Color.White,
-        modifier = Modifier.padding(horizontal = 8.dp)
+        backgroundColor = Color.White
     ) {
         BottomNavigationItem(
             selected = selectedIndex == 1,
@@ -25,7 +22,12 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
                 navController.popBackStack()
                 navController.navigate(Screen.DashboardScreen.route)
             },
-            label = { Text(text = "Home") },
+            label = {
+                Text(
+                    text = "Home",
+                    maxLines = 1
+                )
+            },
             icon = {
                 Icon(
                     painter = painterResource(
@@ -47,7 +49,12 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
                 navController.popBackStack()
                 navController.navigate(Screen.AssessmentListScreen.route)
             },
-            label = { Text(text = "Assessments") },
+            label = {
+                Text(
+                    text = "Assessments",
+                    maxLines = 1
+                )
+            },
             icon = {
                 Icon(
                     painter = painterResource(
@@ -57,7 +64,7 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
                             R.drawable.assessments_outlined
                         }
                     ),
-                    contentDescription = "Assessments"
+                    contentDescription = "Assessments",
                 )
             },
             selectedContentColor = MaterialTheme.colors.primaryVariant,
@@ -68,7 +75,12 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
             onClick = {
                 navController.popBackStack()
             },
-            label = { Text(text = "Calendar") },
+            label = {
+                Text(
+                    text = "Calendar",
+                    maxLines = 1
+                )
+            },
             icon = {
                 Icon(
                     painter = painterResource(
@@ -89,7 +101,12 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
             onClick = {
                 navController.popBackStack()
             },
-            label = { Text(text = "Report") },
+            label = {
+                Text(
+                    text = "Report",
+                    maxLines = 1
+                )
+            },
             icon = {
                 Icon(
                     painter = painterResource(

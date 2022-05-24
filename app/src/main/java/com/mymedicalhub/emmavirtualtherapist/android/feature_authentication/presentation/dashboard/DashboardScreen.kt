@@ -88,7 +88,7 @@ fun DashboardScreen(navController: NavController) {
 }
 
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(showBackground = true)
 @Composable
 fun DashboardScreenPreview() {
     EmmaVirtualTherapistTheme {
