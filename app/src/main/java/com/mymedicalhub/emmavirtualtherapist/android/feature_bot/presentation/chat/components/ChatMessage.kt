@@ -25,11 +25,7 @@ fun ChatMessage(chatResponse: ChatResponse) {
     val mYear: Int
     val mMonth: Int
     val mDay: Int
-
-    // Initializing a Calendar
     val mCalendar = Calendar.getInstance()
-
-    // Fetching current year, month and day
     mYear = mCalendar.get(Calendar.YEAR)
     mMonth = mCalendar.get(Calendar.MONTH)
     mDay = mCalendar.get(Calendar.DAY_OF_MONTH)
@@ -40,6 +36,7 @@ fun ChatMessage(chatResponse: ChatResponse) {
         { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
         }, mYear, mMonth, mDay
     )
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
