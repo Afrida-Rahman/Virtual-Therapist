@@ -1,5 +1,6 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -56,6 +57,7 @@ fun ExerciseGuidelineScreen(
                             overflow = TextOverflow.Ellipsis
                         )
                         Button(onClick = {
+                            Log.d("InNavigation", "I am called in guideline screen")
                             viewModel.patient.value?.let { patient ->
                                 navController.popBackStack()
                                 navController.navigate(

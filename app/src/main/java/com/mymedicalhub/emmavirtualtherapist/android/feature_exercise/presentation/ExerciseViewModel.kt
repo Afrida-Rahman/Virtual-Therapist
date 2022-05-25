@@ -1,7 +1,6 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
 
 import android.content.SharedPreferences
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -14,9 +13,6 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.mod
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Exercise
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Phase
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.usecase.ExerciseUseCases
-import com.mymedicalhub.emmavirtualtherapist.android.feature_ml.domain.model.ml_kit.GraphicOverlay
-import com.mymedicalhub.emmavirtualtherapist.android.feature_ml.domain.model.ml_kit.VisionImageProcessor
-import com.mymedicalhub.emmavirtualtherapist.android.feature_ml.domain.model.posedetector.PoseEstimation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -93,18 +89,10 @@ class ExerciseViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<UIEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    private val _analyzer: MutableState<PoseEstimation?> = mutableStateOf(null)
-    val analyzer: State<PoseEstimation?> = _analyzer
-
-    var imageProcessor: VisionImageProcessor? = null
-    var graphicOverlay: GraphicOverlay? = null
-    var needUpdateGraphicOverlayImageSourceInfo = false
-
     init {
         _patient.value = Utilities.getPatient(preferences = preferences)
         _patient.value?.let {
             fetchAssessments(it)
-            _analyzer.value = PoseEstimation(viewModel = this)
         }
     }
 

@@ -1,5 +1,6 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -174,6 +175,7 @@ fun ExerciseListScreen(
                         testId = testId,
                         exerciseId = viewModel.manualSelectedExercise.value
                     )?.let {
+                        Log.d("InNavigation", "I am called in exercise list screen")
                         ExerciseDemo(
                             phases = it.phases,
                             onStartButtonClicked = {
