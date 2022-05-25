@@ -1,5 +1,6 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
 
+import android.util.Log
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.*
 import androidx.navigation.compose.composable
@@ -81,13 +82,15 @@ fun NavGraphBuilder.exerciseNav(navController: NavController) {
             it.arguments?.getString("tenant")?.let { tenant ->
                 it.arguments?.getString("testId")?.let { testId ->
                     it.arguments?.getInt("exerciseId")?.let { exerciseId ->
-                        ExerciseScreen(
-                            tenant = tenant,
-                            testId = testId,
-                            exerciseId = exerciseId,
-                            navController = navController,
-                            viewModel = viewModel
-                        )
+//                        ExerciseScreen(
+//                            tenant = tenant,
+//                            testId = testId,
+//                            exerciseId = exerciseId,
+//                            navController = navController,
+//                            viewModel = viewModel
+//                        )
+                        Log.d("InNavigation", "I am called in navigation")
+
                     }
                 }
             }
