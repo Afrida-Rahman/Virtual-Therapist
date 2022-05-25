@@ -1,5 +1,6 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
 
+import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -179,11 +180,10 @@ fun ExerciseListScreen(
                         ExerciseDemo(
                             phases = it.phases,
                             onStartButtonClicked = {
-                                navController.navigate(
-                                    Screen.ExerciseScreen.withArgs(
-                                        tenant,
-                                        testId,
-                                        it.id.toString()
+                                context.startActivity(
+                                    Intent(
+                                        context,
+                                        ExerciseScreenActivity::class.java
                                     )
                                 )
                                 viewModel.onEvent(ExerciseEvent.HideExerciseDemo)
