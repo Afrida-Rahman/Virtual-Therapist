@@ -10,12 +10,13 @@ data class PatientDto(
     val contactData: ContactData
 )
 
-fun PatientDto.toPatient(tenant: String): Patient {
+fun PatientDto.toPatient(tenant: String, email: String): Patient {
     return Patient(
         tenant = tenant,
         patientId = contactData.patientId,
         firstName = contactData.firstName,
         lastName = contactData.lastName,
+        email = email,
         loggedIn = true,
         walkThroughPageShown = true
     )

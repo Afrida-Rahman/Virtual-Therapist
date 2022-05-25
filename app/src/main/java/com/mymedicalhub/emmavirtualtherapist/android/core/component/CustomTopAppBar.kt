@@ -2,6 +2,7 @@ package com.mymedicalhub.emmavirtualtherapist.android.core.component
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -28,7 +29,9 @@ fun CustomTopAppBar(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
+        modifier = Modifier
+            .background(Color.White)
+            .padding(horizontal = 24.dp, vertical = 8.dp)
     ) {
         IconButton(onClick = { onClickLeadingIcon() }) {
             Icon(

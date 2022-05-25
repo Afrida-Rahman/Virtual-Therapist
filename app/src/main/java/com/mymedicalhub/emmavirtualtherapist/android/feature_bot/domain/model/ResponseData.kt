@@ -22,7 +22,7 @@ data class ResponseData(
     val responseType: ResponseType,
     val responses: List<Response>,
     val saveAnswer: Boolean,
-    val selectedBodyRegions: List<Any>,
+    val selectedBodyRegions: List<String>,
     val sessionId: String,
     val skipped: Boolean,
     val tenant: String,
@@ -30,5 +30,6 @@ data class ResponseData(
     val title: String,
     val typeId: Int,
     val typeName: String,
-    val vasQuestion: Boolean
+    val vasQuestion: Boolean,
+    var answers: List<Response> = emptyList()
 )

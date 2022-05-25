@@ -1,12 +1,12 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_bot.domain.model
 
 data class Answer(
-    val bodyLocation: String,
     val id: Int,
-    val labels: List<Any>,
     val name: String,
-    val referenceId: Int,
-    val symptoms: List<Any>,
-    val triggers: List<Any>,
-    val types: List<Any>
+    val labels: List<String> = emptyList(),
+    val bodyLocation: String = "",
+    val referenceId: Int = 0,
+    val symptoms: List<String> = emptyList(),
+    val triggers: List<String> = emptyList(),
+    val types: List<String> = emptyList()
 )

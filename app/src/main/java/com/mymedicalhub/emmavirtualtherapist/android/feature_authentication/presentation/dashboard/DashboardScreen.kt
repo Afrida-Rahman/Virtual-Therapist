@@ -17,10 +17,8 @@ import com.mymedicalhub.emmavirtualtherapist.android.core.component.BottomNaviga
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.welcome.components.ActionCard
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Blue
+import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.utils.BotUtils
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Green
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Yellow
 
 @Composable
 fun DashboardScreen(navController: NavController) {
@@ -57,32 +55,15 @@ fun DashboardScreen(navController: NavController) {
                 .fillMaxSize()
                 .padding(24.dp)
         ) {
-            Spacer(modifier = Modifier.height(24.dp))
-            ActionCard(
-                icon = R.drawable.posture_screening,
-                text = "Posture Screening",
-                backgroundColor = Blue,
-                onClick = { }
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-            ActionCard(
-                icon = R.drawable.user,
-                text = "Fysical Score™  \n" +
-                        "Screening",
-                backgroundColor = Green,
-                onClick = { }
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-            ActionCard(
-                icon = R.drawable.fysical_score,
-                text = "Posture or \n" +
-                        "Fysical Score™  \n" +
-                        "Results",
-                backgroundColor = Yellow,
-                onClick = { }
-            )
+            BotUtils.getBots().forEach {
+                Spacer(modifier = Modifier.height(24.dp))
+                ActionCard(
+                    icon = it.icon,
+                    text = it.name,
+                    backgroundColor = it.backgroundColor,
+                    onClick = { navController.navigate(Screen.ChatScreen.withArgs(it.codeName)) }
+                )
+            }
         }
     }
 }

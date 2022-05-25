@@ -121,6 +121,7 @@ class ExerciseViewModel @Inject constructor(
                         patientId = "",
                         firstName = "",
                         lastName = "",
+                        email = "",
                         loggedIn = false
                     )
                 )

@@ -1,175 +1,241 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.chat
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import android.app.DatePickerDialog
+import android.widget.DatePicker
+import android.widget.Toast
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
+import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
+import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.OutlineInputTextField
-import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.domain.model.*
-import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.chat.components.ChatMessage
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
-
-val chatMessageButton = ChatResponse(
-    success = true,
-    message = "Request successful",
-    responseData = ResponseData(
-        questionId = 43,
-        text = "How often do you perform activities that require bending or twisting of your torso, such as gardening or golf?",
-        bodyLocation = "",
-        header1 = "Activities or Hobbies",
-        header2 = "",
-        intent = "",
-        title = "",
-        buttonText = "",
-        dialogue = "How often do you perform activities that require bending or twisting of your torso, such as gardening or golf?",
-        hint = "",
-        exercise = null,
-        typeId = 3,
-        typeName = "Activities of Daily Living",
-        lastQuestionInGroup = false,
-        responseType = ResponseType.BUTTON,
-        tenant = "stg",
-        pageCaption = "How often do you perform any of the following activities or hobbies?",
-        saveAnswer = true,
-        editable = true,
-        skipped = false,
-        vasQuestion = false,
-        chatEnded = false,
-        audioUrl = "https://mmhva.s3.amazonaws.com/Audio/emma/emma_QUESTION_43_637692152587562092.wav",
-        responses = listOf(
-            Response(
-                id = 89,
-                name = "None",
-                hint = "",
-                title = "",
-                description = "",
-                color = "",
-                icon = "",
-                modalUrl = "",
-                checked = false,
-                referenceId = 0
-            ),
-            Response(
-                id = 90,
-                name = "Monthly",
-                hint = "",
-                title = "",
-                description = "",
-                color = "",
-                icon = "",
-                modalUrl = "",
-                checked = false,
-                referenceId = 0
-            ),
-            Response(
-                id = 91,
-                name = "Weekly",
-                hint = "",
-                title = "",
-                description = "",
-                color = "",
-                icon = "",
-                modalUrl = "",
-                checked = false,
-                referenceId = 0
-            ),
-            Response(
-                id = 92,
-                name = "Daily",
-                hint = "",
-                title = "",
-                description = "",
-                color = "",
-                icon = "",
-                modalUrl = "",
-                checked = false,
-                referenceId = 0
-            )
-        ),
-        disableBodyPartIds = emptyList(),
-        selectedBodyRegions = emptyList(),
-        id = 3,
-        sessionId = "263015c3-c51e-4c31-b8bb-e5833059aba5",
-        botName = "MSK_BOT",
-        bodyParts = emptyList()
-    ),
-    errors = emptyList()
-)
+import com.mymedicalhub.emmavirtualtherapist.android.core.component.Pill
+import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.domain.model.ResponseType
+import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.chat.components.*
+import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.utils.BotUtils
+import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.utils.Intents
+import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.utils.Questions
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Yellow
+import java.util.*
 
 @Composable
-fun ChatScreen(bot: Bot) {
+fun ChatScreen(
+    navController: NavController,
+    codeName: String,
+    viewModel: ChatViewModel = hiltViewModel()
+) {
     val field = remember {
         mutableStateOf("")
     }
-    val chatMessages = remember {
-        mutableStateOf(
-            listOf(
-                chatMessageButton
-            )
-        )
+    val chatResponses = viewModel.chatResponses
+    val bot = BotUtils.getBot(codeName)
+    val scaffoldState = rememberScaffoldState()
+    val context = LocalContext.current
+
+    // Initializing a Calendar
+    val mCalendar = Calendar.getInstance()
+
+    // Fetching current year, month and day
+    val mYear: Int = mCalendar.get(Calendar.YEAR)
+    val mMonth: Int = mCalendar.get(Calendar.MONTH)
+    val mDay: Int = mCalendar.get(Calendar.DAY_OF_MONTH)
+
+    mCalendar.time = Date()
+
+    LaunchedEffect(key1 = true) {
+        viewModel.onEvent(ChatEvent.InitializeBotInformation(botName = bot.codeName))
+        viewModel.onEvent(ChatEvent.TextMessageEntered(questionId = 0, message = "Hi"))
+        viewModel.eventFlow.collect { event ->
+            when (event) {
+                is UIEvent.ShowSnackBar -> {
+                    scaffoldState.snackbarHostState.showSnackbar(event.message)
+                }
+                is UIEvent.ShowToastMessage -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
     }
+
     Scaffold(
+        scaffoldState = scaffoldState,
         topBar = {
-            TopAppBar(
-                title = { Text(text = bot.name) },
-                navigationIcon = {
-                    IconButton(onClick = { }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBackIos,
-                            contentDescription = "Go Back"
-                        )
+            CustomTopAppBar(
+                leadingIcon = R.drawable.ic_arrow_back,
+                onClickLeadingIcon = { navController.popBackStack() }
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(text = bot.name)
+                    Row {
+                        if (viewModel.bodyRegions.value.isNotEmpty()) {
+                            Pill(
+                                text = "Body Region: ${viewModel.bodyRegions.value}",
+                                textColor = Color.Black,
+                                backgroundColor = Yellow
+                            )
+                        }
+                        if (viewModel.testId.value.isNotEmpty()) {
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Pill(
+                                text = "Test ID: ${viewModel.testId.value}",
+                                textColor = Color.Black,
+                                backgroundColor = Yellow
+                            )
+                        }
                     }
                 }
-            )
-        }
+            }
+        },
+        backgroundColor = MaterialTheme.colors.surface
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(8.dp)
                     .weight(1f)
             ) {
-                items(chatMessages.value) {
-                    ChatMessage(chatResponse = it)
+                items(chatResponses.value) { chatResponse ->
+                    val responseData = chatResponse.responseData
+                    Spacer(modifier = Modifier.height(12.dp))
+                    ChatMessage(
+                        questionText = responseData.dialogue,
+                        tags = listOf(
+                            responseData.header1,
+                            responseData.header2,
+                            responseData.typeName
+                        )
+                    ) {
+                        if (responseData.answers.isNotEmpty()) {
+                            ResponseSubmittedDisplaySection(responses = responseData.answers)
+                        } else {
+                            when (responseData.responseType) {
+                                ResponseType.BUTTON -> {
+                                    AnswerButtonSection(
+                                        questionId = responseData.questionId,
+                                        responses = responseData.responses,
+                                        viewModel = viewModel
+                                    )
+                                }
+                                ResponseType.TEXT -> {
+                                    if (responseData.intent == Intents.AUTO_CLICK.value) {
+                                        viewModel.onEvent(
+                                            ChatEvent.TextMessageEntered(
+                                                questionId = responseData.questionId,
+                                                message = viewModel.bodyRegions.value
+                                            )
+                                        )
+                                    } else if (responseData.questionId == Questions.HEIGHT.id) {
+                                        OutlineInputTextField(
+                                            field = field,
+                                            onValueChange = { field.value = it },
+                                            placeholder = "Your Height (Inch)",
+                                            keyboardType = KeyboardType.Number,
+                                            trailingIcon = R.drawable.ic_send,
+                                            onIconPressed = {
+                                                viewModel.onEvent(ChatEvent.DisableInput)
+                                                viewModel.onEvent(
+                                                    ChatEvent.TextMessageEntered(
+                                                        questionId = responseData.questionId,
+                                                        message = field.value
+                                                    )
+                                                )
+                                                field.value = ""
+                                            },
+                                            isEnable = viewModel.isInputEnabled.value,
+                                            imeAction = ImeAction.Go
+                                        )
+                                    } else if (responseData.questionId == Questions.WEIGHT.id) {
+                                        OutlineInputTextField(
+                                            field = field,
+                                            onValueChange = { field.value = it },
+                                            placeholder = "Your Weight (LBS)",
+                                            keyboardType = KeyboardType.Number,
+                                            trailingIcon = R.drawable.ic_send,
+                                            onIconPressed = {
+                                                viewModel.onEvent(ChatEvent.DisableInput)
+                                                viewModel.onEvent(
+                                                    ChatEvent.TextMessageEntered(
+                                                        questionId = responseData.questionId,
+                                                        message = field.value
+                                                    )
+                                                )
+                                                field.value = ""
+                                            },
+                                            isEnable = viewModel.isInputEnabled.value,
+                                            imeAction = ImeAction.Go
+                                        )
+                                    } else if (responseData.questionId == Questions.DOB.id) {
+                                        val mDatePickerDialog = DatePickerDialog(
+                                            context,
+                                            { _: DatePicker, year: Int, month: Int, mDayOfMonth: Int ->
+                                                viewModel.onEvent(
+                                                    ChatEvent.TextMessageEntered(
+                                                        questionId = responseData.questionId,
+                                                        message = "$mDayOfMonth/${month + 1}/$year"
+                                                    )
+                                                )
+                                            }, mYear, mMonth, mDay
+                                        )
+                                        Button(onClick = { mDatePickerDialog.show() }) {
+                                            Text(text = "Pick A Date")
+                                        }
+                                    } else {
+                                        OutlineInputTextField(
+                                            field = field,
+                                            onValueChange = { field.value = it },
+                                            placeholder = "Your Message",
+                                            keyboardType = KeyboardType.Text,
+                                            trailingIcon = R.drawable.ic_send,
+                                            onIconPressed = {
+                                                viewModel.onEvent(ChatEvent.DisableInput)
+                                                viewModel.onEvent(
+                                                    ChatEvent.TextMessageEntered(
+                                                        questionId = responseData.questionId,
+                                                        message = field.value
+                                                    )
+                                                )
+                                                field.value = ""
+                                            },
+                                            isEnable = viewModel.isInputEnabled.value,
+                                            imeAction = ImeAction.Go
+                                        )
+                                    }
+                                }
+                                ResponseType.CHECKBOX -> {
+                                    MultiselectSection(
+                                        questionId = responseData.questionId,
+                                        responses = responseData.responses,
+                                        viewModel = viewModel
+                                    )
+                                }
+                                ResponseType.AUTOCOMPLETE -> {}
+                                ResponseType.DATE -> {}
+                                ResponseType.DATETIME -> {}
+                            }
+                        }
+                    }
                 }
             }
-            Card(modifier = Modifier.padding(8.dp)) {
-                OutlineInputTextField(
-                    field = field,
-                    onValueChange = {},
-                    placeholder = "Your Message",
-                    keyboardType = KeyboardType.Text,
-                    trailingIcon = R.drawable.ic_send,
-                    isEnable = true
-                )
+            if (viewModel.isLoading.value) {
+                Loading()
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ChatScreenPreview() {
-    EmmaVirtualTherapistTheme {
-        ChatScreen(
-            bot = Bot(
-                name = "Pain Recorder Bot",
-                codeName = "PAIN_BOT",
-                icon = R.drawable.chest_pain
-            )
-        )
     }
 }

@@ -10,6 +10,7 @@ data class Patient(
     val patientId: String,
     val firstName: String,
     val lastName: String,
+    val email: String,
     val loggedIn: Boolean = false,
     val walkThroughPageShown: Boolean = false
 ) {
@@ -18,6 +19,7 @@ data class Patient(
         const val LAST_NAME = "lastName"
         const val PATIENT_ID = "patientId"
         const val TENANT = "tenant"
+        const val EMAIL = "email"
         const val LOGGED_IN = "logged_in"
         const val WALK_THROUGH_SHOWN = "walk_through_shown"
     }

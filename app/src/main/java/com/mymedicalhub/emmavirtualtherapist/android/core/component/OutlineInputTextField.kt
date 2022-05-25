@@ -68,6 +68,7 @@ fun OutlineInputTextField(
                             onClick = {
                                 onIconPressed()
                             },
+                            enabled = isEnable
                         ) {
                             Icon(
                                 painter = painterResource(id = trailingIcon),
@@ -103,6 +104,7 @@ fun OutlineInputTextField(
                             onClick = {
                                 onIconPressed()
                             },
+                            enabled = isEnable
                         ) {
                             Icon(
                                 painter = painterResource(id = trailingIcon),
