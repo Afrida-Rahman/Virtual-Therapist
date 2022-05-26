@@ -8,7 +8,7 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.domain.model.Re
 data class RemoteResponseData(
     @SerializedName("audioUrl") val audioUrl: String,
     @SerializedName("bodyLocation") val bodyLocation: String,
-    @SerializedName("bodyParts") val bodyParts: List<String>,
+    @SerializedName("bodyParts") val bodyParts: List<RemoteBodyPart>,
     @SerializedName("botName") val botName: String,
     @SerializedName("buttonText") val buttonText: String,
     @SerializedName("chatEnded") val chatEnded: Boolean,
@@ -42,7 +42,7 @@ fun RemoteResponseData.toResponseData(): ResponseData {
     return ResponseData(
         audioUrl = audioUrl,
         bodyLocation = bodyLocation,
-        bodyParts = bodyParts,
+        bodyParts = bodyParts.map { it.toBodyPart() },
         botName = botName,
         buttonText = buttonText,
         chatEnded = chatEnded,

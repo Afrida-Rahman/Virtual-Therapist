@@ -3,7 +3,7 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_bot.domain.model
 data class ResponseData(
     val audioUrl: String,
     val bodyLocation: String,
-    val bodyParts: List<String>,
+    val bodyParts: List<BodyPart>,
     val botName: String,
     val buttonText: String,
     val chatEnded: Boolean,

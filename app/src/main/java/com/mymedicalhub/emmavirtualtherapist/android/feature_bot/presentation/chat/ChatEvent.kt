@@ -15,6 +15,4 @@ sealed class ChatEvent {
 
     data class TextMessageEntered(val questionId: Int, val message: String) : ChatEvent()
     object SendMessageButtonClicked : ChatEvent()
-    object DisableInput : ChatEvent()
-    object EnableInput : ChatEvent()
 }

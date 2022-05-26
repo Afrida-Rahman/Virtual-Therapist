@@ -13,7 +13,7 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.doma
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.usecase.*
 import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.domain.repository.ChatApi
 import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.domain.usecase.ChatUseCases
-import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.domain.usecase.SendMSKChatReply
+import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.domain.usecase.SendChatReply
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.repository.RemoteAssessmentRepository
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.repository.RemoteExerciseTrackingRepository
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.usecase.*
@@ -136,7 +136,7 @@ object AppModule {
         chatApi: ChatApi
     ): ChatUseCases {
         return ChatUseCases(
-            sendMSKChatReply = SendMSKChatReply(chatApi = chatApi)
+            sendChatReply = SendChatReply(chatApi = chatApi)
         )
     }
 }

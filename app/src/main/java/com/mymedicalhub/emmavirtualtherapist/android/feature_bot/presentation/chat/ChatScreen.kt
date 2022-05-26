@@ -79,6 +79,12 @@ fun ChatScreen(
             coroutineScope.launch {
                 listState.animateScrollToItem(lastItemIndex)
             }
+        } else if (viewModel.isLoading.value) {
+            if (lastItemIndex > 0) {
+                coroutineScope.launch {
+                    listState.animateScrollToItem(lastItemIndex + 1)
+                }
+            }
         }
     }
 
@@ -157,7 +163,6 @@ fun ChatScreen(
                                         keyboardType = KeyboardType.Number,
                                         trailingIcon = R.drawable.ic_send,
                                         onIconPressed = {
-                                            viewModel.onEvent(ChatEvent.DisableInput)
                                             viewModel.onEvent(
                                                 ChatEvent.TextMessageEntered(
                                                     questionId = responseData.questionId,
@@ -166,7 +171,6 @@ fun ChatScreen(
                                             )
                                             field.value = ""
                                         },
-                                        isEnable = viewModel.isInputEnabled.value,
                                         imeAction = ImeAction.Go
                                     )
                                 } else if (responseData.questionId == Questions.WEIGHT.id) {
@@ -177,7 +181,6 @@ fun ChatScreen(
                                         keyboardType = KeyboardType.Number,
                                         trailingIcon = R.drawable.ic_send,
                                         onIconPressed = {
-                                            viewModel.onEvent(ChatEvent.DisableInput)
                                             viewModel.onEvent(
                                                 ChatEvent.TextMessageEntered(
                                                     questionId = responseData.questionId,
@@ -186,7 +189,6 @@ fun ChatScreen(
                                             )
                                             field.value = ""
                                         },
-                                        isEnable = viewModel.isInputEnabled.value,
                                         imeAction = ImeAction.Go
                                     )
                                 } else if (responseData.questionId == Questions.DOB.id) {
@@ -212,7 +214,6 @@ fun ChatScreen(
                                         keyboardType = KeyboardType.Text,
                                         trailingIcon = R.drawable.ic_send,
                                         onIconPressed = {
-                                            viewModel.onEvent(ChatEvent.DisableInput)
                                             viewModel.onEvent(
                                                 ChatEvent.TextMessageEntered(
                                                     questionId = responseData.questionId,
@@ -221,7 +222,6 @@ fun ChatScreen(
                                             )
                                             field.value = ""
                                         },
-                                        isEnable = viewModel.isInputEnabled.value,
                                         imeAction = ImeAction.Go
                                     )
                                 }

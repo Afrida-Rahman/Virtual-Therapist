@@ -40,9 +40,6 @@ class ChatViewModel @Inject constructor(
     private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> = _isLoading
 
-    private val _isInputEnabled = mutableStateOf(true)
-    val isInputEnabled: State<Boolean> = _isInputEnabled
-
     private val chatPayload = mutableStateOf<ChatPayload?>(null)
 
     private val _eventFlow = MutableSharedFlow<UIEvent>()
@@ -101,12 +98,6 @@ class ChatViewModel @Inject constructor(
                 )
             }
             ChatEvent.SendMessageButtonClicked -> {}
-            ChatEvent.EnableInput -> {
-                _isInputEnabled.value = true
-            }
-            ChatEvent.DisableInput -> {
-                _isInputEnabled.value = false
-            }
         }
     }
 
@@ -120,46 +111,49 @@ class ChatViewModel @Inject constructor(
     }
 
     private fun sendReply(questionId: Int, responses: List<Response>) {
-        _isLoading.value = true
-        viewModelScope.launch {
-            chatPayload.value?.let { payload ->
-                chatUseCases.sendMSKChatReply(
-                    chatPayload = payload.copy(
-                        questionId = questionId,
-                        answers = responses.map { it.toAnswer() }
-                    )
-                ).onEach {
-                    when (it) {
-                        is Resource.Error -> {
-                            _isLoading.value = false
-                            _isInputEnabled.value = true
-                            _eventFlow.emit(
-                                UIEvent.ShowToastMessage(
-                                    it.message ?: "Unknown error occurred"
-                                )
-                            )
-                        }
-                        is Resource.Loading -> {
-                            _isLoading.value = true
-                        }
-                        is Resource.Success -> {
-                            _isLoading.value = false
-                            _isInputEnabled.value = true
-                            handleResponse(previousResponses = responses, chatResponse = it.data)
-                            if (questionId == Questions.WELCOME.id) {
-                                val bodyRegions = buildString {
-                                    getBodyRegions().forEach {
-                                        append("$it, ")
-                                    }
-                                }
-                                _bodyRegions.value = bodyRegions.substring(
-                                    startIndex = 0,
-                                    endIndex = bodyRegions.length - 2
+        if (!isLoading.value) {
+            _isLoading.value = true
+            viewModelScope.launch {
+                chatPayload.value?.let { payload ->
+                    chatUseCases.sendChatReply(
+                        chatPayload = payload.copy(
+                            questionId = questionId,
+                            answers = responses.map { it.toAnswer() }
+                        )
+                    ).onEach {
+                        when (it) {
+                            is Resource.Error -> {
+                                _isLoading.value = false
+                                _eventFlow.emit(
+                                    UIEvent.ShowToastMessage(
+                                        it.message ?: "Unknown error occurred"
+                                    )
                                 )
                             }
+                            is Resource.Loading -> {
+                                _isLoading.value = true
+                            }
+                            is Resource.Success -> {
+                                _isLoading.value = false
+                                handleResponse(
+                                    previousResponses = responses,
+                                    chatResponse = it.data
+                                )
+                                if (questionId == Questions.WELCOME.id) {
+                                    val bodyRegions = buildString {
+                                        getBodyRegions().forEach {
+                                            append("$it, ")
+                                        }
+                                    }
+                                    _bodyRegions.value = bodyRegions.substring(
+                                        startIndex = 0,
+                                        endIndex = bodyRegions.length - 2
+                                    )
+                                }
+                            }
                         }
-                    }
-                }.launchIn(this)
+                    }.launchIn(this)
+                }
             }
         }
     }

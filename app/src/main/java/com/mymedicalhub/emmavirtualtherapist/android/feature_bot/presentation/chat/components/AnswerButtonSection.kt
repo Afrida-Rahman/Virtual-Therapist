@@ -21,7 +21,6 @@ fun AnswerButtonSection(questionId: Int, responses: List<Response>, viewModel: C
                 text = it.name,
                 textColor = MediumCharcoal,
                 onClick = {
-                    viewModel.onEvent(ChatEvent.DisableInput)
                     viewModel.onEvent(
                         ChatEvent.ResponseButtonClicked(
                             questionId = questionId,
@@ -29,8 +28,7 @@ fun AnswerButtonSection(questionId: Int, responses: List<Response>, viewModel: C
                         )
                     )
                 },
-                modifier = Modifier.padding(4.dp),
-                isEnable = viewModel.isInputEnabled.value
+                modifier = Modifier.padding(4.dp)
             )
         }
     }

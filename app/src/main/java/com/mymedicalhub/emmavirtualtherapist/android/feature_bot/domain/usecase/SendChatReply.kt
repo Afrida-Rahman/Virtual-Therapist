@@ -11,7 +11,7 @@ import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
-class SendMSKChatReply @Inject constructor(
+class SendChatReply @Inject constructor(
     private val chatApi: ChatApi
 ) {
     operator fun invoke(
@@ -19,7 +19,12 @@ class SendMSKChatReply @Inject constructor(
     ): Flow<Resource<ChatResponse>> = flow {
         emit(Resource.Loading())
         try {
-            val chatResponseDto = chatApi.sendMSKChatReply(payload = chatPayload)
+            val chatResponseDto = when (chatPayload.botName) {
+                "MSK_BOT" -> chatApi.sendMSKChatReply(payload = chatPayload)
+                "POSTURE_BOT" -> chatApi.sendPostureChatReply(payload = chatPayload)
+                "PAIN" -> chatApi.sendAppointmentChatReply(payload = chatPayload)
+                else -> chatApi.sendMSKChatReply(payload = chatPayload)
+            }
             emit(
                 Resource.Success(
                     chatResponseDto.toChatResponse()
