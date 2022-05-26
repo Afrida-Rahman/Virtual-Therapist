@@ -137,7 +137,16 @@ fun ChatScreen(
                     )
                 ) {
                     if (responseData.answers.isNotEmpty()) {
-                        ResponseSubmittedDisplaySection(responses = responseData.answers)
+                        ResponseSubmittedDisplaySection(
+                            responses = responseData.answers,
+                            responseType = responseData.responseType,
+                            isEditable = responseData.editable,
+                            onClickEdit = if (responseData.editable) {
+                                { }
+                            } else {
+                                { }
+                            }
+                        )
                     } else {
                         when (responseData.responseType) {
                             ResponseType.BUTTON -> {
