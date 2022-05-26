@@ -16,6 +16,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Green
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Yellow
 import kotlinx.coroutines.delay
 
 @Composable
@@ -28,10 +30,15 @@ fun Loading() {
         remember { Animatable(initialValue = 0f) },
         remember { Animatable(initialValue = 0f) }
     )
-    circles.forEachIndexed { index, animatable ->
-        LaunchedEffect(key1 = animatable) {
+    val circleColors = listOf(
+        MaterialTheme.colors.primary,
+        Green,
+        Yellow
+    )
+    circles.forEachIndexed { index, animate ->
+        LaunchedEffect(key1 = animate) {
             delay(index * 100L)
-            animatable.animateTo(
+            animate.animateTo(
                 targetValue = 1f,
                 animationSpec = infiniteRepeatable(
                     animation = keyframes {
@@ -54,7 +61,7 @@ fun Loading() {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
-            .height(60.dp)
+            .height(80.dp)
             .fillMaxWidth()
     ) {
         circles.forEachIndexed { index, value ->
@@ -64,7 +71,7 @@ fun Loading() {
                     .graphicsLayer {
                         translationY = -value.value * distance
                     }
-                    .background(color = MaterialTheme.colors.primary, shape = CircleShape)
+                    .background(color = circleColors[index], shape = CircleShape)
             )
             if (index != lastCircleIndex) {
                 Spacer(modifier = Modifier.width(spaceBetween))
