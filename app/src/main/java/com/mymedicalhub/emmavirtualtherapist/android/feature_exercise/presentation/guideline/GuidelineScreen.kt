@@ -1,4 +1,4 @@
-package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
+package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.guideline
 
 import android.content.Intent
 import android.util.Log
@@ -14,6 +14,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseScreenActivity
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ImageSection
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.InstructionSection
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.VideoSection
@@ -23,7 +24,7 @@ fun GuidelineScreen(
     testId: String,
     exerciseId: Int,
     navController: NavController,
-    viewModel: ExerciseViewModel
+    viewModel: GuidelineViewModel
 ) {
     val scaffoldState = rememberScaffoldState()
     val exercise = viewModel.getExercise(testId = testId, exerciseId = exerciseId)
@@ -73,6 +74,10 @@ fun GuidelineScreen(
                             Text(text = "Start Workout")
                         }
                     }
+                    Log.d(
+                        "GuidelineScreen",
+                        "${exercise.id}--${exercise.imageURLs}--${exercise.instruction}"
+                    )
                     InstructionSection(exercise.instruction)
                     exercise.videoURL?.let { url ->
                         VideoSection(videoUrl = url)

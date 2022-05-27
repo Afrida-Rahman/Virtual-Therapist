@@ -1,4 +1,4 @@
-package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
+package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList
 
 import android.content.SharedPreferences
 import androidx.compose.runtime.State
@@ -13,6 +13,7 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.mod
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Exercise
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Phase
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.usecase.ExerciseUseCases
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
