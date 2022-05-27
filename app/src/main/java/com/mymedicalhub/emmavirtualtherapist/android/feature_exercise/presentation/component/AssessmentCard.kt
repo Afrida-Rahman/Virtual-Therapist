@@ -2,24 +2,24 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentat
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mymedicalhub.emmavirtualtherapist.android.R
+import com.mymedicalhub.emmavirtualtherapist.android.core.component.MediumButton
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Assessment
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.*
 
 @Composable
 fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Unit) {
+    val context = LocalContext.current
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -41,132 +41,65 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
-
             ) {
-                Button(
-                    onClick = { },
-                    modifier = Modifier.width(160.dp),
-                    shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color(0xFF19A04F),
-                    )
-                ) {
-                    Icon(
-                        painter = painterResource(
-                            id = R.drawable.edit_white
-                        ),
-                        contentDescription = "Edit"
-                    )
-                    Text(
-                        text = "Edit",
-                        color = Color.White,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(4.dp),
-                    )
-                }
-
-                Spacer(Modifier.height(12.dp))
-                val context = LocalContext.current
-                Button(
+                MediumButton(
+                    text = "Edit",
+                    textColor = Color.White,
+                    backgroundColor = Green,
+                    icon = R.drawable.edit,
+                    iconColor = Color.White,
+                    onClick = {}
+                )
+                MediumButton(
+                    text = "Track",
+                    textColor = Color.White,
+                    backgroundColor = Red,
+                    icon = R.drawable.run,
+                    iconColor = Color.White,
                     onClick = {
-                        if (assessment.totalExercise > 0) onViewExerciseButtonClicked() else {
-                            Toast.makeText(context, "No exercise assigned yet!", Toast.LENGTH_LONG)
-                                .show()
+                        if (assessment.totalExercise > 0) {
+                            onViewExerciseButtonClicked()
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "No exercise is assigned yet!",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
-                    },
-                    modifier = Modifier.width(160.dp),
-                    shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color(0xFFF80F1B),
-
-                        )
-
-                ) {
-                    Icon(
-                        painter = painterResource(
-                            id = R.drawable.run
-                        ),
-                        contentDescription = "Track"
-                    )
-                    Text(
-                        text = "Track",
-                        color = Color.White,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(4.dp),
-                    )
-                }
+                    }
+                )
             }
-
             Spacer(Modifier.height(12.dp))
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Button(
-                    onClick = { },
-                    modifier = Modifier.width(160.dp),
-                    shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color(0xFF1176B4),
-                    )
-                ) {
-                    Icon(
-                        painter = painterResource(
-                            id = R.drawable.calendar_white
-                        ),
-                        contentDescription = "Followup"
-                    )
-                    Text(
-                        text = "Followup",
-                        color = Color.White,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(4.dp),
-                    )
-                }
-                Spacer(Modifier.height(12.dp))
-                Button(
-                    onClick = { },
-                    modifier = Modifier.width(160.dp),
-                    shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color(0xFFFFC000),
-                    )
-                ) {
-                    Icon(
-                        painter = painterResource(
-                            id = R.drawable.report_new
-                        ),
-                        contentDescription = "Report"
-                    )
-                    Text(
-                        text = "Report",
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(4.dp),
-                    )
-                }
+                MediumButton(
+                    text = "Followup",
+                    textColor = Color.White,
+                    backgroundColor = Blue,
+                    icon = R.drawable.calendar_outlined,
+                    iconColor = Color.White,
+                    onClick = {}
+                )
+                MediumButton(
+                    text = "Report",
+                    textColor = Color.White,
+                    backgroundColor = Yellow,
+                    icon = R.drawable.report_outlined,
+                    iconColor = Color.White,
+                    onClick = {}
+                )
             }
             Spacer(Modifier.height(12.dp))
-            Button(
-                onClick = { },
-                modifier = Modifier.width(160.dp),
-                shape = CircleShape,
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(0xFF00121C)
-                )
-            ) {
-                Icon(
-                    painter = painterResource(
-                        id = R.drawable.calendar_white
-                    ),
-                    contentDescription = "Movements"
-                )
-                Text(
-                    text = "Movements",
-                    color = Color.White,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(4.dp),
-                )
-            }
+            MediumButton(
+                text = "Movements",
+                textColor = Color.White,
+                backgroundColor = Color.Black,
+                icon = R.drawable.calendar_outlined,
+                iconColor = Color.White,
+                onClick = {}
+            )
         }
     }
 }

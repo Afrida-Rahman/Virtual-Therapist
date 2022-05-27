@@ -73,7 +73,7 @@ fun ResponseSubmittedDisplaySection(
                 )
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.edit_white),
+                    painter = painterResource(id = R.drawable.edit),
                     contentDescription = "Edit",
                     tint = Color.White
                 )
