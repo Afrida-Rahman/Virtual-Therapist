@@ -103,12 +103,16 @@ fun ExerciseListScreen(
                         viewModel.onEvent(ExerciseEvent.GoToAssessmentPage)
                         navController.popBackStack()
                     },
-                    trailingIcon = R.drawable.filter,
+                    trailingIcon = R.drawable.search,
                     onClickTrailingIcon = {
                         viewModel.onEvent(ExerciseEvent.ShowExerciseSearchBar)
                     }
                 ) {
-                    Text(text = "Home Exercises")
+                    Text(
+                        text = "Home Exercises",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             }
         }

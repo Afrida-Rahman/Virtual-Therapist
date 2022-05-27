@@ -37,7 +37,7 @@ fun AssessmentCardBodyItem(icon: Painter, title: String, value: String) {
                 modifier = Modifier
                     .size(40.dp)
                     .clip(CircleShape)
-                    .background(Color(232, 246, 253), shape = CircleShape)
+                    .background(color = Color.White, shape = CircleShape)
                     .border(
                         BorderStroke(color = Color(117, 138, 223), width = 1.dp),
                         shape = CircleShape
@@ -62,7 +62,6 @@ fun AssessmentCardBodyItem(icon: Painter, title: String, value: String) {
                     textAlign = TextAlign.End,
                     fontSize = 14.sp
                 )
-
             }
         }
     }

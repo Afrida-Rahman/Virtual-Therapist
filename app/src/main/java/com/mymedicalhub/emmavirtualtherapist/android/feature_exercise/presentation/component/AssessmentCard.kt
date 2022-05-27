@@ -1,5 +1,6 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,6 +36,7 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
                 exerciseCount = assessment.totalExercise,
                 isReportReady = assessment.isReportReady,
             )
+
             Spacer(Modifier.height(12.dp))
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -61,14 +64,22 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
                         modifier = Modifier.padding(4.dp),
                     )
                 }
+
                 Spacer(Modifier.height(12.dp))
+                val context = LocalContext.current
                 Button(
-                    onClick = { onViewExerciseButtonClicked() },
+                    onClick = {
+                        if (assessment.totalExercise > 0) onViewExerciseButtonClicked() else {
+                            Toast.makeText(context, "No exercise assigned yet!", Toast.LENGTH_LONG)
+                                .show()
+                        }
+                    },
                     modifier = Modifier.width(160.dp),
                     shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Color(0xFFF80F1B),
-                    )
+
+                        )
 
                 ) {
                     Icon(
@@ -85,6 +96,7 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
                     )
                 }
             }
+
             Spacer(Modifier.height(12.dp))
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -126,7 +138,6 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
                         ),
                         contentDescription = "Report"
                     )
-
                     Text(
                         text = "Report",
                         textAlign = TextAlign.Center,
