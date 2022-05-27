@@ -5,11 +5,15 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Urls
+import com.mymedicalhub.emmavirtualtherapist.android.core.util.Utilities
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.data.data_source.PatientDatabase
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.data.repository.LocalPatientRepositoryImpl
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.repository.LocalPatientRepository
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.repository.RemotePatientRepository
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.usecase.*
+import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.domain.repository.ChatApi
+import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.domain.usecase.ChatUseCases
+import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.domain.usecase.SendChatReply
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.repository.RemoteAssessmentRepository
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.repository.RemoteExerciseTrackingRepository
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.usecase.*
@@ -112,5 +116,27 @@ object AppModule {
     @Singleton
     fun providesSharedPreference(application: Application): SharedPreferences {
         return application.getSharedPreferences("patientData", Context.MODE_PRIVATE)
+    }
+
+    @Provides
+    @Singleton
+    fun providesChatApi(preferences: SharedPreferences): ChatApi {
+        val patient = Utilities.getPatient(preferences = preferences)
+        val chatBaseUrl = Utilities.getChatBaseUrl(tenant = patient.tenant)
+        return Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl(chatBaseUrl)
+            .build()
+            .create(ChatApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providesChatUseCases(
+        chatApi: ChatApi
+    ): ChatUseCases {
+        return ChatUseCases(
+            sendChatReply = SendChatReply(chatApi = chatApi)
+        )
     }
 }

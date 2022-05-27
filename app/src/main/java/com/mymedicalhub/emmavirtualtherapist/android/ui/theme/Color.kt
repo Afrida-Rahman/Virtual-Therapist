@@ -3,6 +3,7 @@ package com.mymedicalhub.emmavirtualtherapist.android.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val Blue = Color(0xFF1176B4)
+val Blue100 = Color(0xFFECF6F9)
 val Red = Color(0xFFF80F1B)
 val Red200 = Color(0xFFF9EBEA)
 val Yellow = Color(0xFFFFC000)

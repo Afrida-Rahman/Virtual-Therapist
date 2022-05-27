@@ -4,9 +4,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -14,16 +12,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Blue
 
 @Composable
-fun MultiselectItem(text: String, modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
+fun MultiselectItem(
+    text: String,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
+    var isChecked by remember {
+        mutableStateOf(false)
+    }
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val isChecked = remember { mutableStateOf(true) }
         Checkbox(
-            checked = isChecked.value,
+            checked = isChecked,
             onCheckedChange = {
-                isChecked.value = it
+                isChecked = !isChecked
                 onClick()
             },
             enabled = true,
