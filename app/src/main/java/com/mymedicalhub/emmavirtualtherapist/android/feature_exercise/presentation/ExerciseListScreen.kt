@@ -248,7 +248,7 @@ fun ExerciseListScreen(
                                             isActive = true,
                                             onGuidelineButtonClicked = {
                                                 navController.navigate(
-                                                    Screen.ExerciseGuidelineScreen.withArgs(
+                                                    Screen.GuidelineScreen.withArgs(
                                                         testId,
                                                         it.id.toString()
                                                     )

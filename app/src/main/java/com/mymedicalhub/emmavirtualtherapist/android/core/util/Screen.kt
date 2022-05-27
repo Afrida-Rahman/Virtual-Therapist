@@ -18,7 +18,7 @@ sealed class Screen(val route: String) {
     object SettingsScreen : Screen("settings_screen")
     object AssessmentListScreen : Screen("assessment_list_screen")
     object ExerciseListScreen : Screen("exercise_list_screen")
-    object ExerciseGuidelineScreen : Screen("exercise_guideline_screen")
+    object GuidelineScreen : Screen("exercise_guideline_screen")
     object ExerciseScreen : Screen("exercise_screen")
     object BotListScreen : Screen("bot_list_screen")
     object ChatBotScreen : Screen("chat_bot_screen")

@@ -19,7 +19,7 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentati
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.VideoSection
 
 @Composable
-fun ExerciseGuidelineScreen(
+fun GuidelineScreen(
     testId: String,
     exerciseId: Int,
     navController: NavController,

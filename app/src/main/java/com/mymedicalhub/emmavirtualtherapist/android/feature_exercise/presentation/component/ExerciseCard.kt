@@ -140,7 +140,7 @@ fun ExerciseCard(
 @Composable
 fun ExerciseCardPreview() {
     EmmaVirtualTherapistTheme {
-        ExerciseCard(
+        com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ExerciseCard(
             imageUrl = null,
             name = "Body Weight Squat",
             repetition = 5,
