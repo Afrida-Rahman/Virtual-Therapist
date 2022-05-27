@@ -80,7 +80,7 @@ fun ProfileHeader(fullName: String, email: String, tenant: String, profileImage:
                 )
             }
             Icon(
-                painter = painterResource(id = R.drawable.check_white),
+                painter = painterResource(id = R.drawable.check),
                 contentDescription = "Verified",
                 modifier = Modifier
                     .size(20.dp)
