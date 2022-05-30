@@ -38,9 +38,9 @@ fun ExerciseCard(
     onManualTrackingButtonClicked: () -> Unit = {}
 ) {
     val statusIconId = if (isActive) {
-        R.drawable.ic_check1
+        R.drawable.ic_check
     } else {
-        R.drawable.ic_cross
+        R.drawable.check
     }
     val context = LocalContext.current
     val imageLoader = ImageLoader.Builder(context)
