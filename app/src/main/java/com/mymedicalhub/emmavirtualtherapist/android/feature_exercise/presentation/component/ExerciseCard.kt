@@ -40,7 +40,7 @@ fun ExerciseCard(
     val statusIconId = if (isActive) {
         R.drawable.ic_check
     } else {
-        R.drawable.ic_check
+        R.drawable.ic_cross
     }
     val context = LocalContext.current
     val imageLoader = ImageLoader.Builder(context)
