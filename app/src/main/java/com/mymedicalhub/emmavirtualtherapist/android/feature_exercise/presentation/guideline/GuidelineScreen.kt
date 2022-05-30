@@ -1,7 +1,6 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.guideline
 
 import android.content.Intent
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -15,19 +14,21 @@ import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseScreenActivity
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ImageSection
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.InstructionSection
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.VideoSection
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.ExerciseListViewModel
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.ImageSection
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.InstructionSection
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.VideoSection
 
 @Composable
 fun GuidelineScreen(
     testId: String,
     exerciseId: Int,
     navController: NavController,
-    viewModel: GuidelineViewModel
+    guidelineViewModel: GuidelineViewModel,
+    exerciseListViewModel: ExerciseListViewModel
 ) {
     val scaffoldState = rememberScaffoldState()
-    val exercise = viewModel.getExercise(testId = testId, exerciseId = exerciseId)
+    val exercise = exerciseListViewModel.getExercise(testId = testId, exerciseId = exerciseId)
     val context = LocalContext.current
     Scaffold(
         scaffoldState = scaffoldState,
@@ -59,25 +60,18 @@ fun GuidelineScreen(
                             overflow = TextOverflow.Ellipsis
                         )
                         Button(onClick = {
-                            Log.d("InNavigation", "I am called in guideline screen")
-                            viewModel.patient.value?.let { patient ->
-                                navController.popBackStack()
-                                context.startActivity(
-                                    Intent(
-                                        context,
-                                        ExerciseScreenActivity::class.java
-                                    )
+                            navController.popBackStack()
+                            context.startActivity(
+                                Intent(
+                                    context,
+                                    ExerciseScreenActivity::class.java
                                 )
-                            }
+                            )
 
                         }) {
                             Text(text = "Start Workout")
                         }
                     }
-                    Log.d(
-                        "GuidelineScreen",
-                        "${exercise.id}--${exercise.imageURLs}--${exercise.instruction}"
-                    )
                     InstructionSection(exercise.instruction)
                     exercise.videoURL?.let { url ->
                         VideoSection(videoUrl = url)

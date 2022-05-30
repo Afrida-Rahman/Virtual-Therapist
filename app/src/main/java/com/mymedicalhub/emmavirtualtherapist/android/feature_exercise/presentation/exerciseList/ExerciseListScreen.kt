@@ -1,7 +1,6 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList
 
 import android.content.Intent
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,9 +30,9 @@ import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopApp
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseEvent
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseScreenActivity
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ExerciseCard
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ExerciseDemo
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.component.ManualTrackingForm
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.ExerciseCard
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.ExerciseDemo
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.ManualTrackingForm
 
 @Composable
 fun ExerciseListScreen(
@@ -41,7 +40,7 @@ fun ExerciseListScreen(
     testId: String,
     creationDate: String,
     navController: NavController,
-    viewModel: ExerciseViewModel
+    viewModel: ExerciseListViewModel
 ) {
     val scaffoldState = rememberScaffoldState()
     val context = LocalContext.current
@@ -182,7 +181,6 @@ fun ExerciseListScreen(
                         testId = testId,
                         exerciseId = viewModel.manualSelectedExercise.value
                     )?.let {
-                        Log.d("InNavigation", "I am called in exercise list screen")
                         ExerciseDemo(
                             phases = it.phases,
                             onStartButtonClicked = {

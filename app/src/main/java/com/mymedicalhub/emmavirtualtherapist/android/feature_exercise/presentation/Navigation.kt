@@ -1,6 +1,5 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
 
-import android.util.Log
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.*
 import androidx.navigation.compose.composable
@@ -9,20 +8,18 @@ import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessmentList.AssessmentListScreen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessmentList.AssessmentListViewModel
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.ExerciseListScreen
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.ExerciseViewModel
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.ExerciseListViewModel
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.guideline.GuidelineScreen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.guideline.GuidelineViewModel
 
 fun NavGraphBuilder.exerciseNav(navController: NavController) {
-    lateinit var exerciseListViewModel: ExerciseViewModel
+    lateinit var exerciseListViewModel: ExerciseListViewModel
     lateinit var guidelineViewModel: GuidelineViewModel
     lateinit var assessmentListviewModel: AssessmentListViewModel
 
     navigation(route = EXERCISE_ROUTE, startDestination = Screen.AssessmentListScreen.route) {
         composable(route = Screen.AssessmentListScreen.route) {
             assessmentListviewModel = hiltViewModel()
-            exerciseListViewModel = hiltViewModel()
-            guidelineViewModel = hiltViewModel()
             AssessmentListScreen(navController = navController, viewModel = assessmentListviewModel)
         }
         composable(
@@ -39,6 +36,7 @@ fun NavGraphBuilder.exerciseNav(navController: NavController) {
                 }
             )
         ) {
+            exerciseListViewModel = hiltViewModel()
             it.arguments?.getString("tenant")?.let { tenant ->
                 it.arguments?.getString("testId")?.let { testId ->
                     it.arguments?.getString("creationDate")?.let { creationDate ->
@@ -65,13 +63,15 @@ fun NavGraphBuilder.exerciseNav(navController: NavController) {
                 }
             )
         ) {
+            guidelineViewModel = hiltViewModel()
             it.arguments?.getString("testId")?.also { testId ->
                 it.arguments?.getInt("exerciseId")?.let { exerciseId ->
                     GuidelineScreen(
                         testId = testId,
                         exerciseId = exerciseId,
                         navController = navController,
-                        viewModel = guidelineViewModel
+                        guidelineViewModel = guidelineViewModel,
+                        exerciseListViewModel = exerciseListViewModel
                     )
                 }
             }
@@ -100,7 +100,6 @@ fun NavGraphBuilder.exerciseNav(navController: NavController) {
 //                            navController = navController,
 //                            viewModel = viewModel
 //                        )
-                        Log.d("InNavigation", "I am called in navigation")
 
                     }
                 }
