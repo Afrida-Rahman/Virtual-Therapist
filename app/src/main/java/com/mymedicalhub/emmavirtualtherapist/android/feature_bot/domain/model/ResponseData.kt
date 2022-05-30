@@ -3,7 +3,7 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_bot.domain.model
 data class ResponseData(
     val audioUrl: String,
     val bodyLocation: String,
-    val bodyParts: List<String>,
+    val bodyParts: List<BodyPart>,
     val botName: String,
     val buttonText: String,
     val chatEnded: Boolean,
@@ -22,7 +22,7 @@ data class ResponseData(
     val responseType: ResponseType,
     val responses: List<Response>,
     val saveAnswer: Boolean,
-    val selectedBodyRegions: List<Any>,
+    val selectedBodyRegions: List<String>,
     val sessionId: String,
     val skipped: Boolean,
     val tenant: String,
@@ -30,5 +30,6 @@ data class ResponseData(
     val title: String,
     val typeId: Int,
     val typeName: String,
-    val vasQuestion: Boolean
+    val vasQuestion: Boolean,
+    var answers: List<Response> = emptyList()
 )

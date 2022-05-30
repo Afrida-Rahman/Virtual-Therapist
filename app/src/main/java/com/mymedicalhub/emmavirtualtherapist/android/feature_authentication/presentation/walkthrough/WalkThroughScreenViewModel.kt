@@ -21,6 +21,7 @@ class WalkThroughScreenViewModel @Inject constructor(
                         lastName = "",
                         tenant = "",
                         patientId = "",
+                        email = "",
                         loggedIn = false,
                         walkThroughPageShown = true,
                     )

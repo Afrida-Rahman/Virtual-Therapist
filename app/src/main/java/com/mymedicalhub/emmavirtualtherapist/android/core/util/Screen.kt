@@ -21,7 +21,7 @@ sealed class Screen(val route: String) {
     object GuidelineScreen : Screen("exercise_guideline_screen")
     object ExerciseScreen : Screen("exercise_screen")
     object BotListScreen : Screen("bot_list_screen")
-    object ChatBotScreen : Screen("chat_bot_screen")
+    object ChatScreen : Screen("chat_screen")
 
     fun withArgs(vararg args: String): String {
         return buildString {

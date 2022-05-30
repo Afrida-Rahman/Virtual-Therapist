@@ -5,6 +5,6 @@ import com.google.gson.annotations.SerializedName
 data class ExerciseTrackingDto(
     @SerializedName("Successful")
     val success: Boolean,
-    @SerializedName("ChatMessage")
+    @SerializedName("Message")
     val message: String
 )

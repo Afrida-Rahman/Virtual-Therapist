@@ -4,11 +4,16 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Blue
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.DarkCharcoal
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Gray200
 
 @Composable
 fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
@@ -37,7 +42,8 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
                             R.drawable.home_outline
                         }
                     ),
-                    contentDescription = "Home"
+                    contentDescription = "Home",
+                    tint = if (selectedIndex == 1) Blue else Gray200
                 )
             },
             selectedContentColor = MaterialTheme.colors.primaryVariant,
@@ -65,6 +71,7 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
                         }
                     ),
                     contentDescription = "Assessments",
+                    tint = if (selectedIndex == 2) Blue else Gray200
                 )
             },
             selectedContentColor = MaterialTheme.colors.primaryVariant,
@@ -90,7 +97,8 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
                             R.drawable.calendar_outlined
                         }
                     ),
-                    contentDescription = "Calendar"
+                    contentDescription = "Calendar",
+                    tint = if (selectedIndex == 4) Blue else Gray200
                 )
             },
             selectedContentColor = MaterialTheme.colors.primaryVariant,
@@ -116,11 +124,23 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
                             R.drawable.report_outlined
                         }
                     ),
-                    contentDescription = "Report"
+                    contentDescription = "Report",
+                    tint = if (selectedIndex == 5) Blue else Gray200
                 )
             },
             selectedContentColor = MaterialTheme.colors.primaryVariant,
             unselectedContentColor = DarkCharcoal
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun BottomNavigationBarPreview() {
+    EmmaVirtualTherapistTheme {
+        BottomNavigationBar(
+            navController = rememberNavController(),
+            selectedIndex = 1
         )
     }
 }
