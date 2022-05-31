@@ -28,7 +28,7 @@ class FetchAssessments @Inject constructor(
             )
             emit(
                 Resource.Success(
-                    assessmentDto.toAssessmentList().sortedBy { it.creationDate }.reversed()
+                    assessmentDto.toAssessmentList().sortedBy { it.creationDate }//.reversed()
                 )
             )
         } catch (e: IOException) {

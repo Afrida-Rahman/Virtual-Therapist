@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.mymedicalhub.emmavirtualtherapist.android.feature_ml.domain.model.ml_kit.GraphicOverlay
+    <com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.posedetector.ml_kit.GraphicOverlay
         android:id="@+id/graphic_overlay"
         android:layout_width="0dp"
         android:layout_height="0dp"
