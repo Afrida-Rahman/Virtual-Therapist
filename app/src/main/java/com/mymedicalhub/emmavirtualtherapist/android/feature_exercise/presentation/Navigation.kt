@@ -6,7 +6,6 @@ import androidx.navigation.compose.composable
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.EXERCISE_ROUTE
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessmentList.AssessmentListScreen
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessmentList.AssessmentListViewModel
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.ExerciseListScreen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.ExerciseListViewModel
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.guideline.GuidelineScreen
@@ -15,12 +14,12 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentati
 fun NavGraphBuilder.exerciseNav(navController: NavController) {
     lateinit var exerciseListViewModel: ExerciseListViewModel
     lateinit var guidelineViewModel: GuidelineViewModel
-    lateinit var assessmentListviewModel: AssessmentListViewModel
+    lateinit var commonViewModel: CommonViewModel
 
     navigation(route = EXERCISE_ROUTE, startDestination = Screen.AssessmentListScreen.route) {
         composable(route = Screen.AssessmentListScreen.route) {
-            assessmentListviewModel = hiltViewModel()
-            AssessmentListScreen(navController = navController, viewModel = assessmentListviewModel)
+            commonViewModel = hiltViewModel()
+            AssessmentListScreen(navController = navController, viewModel = commonViewModel)
         }
         composable(
             route = Screen.ExerciseListScreen.route + "/{tenant}/{testId}/{creationDate}",

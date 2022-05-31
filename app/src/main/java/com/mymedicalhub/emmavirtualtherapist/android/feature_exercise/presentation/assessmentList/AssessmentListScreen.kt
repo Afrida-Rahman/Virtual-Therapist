@@ -30,13 +30,14 @@ import com.mymedicalhub.emmavirtualtherapist.android.core.component.BottomNaviga
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.NavigationDrawer
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.CommonViewModel
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseEvent
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessmentList.component.AssessmentCard
 
 @Composable
 fun AssessmentListScreen(
     navController: NavController,
-    viewModel: AssessmentListViewModel
+    viewModel: CommonViewModel
 ) {
     val scaffoldState = rememberScaffoldState(
         drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)

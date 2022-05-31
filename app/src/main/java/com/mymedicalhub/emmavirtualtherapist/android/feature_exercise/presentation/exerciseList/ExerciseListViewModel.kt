@@ -11,8 +11,8 @@ import com.mymedicalhub.emmavirtualtherapist.android.core.util.Utilities
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.model.Patient
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Exercise
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.usecase.ExerciseUseCases
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.CommonViewModel
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseEvent
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessmentList.AssessmentListViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -28,8 +28,8 @@ class ExerciseListViewModel @Inject constructor(
     private val exerciseUseCases: ExerciseUseCases,
     private val preferences: SharedPreferences
 ) : ViewModel() {
-    private val viewModel: AssessmentListViewModel =
-        AssessmentListViewModel(exerciseUseCases, preferences)
+    private val viewModel: CommonViewModel =
+        CommonViewModel(exerciseUseCases, preferences)
 
     private val _patient = Utilities.getPatient(preferences)
     val patient: Patient = _patient
