@@ -31,8 +31,8 @@ class ExerciseListViewModel @Inject constructor(
     private val viewModel: CommonViewModel =
         CommonViewModel(exerciseUseCases, preferences)
 
-    private val _patient = Utilities.getPatient(preferences)
-    val patient: Patient = _patient
+    private val _patient = mutableStateOf<Patient?>(null)
+    val patient: State<Patient?> = _patient
 
     private val _exercises = mutableStateOf<List<Exercise>?>(null)
     val exercises: State<List<Exercise>?> = _exercises
@@ -137,6 +137,19 @@ class ExerciseListViewModel @Inject constructor(
             is ExerciseEvent.HideExerciseDemo -> {
                 _showExerciseDemo.value = false
             }
+            is ExerciseEvent.SaveDataButtonClicked -> {
+                if (!saveDataButtonClicked.value) {
+                    _saveDataButtonClicked.value = true
+                    _patient.value?.let {
+                        saveExerciseData(
+                            tenant = it.tenant,
+                            testId = event.testId,
+                            patientId = it.patientId,
+                            exercise = event.exercise
+                        )
+                    }
+                }
+            }
             else -> {}
         }
     }
@@ -206,6 +219,71 @@ class ExerciseListViewModel @Inject constructor(
                 viewModel.assessments.value[index].exercises = exercises
                 _exercises.value = exercises.sortedBy { it.name }
                 break
+            }
+        }
+    }
+
+    private fun saveExerciseData(
+        tenant: String,
+        testId: String,
+        patientId: String,
+        exercise: Exercise
+    ) {
+        viewModelScope.launch {
+            when {
+                manualRepetitionCount.value.isBlank() -> {
+                    _saveDataButtonClicked.value = false
+                    _eventFlow.emit(UIEvent.ShowToastMessage("Repetition count cannot be blank"))
+                }
+                manualSetCount.value.isBlank() -> {
+                    _saveDataButtonClicked.value = false
+                    _eventFlow.emit(UIEvent.ShowToastMessage("Set count cannot be blank"))
+                }
+                manualWrongCount.value.isBlank() -> {
+                    _saveDataButtonClicked.value = false
+                    _eventFlow.emit(UIEvent.ShowToastMessage("Wrong count cannot be blank"))
+                }
+                else -> {
+                    exerciseUseCases.saveExerciseData(
+                        exercise = exercise,
+                        testId = testId,
+                        patientId = patientId,
+                        noOfReps = manualRepetitionCount.value.toInt(),
+                        noOfSets = manualSetCount.value.toInt(),
+                        noOfWrongCount = manualWrongCount.value.toInt(),
+                        tenant = tenant
+                    ).onEach {
+                        when (it) {
+                            is Resource.Error -> {
+                                _saveDataButtonClicked.value = false
+                                _eventFlow.emit(
+                                    UIEvent.ShowToastMessage(
+                                        it.message ?: "Unknown error"
+                                    )
+                                )
+                            }
+                            is Resource.Loading -> {
+                                _saveDataButtonClicked.value = true
+                                _eventFlow.emit(UIEvent.ShowToastMessage("Please wait"))
+                            }
+                            is Resource.Success -> {
+                                _showManualTrackingForm.value = false
+                                _saveDataButtonClicked.value = false
+                                _manualRepetitionCount.value = ""
+                                _manualSetCount.value = ""
+                                _manualWrongCount.value = ""
+                                _manualSelectedExercise.value = 0
+                                it.data?.let { exerciseTrackingResponse ->
+                                    _eventFlow.emit(
+                                        UIEvent.ShowToastMessage(
+                                            exerciseTrackingResponse.message
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                    }.launchIn(this)
+                }
             }
         }
     }

@@ -28,6 +28,7 @@ import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.CommonViewModel
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseEvent
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseScreenActivity
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.ExerciseCard
@@ -40,15 +41,16 @@ fun ExerciseListScreen(
     testId: String,
     creationDate: String,
     navController: NavController,
-    viewModel: ExerciseListViewModel
+    commonViewModel: CommonViewModel,
+    exerciseListViewModel: ExerciseListViewModel
 ) {
     val scaffoldState = rememberScaffoldState()
     val context = LocalContext.current
     val localConfiguration = LocalConfiguration.current
-    viewModel.loadExercises(testId = testId, tenant = tenant)
+    commonViewModel.loadExercises(testId = testId, tenant = tenant)
 
     LaunchedEffect(key1 = true) {
-        viewModel.eventFlow.collect { event ->
+        commonViewModel.eventFlow.collect { event ->
             when (event) {
                 is UIEvent.ShowSnackBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(event.message)
@@ -63,15 +65,15 @@ fun ExerciseListScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            if (viewModel.showExerciseSearchBar.value) {
+            if (commonViewModel.showExerciseSearchBar.value) {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     OutlinedTextField(
-                        value = viewModel.exerciseSearchTerm.value,
+                        value = commonViewModel.exerciseSearchTerm.value,
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(Color.White),
                         onValueChange = { searchTerm ->
-                            viewModel.onEvent(
+                            commonViewModel.onEvent(
                                 ExerciseEvent.ExerciseSearchTermEntered(
                                     testId = testId,
                                     searchTerm = searchTerm
@@ -89,7 +91,7 @@ fun ExerciseListScreen(
                                 imageVector = Icons.Default.Close,
                                 contentDescription = "Close search bar",
                                 modifier = Modifier.clickable {
-                                    viewModel.onEvent(ExerciseEvent.HideExerciseSearchBar)
+                                    commonViewModel.onEvent(ExerciseEvent.HideExerciseSearchBar)
                                 }
                             )
                         }),
@@ -101,12 +103,12 @@ fun ExerciseListScreen(
                 CustomTopAppBar(
                     leadingIcon = R.drawable.ic_arrow_back,
                     onClickLeadingIcon = {
-                        viewModel.onEvent(ExerciseEvent.GoToAssessmentPage)
+                        commonViewModel.onEvent(ExerciseEvent.GoToAssessmentPage)
                         navController.popBackStack()
                     },
                     trailingIcon = R.drawable.search,
                     onClickTrailingIcon = {
-                        viewModel.onEvent(ExerciseEvent.ShowExerciseSearchBar)
+                        commonViewModel.onEvent(ExerciseEvent.ShowExerciseSearchBar)
                     }
                 ) {
                     Text(
@@ -143,43 +145,47 @@ fun ExerciseListScreen(
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
-                if (viewModel.showManualTrackingForm.value) {
-                    viewModel.getExercise(
+                if (commonViewModel.showManualTrackingForm.value) {
+                    commonViewModel.getExercise(
                         testId = testId,
-                        exerciseId = viewModel.manualSelectedExercise.value
+                        exerciseId = commonViewModel.manualSelectedExercise.value
                     )?.let { selectedExercise ->
                         ManualTrackingForm(
                             exerciseName = selectedExercise.name,
-                            repetitionField = viewModel.manualRepetitionCount,
+                            repetitionField = commonViewModel.manualRepetitionCount,
                             onRepetitionValueChanged = {
-                                viewModel.onEvent(ExerciseEvent.ManualRepetitionCountEntered(it))
+                                commonViewModel.onEvent(
+                                    ExerciseEvent.ManualRepetitionCountEntered(
+                                        it
+                                    )
+                                )
                             },
-                            setField = viewModel.manualSetCount,
+                            setField = commonViewModel.manualSetCount,
                             onSetValueChanged = {
-                                viewModel.onEvent(ExerciseEvent.ManualSetCountEntered(it))
+                                commonViewModel.onEvent(ExerciseEvent.ManualSetCountEntered(it))
                             },
-                            wrongField = viewModel.manualWrongCount,
+                            wrongField = commonViewModel.manualWrongCount,
                             onWrongValueChanged = {
-                                viewModel.onEvent(ExerciseEvent.ManualWrongCountEntered(it))
+                                commonViewModel.onEvent(ExerciseEvent.ManualWrongCountEntered(it))
                             },
                             onCloseClicked = {
-                                viewModel.onEvent(ExerciseEvent.HideManualTrackingAlertDialogue)
+                                commonViewModel.onEvent(ExerciseEvent.HideManualTrackingAlertDialogue)
                             },
                             onSaveDataClick = {
-                                viewModel.onEvent(
+                                commonViewModel.onEvent(
                                     ExerciseEvent.SaveDataButtonClicked(
                                         testId = testId,
                                         exercise = selectedExercise
                                     )
                                 )
                             },
-                            saveDataButtonClickState = viewModel.saveDataButtonClicked
+                            saveDataButtonClickState = commonViewModel.saveDataButtonClicked
                         )
                     }
-                } else if (viewModel.showExerciseDemo.value) {
-                    viewModel.getExercise(
+                } else if (commonViewModel.showExerciseDemo.value) {
+                    commonViewModel.getExercise(
                         testId = testId,
-                        exerciseId = viewModel.manualSelectedExercise.value
+                        exerciseId = commonViewModel.manualSelectedExercise.value
                     )?.let {
                         ExerciseDemo(
                             phases = it.phases,
@@ -190,15 +196,15 @@ fun ExerciseListScreen(
                                         ExerciseScreenActivity::class.java
                                     )
                                 )
-                                viewModel.onEvent(ExerciseEvent.HideExerciseDemo)
+                                commonViewModel.onEvent(ExerciseEvent.HideExerciseDemo)
                             },
-                            onDismiss = { viewModel.onEvent(ExerciseEvent.HideExerciseDemo) }
+                            onDismiss = { commonViewModel.onEvent(ExerciseEvent.HideExerciseDemo) }
                         )
                     }
                 }
 
                 when {
-                    viewModel.isExerciseLoading.value -> {
+                    commonViewModel.isExerciseLoading.value -> {
                         Box(
                             contentAlignment = Alignment.Center,
                             modifier = Modifier.fillMaxSize()
@@ -206,13 +212,13 @@ fun ExerciseListScreen(
                             CircularProgressIndicator()
                         }
                     }
-                    viewModel.showTryAgain.value -> {
+                    commonViewModel.showTryAgain.value -> {
                         Box(
                             contentAlignment = Alignment.Center,
                             modifier = Modifier.fillMaxSize()
                         ) {
                             Button(onClick = {
-                                viewModel.onEvent(
+                                commonViewModel.onEvent(
                                     ExerciseEvent.FetchExercises(
                                         testId = testId,
                                         tenant = tenant
@@ -224,7 +230,7 @@ fun ExerciseListScreen(
                         }
                     }
                     else -> {
-                        viewModel.exercises.value?.let { exercises ->
+                        commonViewModel.exercises.value?.let { exercises ->
                             if (exercises.isNotEmpty()) {
                                 val itemsPerRow = when {
                                     localConfiguration.screenWidthDp > 840 -> {
@@ -259,15 +265,19 @@ fun ExerciseListScreen(
                                                 )
                                             },
                                             onStartWorkoutButtonClicked = {
-                                                viewModel.onEvent(ExerciseEvent.ShowExerciseDemo(it.id))
+                                                commonViewModel.onEvent(
+                                                    ExerciseEvent.ShowExerciseDemo(
+                                                        it.id
+                                                    )
+                                                )
                                             },
                                             onManualTrackingButtonClicked = {
-                                                viewModel.onEvent(
+                                                commonViewModel.onEvent(
                                                     ExerciseEvent.ManualSelectedExerciseId(
                                                         it.id
                                                     )
                                                 )
-                                                viewModel.onEvent(ExerciseEvent.ShowManualTrackingAlertDialogue)
+                                                commonViewModel.onEvent(ExerciseEvent.ShowManualTrackingAlertDialogue)
                                             }
                                         )
                                     }

@@ -13,6 +13,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.CommonViewModel
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseScreenActivity
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.ExerciseListViewModel
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.guideline.component.ImageSection
@@ -25,10 +26,11 @@ fun GuidelineScreen(
     exerciseId: Int,
     navController: NavController,
     guidelineViewModel: GuidelineViewModel,
-    exerciseListViewModel: ExerciseListViewModel
+    exerciseListViewModel: ExerciseListViewModel,
+    commonViewModel: CommonViewModel
 ) {
     val scaffoldState = rememberScaffoldState()
-    val exercise = exerciseListViewModel.getExercise(testId = testId, exerciseId = exerciseId)
+    val exercise = commonViewModel.getExercise(testId = testId, exerciseId = exerciseId)
     val context = LocalContext.current
     Scaffold(
         scaffoldState = scaffoldState,

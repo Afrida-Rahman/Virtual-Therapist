@@ -44,7 +44,8 @@ fun NavGraphBuilder.exerciseNav(navController: NavController) {
                             testId = testId,
                             creationDate = creationDate,
                             navController = navController,
-                            viewModel = exerciseListViewModel
+                            exerciseListViewModel = exerciseListViewModel,
+                            commonViewModel = commonViewModel
                         )
                     }
                 }
@@ -70,7 +71,8 @@ fun NavGraphBuilder.exerciseNav(navController: NavController) {
                         exerciseId = exerciseId,
                         navController = navController,
                         guidelineViewModel = guidelineViewModel,
-                        exerciseListViewModel = exerciseListViewModel
+                        exerciseListViewModel = exerciseListViewModel,
+                        commonViewModel = commonViewModel
                     )
                 }
             }
