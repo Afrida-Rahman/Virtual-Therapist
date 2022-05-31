@@ -1,4 +1,4 @@
-package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
+package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise
 
 import android.Manifest
 import android.content.Context
@@ -22,7 +22,6 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.pos
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.posedetector.ml_kit.GraphicOverlay
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.posedetector.ml_kit.VisionImageProcessor
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.posedetector.utils.PreferenceUtils
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise.ExerciseViewModel
 
 /** Live preview demo app for ML Kit APIs using CameraX. */
 @KeepName

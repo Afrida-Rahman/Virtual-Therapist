@@ -1,4 +1,4 @@
-package com.mymedicalhub.emmavirtualtherapist.android.feature_ml.domain.model.posedetector
+package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.posedetector
 
 import android.content.Context
 import android.util.Log
@@ -8,8 +8,8 @@ import com.google.mlkit.vision.pose.Pose
 import com.google.mlkit.vision.pose.PoseDetection
 import com.google.mlkit.vision.pose.PoseDetector
 import com.google.mlkit.vision.pose.PoseDetectorOptionsBase
-import com.mymedicalhub.emmavirtualtherapist.android.feature_ml.domain.model.ml_kit.GraphicOverlay
-import com.mymedicalhub.emmavirtualtherapist.android.feature_ml.domain.model.ml_kit.VisionProcessorBase
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.posedetector.ml_kit.GraphicOverlay
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.posedetector.ml_kit.VisionProcessorBase
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 

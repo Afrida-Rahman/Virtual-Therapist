@@ -1,4 +1,4 @@
-package com.mymedicalhub.emmavirtualtherapist.android.feature_ml.domain.model.ml_kit
+package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.posedetector.ml_kit
 
 import androidx.camera.core.ImageProxy
 

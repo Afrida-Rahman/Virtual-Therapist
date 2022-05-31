@@ -1,11 +1,11 @@
-package com.mymedicalhub.emmavirtualtherapist.android.feature_ml.domain.utils
+package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.posedetector.utils
 
 import android.graphics.*
 import android.media.Image.Plane
 import android.util.Log
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageProxy
-import com.mymedicalhub.emmavirtualtherapist.android.feature_ml.domain.model.ml_kit.FrameMetadata
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.posedetector.ml_kit.FrameMetadata
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 

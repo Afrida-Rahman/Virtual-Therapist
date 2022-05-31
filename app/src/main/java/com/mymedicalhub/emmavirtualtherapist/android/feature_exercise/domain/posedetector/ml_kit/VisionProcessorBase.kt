@@ -1,4 +1,4 @@
-package com.mymedicalhub.emmavirtualtherapist.android.feature_ml.domain.model.ml_kit
+package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.posedetector.ml_kit
 
 import android.app.ActivityManager
 import android.content.Context
@@ -10,7 +10,7 @@ import androidx.camera.core.ImageProxy
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskExecutors
 import com.google.mlkit.vision.common.InputImage
-import com.mymedicalhub.emmavirtualtherapist.android.feature_ml.domain.utils.BitmapUtils
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.posedetector.utils.BitmapUtils
 import java.nio.ByteBuffer
 
 /**

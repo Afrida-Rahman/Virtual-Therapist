@@ -15,9 +15,9 @@ import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseScreenActivity
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.ExerciseListViewModel
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.ImageSection
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.InstructionSection
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.VideoSection
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.guideline.component.ImageSection
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.guideline.component.InstructionSection
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.guideline.component.VideoSection
 
 @Composable
 fun GuidelineScreen(

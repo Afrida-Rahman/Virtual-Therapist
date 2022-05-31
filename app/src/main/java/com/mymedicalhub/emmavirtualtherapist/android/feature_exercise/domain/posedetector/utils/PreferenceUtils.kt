@@ -1,4 +1,4 @@
-package com.mymedicalhub.emmavirtualtherapist.android.feature_ml.domain.utils
+package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.posedetector.utils
 
 import android.content.Context
 import android.preference.PreferenceManager

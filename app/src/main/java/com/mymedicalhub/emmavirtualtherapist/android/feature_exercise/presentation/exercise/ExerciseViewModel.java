@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.mymedicalhub.emmavirtualtherapist.android.feature_ml.presentation;
+package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise;
 
 import android.app.Application;
 import android.util.Log;
@@ -33,7 +33,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * View model for interacting with CameraX.
  */
-public final class CameraXViewModel extends AndroidViewModel {
+public final class ExerciseViewModel extends AndroidViewModel {
 
     private static final String TAG = "CameraXViewModel";
     private MutableLiveData<ProcessCameraProvider> cameraProviderLiveData;
@@ -41,7 +41,7 @@ public final class CameraXViewModel extends AndroidViewModel {
     /**
      * Create an instance which interacts with the camera service via the given application context.
      */
-    public CameraXViewModel(@NonNull Application application) {
+    public ExerciseViewModel(@NonNull Application application) {
         super(application);
     }
 

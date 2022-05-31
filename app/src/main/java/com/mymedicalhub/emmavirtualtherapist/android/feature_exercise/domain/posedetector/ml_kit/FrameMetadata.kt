@@ -1,4 +1,4 @@
-package com.mymedicalhub.emmavirtualtherapist.android.feature_ml.domain.model.ml_kit
+package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.posedetector.ml_kit
 
 /** Describing a frame info.  */
 class FrameMetadata private constructor(val width: Int, val height: Int, val rotation: Int) {
