@@ -1,21 +1,23 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.guideline
 
 import android.content.Intent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.CommonViewModel
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseScreenActivity
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.ExerciseListViewModel
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.guideline.component.ImageSection
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.guideline.component.InstructionSection
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.guideline.component.VideoSection
@@ -25,13 +27,13 @@ fun GuidelineScreen(
     testId: String,
     exerciseId: Int,
     navController: NavController,
-    guidelineViewModel: GuidelineViewModel,
-    exerciseListViewModel: ExerciseListViewModel,
-    commonViewModel: CommonViewModel
+    commonViewModel: CommonViewModel,
+    guidelineViewModel: GuidelineViewModel = hiltViewModel()
 ) {
     val scaffoldState = rememberScaffoldState()
     val exercise = commonViewModel.getExercise(testId = testId, exerciseId = exerciseId)
     val context = LocalContext.current
+
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
@@ -39,46 +41,42 @@ fun GuidelineScreen(
                 leadingIcon = R.drawable.ic_arrow_back,
                 onClickLeadingIcon = { navController.popBackStack() }
             ) {
-                Text(text = "Exercise Guideline")
+                Text(
+                    text = "Exercise Guideline",
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
-        }
+        },
+        backgroundColor = MaterialTheme.colors.surface
     ) {
         Column(
-            modifier = Modifier.background(MaterialTheme.colors.surface)
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-            ) {
-                exercise?.let { exercise ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = exercise.name,
-                            style = MaterialTheme.typography.h1,
-                            overflow = TextOverflow.Ellipsis
+            exercise?.let { exercise ->
+                Text(
+                    text = exercise.name,
+                    style = MaterialTheme.typography.h1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Button(onClick = {
+                    navController.popBackStack()
+                    context.startActivity(
+                        Intent(
+                            context,
+                            ExerciseScreenActivity::class.java
                         )
-                        Button(onClick = {
-                            navController.popBackStack()
-                            context.startActivity(
-                                Intent(
-                                    context,
-                                    ExerciseScreenActivity::class.java
-                                )
-                            )
+                    )
 
-                        }) {
-                            Text(text = "Start Workout")
-                        }
-                    }
-                    InstructionSection(exercise.instruction)
-                    exercise.videoURL?.let { url ->
-                        VideoSection(videoUrl = url)
-                    }
-                    ImageSection(exercise.imageURLs)
+                }) {
+                    Text(text = "Start Workout")
+                }
+                InstructionSection(exercise.instruction)
+                ImageSection(exercise.imageURLs)
+                exercise.videoURL?.let { url ->
+                    VideoSection(videoUrl = url)
                 }
             }
         }

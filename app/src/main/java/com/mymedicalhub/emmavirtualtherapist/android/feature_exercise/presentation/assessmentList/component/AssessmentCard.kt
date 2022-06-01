@@ -24,7 +24,8 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
         modifier = Modifier
             .fillMaxWidth()
             .padding(4.dp)
-            .shadow(4.dp, RoundedCornerShape(8.dp))
+            .shadow(4.dp, RoundedCornerShape(8.dp)),
+        backgroundColor = Color.White
     ) {
         Column(
             modifier = Modifier.padding(8.dp)

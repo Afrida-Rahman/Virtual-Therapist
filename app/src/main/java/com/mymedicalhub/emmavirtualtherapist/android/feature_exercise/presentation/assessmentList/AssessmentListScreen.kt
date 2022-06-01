@@ -126,7 +126,8 @@ fun AssessmentListScreen(
         },
         bottomBar = {
             BottomNavigationBar(navController = navController, selectedIndex = 2)
-        }
+        },
+        backgroundColor = MaterialTheme.colors.surface
     ) {
         Spacer(modifier = Modifier.height(12.dp))
         if (viewModel.assessments.value.isNotEmpty()) {
