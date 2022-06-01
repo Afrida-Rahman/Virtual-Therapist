@@ -19,6 +19,7 @@ fun NavGraphBuilder.exerciseNav(navController: NavController) {
     navigation(route = EXERCISE_ROUTE, startDestination = Screen.AssessmentListScreen.route) {
         composable(route = Screen.AssessmentListScreen.route) {
             commonViewModel = hiltViewModel()
+            exerciseListViewModel = hiltViewModel()
             AssessmentListScreen(navController = navController, viewModel = commonViewModel)
         }
         composable(
@@ -35,7 +36,6 @@ fun NavGraphBuilder.exerciseNav(navController: NavController) {
                 }
             )
         ) {
-            exerciseListViewModel = hiltViewModel()
             it.arguments?.getString("tenant")?.let { tenant ->
                 it.arguments?.getString("testId")?.let { testId ->
                     it.arguments?.getString("creationDate")?.let { creationDate ->

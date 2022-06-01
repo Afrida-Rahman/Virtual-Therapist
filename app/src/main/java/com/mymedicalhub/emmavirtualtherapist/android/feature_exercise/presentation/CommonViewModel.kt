@@ -34,8 +34,8 @@ class CommonViewModel @Inject constructor(
     private val _assessments = mutableStateOf<List<Assessment>>(emptyList())
     val assessments: State<List<Assessment>> = _assessments
 
-    private val _patient = mutableStateOf<Patient?>(null)
-    val patient: State<Patient?> = _patient
+    private val _patient = Utilities.getPatient(preferences)
+    var patient: Patient = _patient
 
     private val _exercises = mutableStateOf<List<Exercise>?>(null)
     val exercises: State<List<Exercise>?> = _exercises
@@ -61,27 +61,6 @@ class CommonViewModel @Inject constructor(
     private val _exerciseSearchTerm = mutableStateOf("")
     val exerciseSearchTerm: State<String> = _exerciseSearchTerm
 
-    private val _showManualTrackingForm = mutableStateOf(false)
-    val showManualTrackingForm: State<Boolean> = _showManualTrackingForm
-
-    private val _showExerciseDemo = mutableStateOf(false)
-    val showExerciseDemo: State<Boolean> = _showExerciseDemo
-
-    private val _manualSelectedExercise = mutableStateOf(0)
-    val manualSelectedExercise: State<Int> = _manualSelectedExercise
-
-    private val _manualRepetitionCount = mutableStateOf("")
-    val manualRepetitionCount: State<String> = _manualRepetitionCount
-
-    private val _manualSetCount = mutableStateOf("")
-    val manualSetCount: State<String> = _manualSetCount
-
-    private val _manualWrongCount = mutableStateOf("")
-    val manualWrongCount: State<String> = _manualWrongCount
-
-    private val _saveDataButtonClicked = mutableStateOf(false)
-    val saveDataButtonClicked: State<Boolean> = _saveDataButtonClicked
-
     private val _showFrontCamera = mutableStateOf(true)
     val showFrontCamera: State<Boolean> = _showFrontCamera
 
@@ -91,18 +70,26 @@ class CommonViewModel @Inject constructor(
     val eventFlow = _eventFlow.asSharedFlow()
 
     init {
-        _patient.value = Utilities.getPatient(preferences = preferences)
-        _patient.value?.let {
-            fetchAssessments(it)
-        }
+        patient = Utilities.getPatient(preferences = preferences)
+        fetchAssessments(patient)
     }
 
     fun onEvent(event: ExerciseEvent) {
         when (event) {
             is ExerciseEvent.FetchAssessments -> {
-                _patient.value?.let {
-                    fetchAssessments(it)
-                }
+                fetchAssessments(patient)
+            }
+            is ExerciseEvent.AssessmentSearchTermEntered -> {
+                _assessmentSearchTerm.value = event.searchTerm
+                _assessments.value = getAssessments(event.searchTerm)
+            }
+            is ExerciseEvent.ShowAssessmentSearchBar -> {
+                _showAssessmentSearchBar.value = true
+            }
+            is ExerciseEvent.HideAssessmentSearchBar -> {
+                _showAssessmentSearchBar.value = false
+                _assessmentSearchTerm.value = ""
+                _assessments.value = originalAssessmentList
             }
             is ExerciseEvent.FetchExercises -> fetchExercises(
                 tenant = event.tenant,
@@ -113,6 +100,23 @@ class CommonViewModel @Inject constructor(
                 testId = event.testId,
                 exerciseId = event.exerciseId
             )
+            is ExerciseEvent.ShowExerciseSearchBar -> {
+                _showExerciseSearchBar.value = true
+            }
+            is ExerciseEvent.HideExerciseSearchBar -> {
+                _showExerciseSearchBar.value = false
+                _exerciseSearchTerm.value = ""
+            }
+            is ExerciseEvent.ExerciseSearchTermEntered -> {
+                _exerciseSearchTerm.value = event.searchTerm
+                searchExercises(event.testId, event.searchTerm)
+            }
+            is ExerciseEvent.FlipCamera -> {
+                _showFrontCamera.value = !showFrontCamera.value
+            }
+            is ExerciseEvent.GoToAssessmentPage -> {
+                _exercises.value = null
+            }
             is ExerciseEvent.SignOut -> {
                 Utilities.savePatient(
                     preferences = preferences,
@@ -127,76 +131,7 @@ class CommonViewModel @Inject constructor(
                     )
                 )
             }
-            is ExerciseEvent.AssessmentSearchTermEntered -> {
-                _assessmentSearchTerm.value = event.searchTerm
-                _assessments.value = getAssessments(event.searchTerm)
-            }
-            is ExerciseEvent.ShowExerciseSearchBar -> {
-                _showExerciseSearchBar.value = true
-            }
-            is ExerciseEvent.HideExerciseSearchBar -> {
-                _showExerciseSearchBar.value = false
-                _exerciseSearchTerm.value = ""
-            }
-            is ExerciseEvent.ShowAssessmentSearchBar -> {
-                _showAssessmentSearchBar.value = true
-            }
-            is ExerciseEvent.HideAssessmentSearchBar -> {
-                _showAssessmentSearchBar.value = false
-                _assessmentSearchTerm.value = ""
-                _assessments.value = originalAssessmentList
-            }
-            is ExerciseEvent.ExerciseSearchTermEntered -> {
-                _exerciseSearchTerm.value = event.searchTerm
-                searchExercises(event.testId, event.searchTerm)
-            }
-            is ExerciseEvent.FlipCamera -> {
-                _showFrontCamera.value = !showFrontCamera.value
-            }
-            is ExerciseEvent.GoToAssessmentPage -> {
-                _exercises.value = null
-            }
-            is ExerciseEvent.ManualSelectedExerciseId -> {
-                _manualSelectedExercise.value = event.exerciseId
-            }
-            is ExerciseEvent.ManualRepetitionCountEntered -> {
-                _manualRepetitionCount.value = event.value
-            }
-            is ExerciseEvent.ManualSetCountEntered -> {
-                _manualSetCount.value = event.value
-            }
-            is ExerciseEvent.ManualWrongCountEntered -> {
-                _manualWrongCount.value = event.value
-            }
-            is ExerciseEvent.ShowManualTrackingAlertDialogue -> {
-                _showManualTrackingForm.value = true
-            }
-            is ExerciseEvent.HideManualTrackingAlertDialogue -> {
-                _showManualTrackingForm.value = false
-                _manualRepetitionCount.value = ""
-                _manualSetCount.value = ""
-                _manualWrongCount.value = ""
-            }
-            is ExerciseEvent.ShowExerciseDemo -> {
-                _manualSelectedExercise.value = event.exerciseId
-                _showExerciseDemo.value = true
-            }
-            is ExerciseEvent.HideExerciseDemo -> {
-                _showExerciseDemo.value = false
-            }
-            is ExerciseEvent.SaveDataButtonClicked -> {
-                if (!saveDataButtonClicked.value) {
-                    _saveDataButtonClicked.value = true
-                    _patient.value?.let {
-                        saveExerciseData(
-                            tenant = it.tenant,
-                            testId = event.testId,
-                            patientId = it.patientId,
-                            exercise = event.exercise
-                        )
-                    }
-                }
-            }
+            else -> {}
         }
     }
 
@@ -369,71 +304,6 @@ class CommonViewModel @Inject constructor(
                     }
                 }
                 break
-            }
-        }
-    }
-
-    private fun saveExerciseData(
-        tenant: String,
-        testId: String,
-        patientId: String,
-        exercise: Exercise
-    ) {
-        viewModelScope.launch {
-            when {
-                manualRepetitionCount.value.isBlank() -> {
-                    _saveDataButtonClicked.value = false
-                    _eventFlow.emit(UIEvent.ShowToastMessage("Repetition count cannot be blank"))
-                }
-                manualSetCount.value.isBlank() -> {
-                    _saveDataButtonClicked.value = false
-                    _eventFlow.emit(UIEvent.ShowToastMessage("Set count cannot be blank"))
-                }
-                manualWrongCount.value.isBlank() -> {
-                    _saveDataButtonClicked.value = false
-                    _eventFlow.emit(UIEvent.ShowToastMessage("Wrong count cannot be blank"))
-                }
-                else -> {
-                    exerciseUseCases.saveExerciseData(
-                        exercise = exercise,
-                        testId = testId,
-                        patientId = patientId,
-                        noOfReps = manualRepetitionCount.value.toInt(),
-                        noOfSets = manualSetCount.value.toInt(),
-                        noOfWrongCount = manualWrongCount.value.toInt(),
-                        tenant = tenant
-                    ).onEach {
-                        when (it) {
-                            is Resource.Error -> {
-                                _saveDataButtonClicked.value = false
-                                _eventFlow.emit(
-                                    UIEvent.ShowToastMessage(
-                                        it.message ?: "Unknown error"
-                                    )
-                                )
-                            }
-                            is Resource.Loading -> {
-                                _saveDataButtonClicked.value = true
-                                _eventFlow.emit(UIEvent.ShowToastMessage("Please wait"))
-                            }
-                            is Resource.Success -> {
-                                _showManualTrackingForm.value = false
-                                _saveDataButtonClicked.value = false
-                                _manualRepetitionCount.value = ""
-                                _manualSetCount.value = ""
-                                _manualWrongCount.value = ""
-                                _manualSelectedExercise.value = 0
-                                it.data?.let { exerciseTrackingResponse ->
-                                    _eventFlow.emit(
-                                        UIEvent.ShowToastMessage(
-                                            exerciseTrackingResponse.message
-                                        )
-                                    )
-                                }
-                            }
-                        }
-                    }.launchIn(this)
-                }
             }
         }
     }

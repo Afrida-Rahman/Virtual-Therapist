@@ -42,7 +42,7 @@ fun AssessmentListScreen(
     val scaffoldState = rememberScaffoldState(
         drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     )
-    val tenant = viewModel.patient.value?.tenant ?: "emma"
+    val tenant = viewModel.patient.tenant
     val context = LocalContext.current
     val localConfiguration = LocalConfiguration.current
     val coroutineScope = rememberCoroutineScope()

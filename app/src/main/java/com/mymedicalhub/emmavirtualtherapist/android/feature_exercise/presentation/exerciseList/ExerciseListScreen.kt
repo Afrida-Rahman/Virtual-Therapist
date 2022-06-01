@@ -145,14 +145,14 @@ fun ExerciseListScreen(
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
-                if (commonViewModel.showManualTrackingForm.value) {
+                if (exerciseListViewModel.showManualTrackingForm.value) {
                     commonViewModel.getExercise(
                         testId = testId,
-                        exerciseId = commonViewModel.manualSelectedExercise.value
+                        exerciseId = exerciseListViewModel.manualSelectedExercise.value
                     )?.let { selectedExercise ->
                         ManualTrackingForm(
                             exerciseName = selectedExercise.name,
-                            repetitionField = commonViewModel.manualRepetitionCount,
+                            repetitionField = exerciseListViewModel.manualRepetitionCount,
                             onRepetitionValueChanged = {
                                 commonViewModel.onEvent(
                                     ExerciseEvent.ManualRepetitionCountEntered(
@@ -160,11 +160,11 @@ fun ExerciseListScreen(
                                     )
                                 )
                             },
-                            setField = commonViewModel.manualSetCount,
+                            setField = exerciseListViewModel.manualSetCount,
                             onSetValueChanged = {
                                 commonViewModel.onEvent(ExerciseEvent.ManualSetCountEntered(it))
                             },
-                            wrongField = commonViewModel.manualWrongCount,
+                            wrongField = exerciseListViewModel.manualWrongCount,
                             onWrongValueChanged = {
                                 commonViewModel.onEvent(ExerciseEvent.ManualWrongCountEntered(it))
                             },
@@ -179,13 +179,13 @@ fun ExerciseListScreen(
                                     )
                                 )
                             },
-                            saveDataButtonClickState = commonViewModel.saveDataButtonClicked
+                            saveDataButtonClickState = exerciseListViewModel.saveDataButtonClicked
                         )
                     }
-                } else if (commonViewModel.showExerciseDemo.value) {
+                } else if (exerciseListViewModel.showExerciseDemo.value) {
                     commonViewModel.getExercise(
                         testId = testId,
-                        exerciseId = commonViewModel.manualSelectedExercise.value
+                        exerciseId = exerciseListViewModel.manualSelectedExercise.value
                     )?.let {
                         ExerciseDemo(
                             phases = it.phases,
