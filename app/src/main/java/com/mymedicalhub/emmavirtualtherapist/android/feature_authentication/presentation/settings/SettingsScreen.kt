@@ -10,10 +10,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
@@ -21,14 +20,16 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.pres
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.settings.component.GeneralSettingSection
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.settings.component.ProfileHeader
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.settings.component.SettingsItem
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Red
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Red200
 
 @Composable
 fun SettingsScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: SettingsViewModel = hiltViewModel()
 ) {
+    val patient = viewModel.patient
+    val fullName = "${patient.value?.firstName} ${patient.value?.lastName}"
     Scaffold(
         topBar = {
             CustomTopAppBar(
@@ -44,9 +45,9 @@ fun SettingsScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             ProfileHeader(
-                fullName = "Minerva Janero",
-                email = "janero@yopmail.com",
-                tenant = "emma"
+                fullName = fullName,
+                email = patient.value?.email ?: "",
+                tenant = patient.value?.tenant ?: ""
             )
             AccountSettingSection(navController = navController)
             GeneralSettingSection(navController = navController)
@@ -65,13 +66,5 @@ fun SettingsScreen(
                 }
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SettingsScreenPreview() {
-    EmmaVirtualTherapistTheme {
-        SettingsScreen(rememberNavController())
     }
 }
