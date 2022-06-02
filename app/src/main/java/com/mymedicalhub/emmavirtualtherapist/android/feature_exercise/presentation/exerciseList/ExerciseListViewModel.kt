@@ -11,8 +11,9 @@ import com.mymedicalhub.emmavirtualtherapist.android.core.util.Utilities
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.model.Patient
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Exercise
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.usecase.ExerciseUseCases
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseEvent
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.CommonViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
@@ -27,6 +28,17 @@ class ExerciseListViewModel @Inject constructor(
 ) : ViewModel() {
     private val _patient = Utilities.getPatient(preferences)
     val patient: Patient = _patient
+
+    private val commonViewModel = CommonViewModel(exerciseUseCases, preferences)
+
+    private val _exercises = mutableStateOf<List<Exercise>?>(null)
+    val exercises: State<List<Exercise>?> = _exercises
+
+    private val _showExerciseSearchBar = mutableStateOf(false)
+    val showExerciseSearchBar: State<Boolean> = _showExerciseSearchBar
+
+    private val _exerciseSearchTerm = mutableStateOf("")
+    val exerciseSearchTerm: State<String> = _exerciseSearchTerm
 
     private val _showManualTrackingForm = mutableStateOf(false)
     val showManualTrackingForm: State<Boolean> = _showManualTrackingForm
@@ -52,9 +64,11 @@ class ExerciseListViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<UIEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    fun onEvent(event: ExerciseEvent) {
+    private var searchCoroutine: Job? = null
+
+    fun onExerciseEvent(event: ExerciseListEvent) {
         when (event) {
-            is ExerciseEvent.SignOut -> {
+            is ExerciseListEvent.SignOut -> {
                 Utilities.savePatient(
                     preferences = preferences,
                     data = Patient(
@@ -68,35 +82,43 @@ class ExerciseListViewModel @Inject constructor(
                     )
                 )
             }
-            is ExerciseEvent.ManualSelectedExerciseId -> {
+
+            is ExerciseListEvent.ShowExerciseSearchBar -> {
+                _showExerciseSearchBar.value = true
+            }
+            is ExerciseListEvent.HideExerciseSearchBar -> {
+                _showExerciseSearchBar.value = false
+                _exerciseSearchTerm.value = ""
+            }
+            is ExerciseListEvent.ManualSelectedExerciseId -> {
                 _manualSelectedExercise.value = event.exerciseId
             }
-            is ExerciseEvent.ManualRepetitionCountEntered -> {
+            is ExerciseListEvent.ManualRepetitionCountEntered -> {
                 _manualRepetitionCount.value = event.value
             }
-            is ExerciseEvent.ManualSetCountEntered -> {
+            is ExerciseListEvent.ManualSetCountEntered -> {
                 _manualSetCount.value = event.value
             }
-            is ExerciseEvent.ManualWrongCountEntered -> {
+            is ExerciseListEvent.ManualWrongCountEntered -> {
                 _manualWrongCount.value = event.value
             }
-            is ExerciseEvent.ShowManualTrackingAlertDialogue -> {
+            is ExerciseListEvent.ShowManualTrackingAlertDialogue -> {
                 _showManualTrackingForm.value = true
             }
-            is ExerciseEvent.HideManualTrackingAlertDialogue -> {
+            is ExerciseListEvent.HideManualTrackingAlertDialogue -> {
                 _showManualTrackingForm.value = false
                 _manualRepetitionCount.value = ""
                 _manualSetCount.value = ""
                 _manualWrongCount.value = ""
             }
-            is ExerciseEvent.ShowExerciseDemo -> {
+            is ExerciseListEvent.ShowExerciseDemo -> {
                 _manualSelectedExercise.value = event.exerciseId
                 _showExerciseDemo.value = true
             }
-            is ExerciseEvent.HideExerciseDemo -> {
+            is ExerciseListEvent.HideExerciseDemo -> {
                 _showExerciseDemo.value = false
             }
-            is ExerciseEvent.SaveDataButtonClicked -> {
+            is ExerciseListEvent.SaveDataButtonClicked -> {
                 if (!saveDataButtonClicked.value) {
                     _saveDataButtonClicked.value = true
                     patient.let {
@@ -108,6 +130,9 @@ class ExerciseListViewModel @Inject constructor(
                         )
                     }
                 }
+            }
+            is ExerciseListEvent.GoToAssessmentPage -> {
+                _exercises.value = null
             }
             else -> {}
         }

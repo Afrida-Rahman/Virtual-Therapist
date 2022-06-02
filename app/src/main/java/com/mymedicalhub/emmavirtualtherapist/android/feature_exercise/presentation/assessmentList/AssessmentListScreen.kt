@@ -31,8 +31,8 @@ import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopApp
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.NavigationDrawer
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.CommonViewModel
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseEvent
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessmentList.component.AssessmentCard
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.ExerciseListEvent
 
 @Composable
 fun AssessmentListScreen(
@@ -71,8 +71,8 @@ fun AssessmentListScreen(
                             .fillMaxWidth()
                             .background(Color.White),
                         onValueChange = { searchTerm ->
-                            viewModel.onEvent(
-                                ExerciseEvent.AssessmentSearchTermEntered(searchTerm)
+                            viewModel.onAssessmentEvent(
+                                AssessmentEvent.AssessmentSearchTermEntered(searchTerm)
                             )
                         },
                         leadingIcon = ({
@@ -86,7 +86,7 @@ fun AssessmentListScreen(
                                 imageVector = Icons.Default.Close,
                                 contentDescription = "Close search bar",
                                 modifier = Modifier.clickable {
-                                    viewModel.onEvent(ExerciseEvent.HideAssessmentSearchBar)
+                                    viewModel.onAssessmentEvent(AssessmentEvent.HideAssessmentSearchBar)
                                 }
                             )
                         }),
@@ -102,7 +102,7 @@ fun AssessmentListScreen(
                     },
                     trailingIcon = R.drawable.filter,
                     onClickTrailingIcon = {
-                        viewModel.onEvent(ExerciseEvent.ShowAssessmentSearchBar)
+                        viewModel.onAssessmentEvent(AssessmentEvent.ShowAssessmentSearchBar)
                     }
                 ) {
                     Text(
@@ -119,7 +119,7 @@ fun AssessmentListScreen(
                 coroutineScope = coroutineScope,
                 scaffoldState = scaffoldState
             ) {
-                viewModel.onEvent(ExerciseEvent.SignOut)
+                viewModel.onExerciseEvent(ExerciseListEvent.SignOut)
                 navController.popBackStack()
                 navController.navigate(Screen.SignInScreen.route)
             }
@@ -179,7 +179,7 @@ fun AssessmentListScreen(
                     viewModel.showTryAgain.value -> {
                         Button(
                             onClick = {
-                                viewModel.onEvent(ExerciseEvent.FetchAssessments)
+                                viewModel.onAssessmentEvent(AssessmentEvent.FetchAssessments)
                             }
                         ) {
                             Text(text = "Try Again")
