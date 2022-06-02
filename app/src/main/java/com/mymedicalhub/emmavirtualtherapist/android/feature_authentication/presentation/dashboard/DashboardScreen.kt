@@ -2,6 +2,7 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.pre
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -46,7 +47,8 @@ fun DashboardScreen(navController: NavController) {
         },
         bottomBar = {
             BottomNavigationBar(navController = navController)
-        }
+        },
+        backgroundColor = MaterialTheme.colors.surface
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

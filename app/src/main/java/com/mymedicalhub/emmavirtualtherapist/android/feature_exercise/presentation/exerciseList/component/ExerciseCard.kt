@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -56,7 +57,8 @@ fun ExerciseCard(
         elevation = 8.dp,
         modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
-            .padding(4.dp)
+            .padding(4.dp),
+        backgroundColor = Color.White
     ) {
         Column(
             modifier = Modifier.padding(8.dp)

@@ -1,7 +1,9 @@
 package com.mymedicalhub.emmavirtualtherapist.android.core.component
 
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -13,7 +15,7 @@ import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Blue
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.DarkCharcoal
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Gray200
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Gray500
 
 @Composable
 fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
@@ -21,6 +23,10 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
         elevation = 8.dp,
         backgroundColor = Color.White
     ) {
+        val activeColor = Blue
+        val inactiveColor = Gray500
+        val iconSize = 24.dp
+
         BottomNavigationItem(
             selected = selectedIndex == 1,
             onClick = {
@@ -43,7 +49,8 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
                         }
                     ),
                     contentDescription = "Home",
-                    tint = if (selectedIndex == 1) Blue else Gray200
+                    tint = if (selectedIndex == 1) activeColor else inactiveColor,
+                    modifier = Modifier.size(iconSize)
                 )
             },
             selectedContentColor = MaterialTheme.colors.primaryVariant,
@@ -71,7 +78,8 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
                         }
                     ),
                     contentDescription = "Assessments",
-                    tint = if (selectedIndex == 2) Blue else Gray200
+                    tint = if (selectedIndex == 2) activeColor else inactiveColor,
+                    modifier = Modifier.size(iconSize)
                 )
             },
             selectedContentColor = MaterialTheme.colors.primaryVariant,
@@ -98,7 +106,8 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
                         }
                     ),
                     contentDescription = "Calendar",
-                    tint = if (selectedIndex == 4) Blue else Gray200
+                    tint = if (selectedIndex == 4) activeColor else inactiveColor,
+                    modifier = Modifier.size(iconSize)
                 )
             },
             selectedContentColor = MaterialTheme.colors.primaryVariant,
@@ -125,7 +134,8 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
                         }
                     ),
                     contentDescription = "Report",
-                    tint = if (selectedIndex == 5) Blue else Gray200
+                    tint = if (selectedIndex == 5) activeColor else inactiveColor,
+                    modifier = Modifier.size(iconSize)
                 )
             },
             selectedContentColor = MaterialTheme.colors.primaryVariant,

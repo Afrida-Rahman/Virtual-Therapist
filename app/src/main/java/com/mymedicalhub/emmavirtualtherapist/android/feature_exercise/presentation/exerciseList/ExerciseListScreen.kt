@@ -23,14 +23,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.CommonViewModel
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseEvent
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseScreenActivity
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise.ExerciseScreenActivity
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.ExerciseCard
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.ExerciseDemo
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.ManualTrackingForm
@@ -42,7 +42,7 @@ fun ExerciseListScreen(
     creationDate: String,
     navController: NavController,
     commonViewModel: CommonViewModel,
-    exerciseListViewModel: ExerciseListViewModel
+    exerciseListViewModel: ExerciseListViewModel = hiltViewModel()
 ) {
     val scaffoldState = rememberScaffoldState()
     val context = LocalContext.current
@@ -50,7 +50,7 @@ fun ExerciseListScreen(
     commonViewModel.loadExercises(testId = testId, tenant = tenant)
 
     LaunchedEffect(key1 = true) {
-        commonViewModel.eventFlow.collect { event ->
+        exerciseListViewModel.eventFlow.collect { event ->
             when (event) {
                 is UIEvent.ShowSnackBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(event.message)
@@ -65,16 +65,16 @@ fun ExerciseListScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            if (commonViewModel.showExerciseSearchBar.value) {
+            if (exerciseListViewModel.showExerciseSearchBar.value) {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     OutlinedTextField(
-                        value = commonViewModel.exerciseSearchTerm.value,
+                        value = exerciseListViewModel.exerciseSearchTerm.value,
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(Color.White),
                         onValueChange = { searchTerm ->
-                            commonViewModel.onEvent(
-                                ExerciseEvent.ExerciseSearchTermEntered(
+                            exerciseListViewModel.onExerciseEvent(
+                                ExerciseListEvent.ExerciseSearchTermEntered(
                                     testId = testId,
                                     searchTerm = searchTerm
                                 )
@@ -91,7 +91,7 @@ fun ExerciseListScreen(
                                 imageVector = Icons.Default.Close,
                                 contentDescription = "Close search bar",
                                 modifier = Modifier.clickable {
-                                    commonViewModel.onEvent(ExerciseEvent.HideExerciseSearchBar)
+                                    exerciseListViewModel.onExerciseEvent(ExerciseListEvent.HideExerciseSearchBar)
                                 }
                             )
                         }),
@@ -103,12 +103,12 @@ fun ExerciseListScreen(
                 CustomTopAppBar(
                     leadingIcon = R.drawable.ic_arrow_back,
                     onClickLeadingIcon = {
-                        commonViewModel.onEvent(ExerciseEvent.GoToAssessmentPage)
+                        commonViewModel.onExerciseEvent(ExerciseListEvent.GoToAssessmentPage)
                         navController.popBackStack()
                     },
                     trailingIcon = R.drawable.search,
                     onClickTrailingIcon = {
-                        commonViewModel.onEvent(ExerciseEvent.ShowExerciseSearchBar)
+                        exerciseListViewModel.onExerciseEvent(ExerciseListEvent.ShowExerciseSearchBar)
                     }
                 ) {
                     Text(
@@ -118,176 +118,181 @@ fun ExerciseListScreen(
                     )
                 }
             }
-        }
+        },
+        backgroundColor = MaterialTheme.colors.surface
     ) {
         Column(
-            modifier = Modifier.background(MaterialTheme.colors.surface)
+            modifier = Modifier.padding(horizontal = 8.dp)
         ) {
-            Column(
-                modifier = Modifier.padding(horizontal = 8.dp)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 4.dp, top = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 4.dp, top = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                Text(
+                    text = "Home Exercises",
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Column(
+                    horizontalAlignment = Alignment.End
                 ) {
-                    Text(
-                        text = "Home Exercises",
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold
+                    Text(text = testId, fontWeight = FontWeight.SemiBold, fontSize = 22.sp)
+                    Text(text = creationDate, fontSize = 14.sp)
+                }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            if (exerciseListViewModel.showManualTrackingForm.value) {
+                commonViewModel.getExercise(
+                    testId = testId,
+                    exerciseId = exerciseListViewModel.manualSelectedExercise.value
+                )?.let { selectedExercise ->
+                    ManualTrackingForm(
+                        exerciseName = selectedExercise.name,
+                        repetitionField = exerciseListViewModel.manualRepetitionCount,
+                        onRepetitionValueChanged = {
+                            exerciseListViewModel.onExerciseEvent(
+                                ExerciseListEvent.ManualRepetitionCountEntered(
+                                    it
+                                )
+                            )
+                        },
+                        setField = exerciseListViewModel.manualSetCount,
+                        onSetValueChanged = {
+                            exerciseListViewModel.onExerciseEvent(
+                                ExerciseListEvent.ManualSetCountEntered(
+                                    it
+                                )
+                            )
+                        },
+                        wrongField = exerciseListViewModel.manualWrongCount,
+                        onWrongValueChanged = {
+                            exerciseListViewModel.onExerciseEvent(
+                                ExerciseListEvent.ManualWrongCountEntered(
+                                    it
+                                )
+                            )
+                        },
+                        onCloseClicked = {
+                            exerciseListViewModel.onExerciseEvent(ExerciseListEvent.HideManualTrackingAlertDialogue)
+                        },
+                        onSaveDataClick = {
+                            exerciseListViewModel.onExerciseEvent(
+                                ExerciseListEvent.SaveDataButtonClicked(
+                                    testId = testId,
+                                    exercise = selectedExercise
+                                )
+                            )
+                        },
+                        saveDataButtonClickState = exerciseListViewModel.saveDataButtonClicked
                     )
-                    Column(
-                        horizontalAlignment = Alignment.End
-                    ) {
-                        Text(text = testId, fontWeight = FontWeight.SemiBold, fontSize = 22.sp)
-                        Text(text = creationDate, fontSize = 14.sp)
-                    }
                 }
-                Spacer(modifier = Modifier.height(8.dp))
-                if (commonViewModel.showManualTrackingForm.value) {
-                    commonViewModel.getExercise(
-                        testId = testId,
-                        exerciseId = commonViewModel.manualSelectedExercise.value
-                    )?.let { selectedExercise ->
-                        ManualTrackingForm(
-                            exerciseName = selectedExercise.name,
-                            repetitionField = commonViewModel.manualRepetitionCount,
-                            onRepetitionValueChanged = {
-                                commonViewModel.onEvent(
-                                    ExerciseEvent.ManualRepetitionCountEntered(
-                                        it
-                                    )
+            } else if (exerciseListViewModel.showExerciseDemo.value) {
+                commonViewModel.getExercise(
+                    testId = testId,
+                    exerciseId = exerciseListViewModel.manualSelectedExercise.value
+                )?.let {
+                    ExerciseDemo(
+                        phases = it.phases,
+                        onStartButtonClicked = {
+                            context.startActivity(
+                                Intent(
+                                    context,
+                                    ExerciseScreenActivity::class.java
                                 )
-                            },
-                            setField = commonViewModel.manualSetCount,
-                            onSetValueChanged = {
-                                commonViewModel.onEvent(ExerciseEvent.ManualSetCountEntered(it))
-                            },
-                            wrongField = commonViewModel.manualWrongCount,
-                            onWrongValueChanged = {
-                                commonViewModel.onEvent(ExerciseEvent.ManualWrongCountEntered(it))
-                            },
-                            onCloseClicked = {
-                                commonViewModel.onEvent(ExerciseEvent.HideManualTrackingAlertDialogue)
-                            },
-                            onSaveDataClick = {
-                                commonViewModel.onEvent(
-                                    ExerciseEvent.SaveDataButtonClicked(
-                                        testId = testId,
-                                        exercise = selectedExercise
-                                    )
-                                )
-                            },
-                            saveDataButtonClickState = commonViewModel.saveDataButtonClicked
-                        )
-                    }
-                } else if (commonViewModel.showExerciseDemo.value) {
-                    commonViewModel.getExercise(
-                        testId = testId,
-                        exerciseId = commonViewModel.manualSelectedExercise.value
-                    )?.let {
-                        ExerciseDemo(
-                            phases = it.phases,
-                            onStartButtonClicked = {
-                                context.startActivity(
-                                    Intent(
-                                        context,
-                                        ExerciseScreenActivity::class.java
-                                    )
-                                )
-                                commonViewModel.onEvent(ExerciseEvent.HideExerciseDemo)
-                            },
-                            onDismiss = { commonViewModel.onEvent(ExerciseEvent.HideExerciseDemo) }
-                        )
-                    }
+                            )
+                            exerciseListViewModel.onExerciseEvent(ExerciseListEvent.HideExerciseDemo)
+                        },
+                        onDismiss = { exerciseListViewModel.onExerciseEvent(ExerciseListEvent.HideExerciseDemo) }
+                    )
                 }
+            }
 
-                when {
-                    commonViewModel.isExerciseLoading.value -> {
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier.fillMaxSize()
-                        ) {
-                            CircularProgressIndicator()
+            when {
+                commonViewModel.isExerciseLoading.value -> {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+                commonViewModel.showTryAgain.value -> {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Button(onClick = {
+                            commonViewModel.onExerciseEvent(
+                                ExerciseListEvent.FetchExercises(
+                                    testId = testId,
+                                    tenant = tenant
+                                )
+                            )
+                        }) {
+                            Text(text = "Try Again")
                         }
                     }
-                    commonViewModel.showTryAgain.value -> {
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier.fillMaxSize()
-                        ) {
-                            Button(onClick = {
-                                commonViewModel.onEvent(
-                                    ExerciseEvent.FetchExercises(
-                                        testId = testId,
-                                        tenant = tenant
+                }
+                else -> {
+                    commonViewModel.exercises.value?.let { exercises ->
+                        if (exercises.isNotEmpty()) {
+                            val itemsPerRow = when {
+                                localConfiguration.screenWidthDp > 840 -> {
+                                    3
+                                }
+                                localConfiguration.screenWidthDp > 600 -> {
+                                    2
+                                }
+                                else -> {
+                                    1
+                                }
+                            }
+                            LazyVerticalGrid(
+                                columns = GridCells.Fixed(itemsPerRow),
+                                modifier = Modifier.padding(4.dp)
+                            ) {
+                                items(exercises) {
+                                    ExerciseCard(
+                                        imageUrl = if (it.imageURLs.isNotEmpty()) {
+                                            it.imageURLs[0]
+                                        } else null,
+                                        name = it.name,
+                                        repetition = it.repetition,
+                                        set = it.set,
+                                        isActive = true,
+                                        onGuidelineButtonClicked = {
+                                            navController.navigate(
+                                                Screen.GuidelineScreen.withArgs(
+                                                    testId,
+                                                    it.id.toString()
+                                                )
+                                            )
+                                        },
+                                        onStartWorkoutButtonClicked = {
+                                            exerciseListViewModel.onExerciseEvent(
+                                                ExerciseListEvent.ShowExerciseDemo(
+                                                    it.id
+                                                )
+                                            )
+                                        },
+                                        onManualTrackingButtonClicked = {
+                                            exerciseListViewModel.onExerciseEvent(
+                                                ExerciseListEvent.ManualSelectedExerciseId(
+                                                    it.id
+                                                )
+                                            )
+                                            exerciseListViewModel.onExerciseEvent(ExerciseListEvent.ShowManualTrackingAlertDialogue)
+                                        }
                                     )
-                                )
-                            }) {
-                                Text(text = "Try Again")
-                            }
-                        }
-                    }
-                    else -> {
-                        commonViewModel.exercises.value?.let { exercises ->
-                            if (exercises.isNotEmpty()) {
-                                val itemsPerRow = when {
-                                    localConfiguration.screenWidthDp > 840 -> {
-                                        3
-                                    }
-                                    localConfiguration.screenWidthDp > 600 -> {
-                                        2
-                                    }
-                                    else -> {
-                                        1
-                                    }
                                 }
-                                LazyVerticalGrid(
-                                    columns = GridCells.Fixed(itemsPerRow),
-                                    modifier = Modifier.padding(4.dp)
-                                ) {
-                                    items(exercises) {
-                                        ExerciseCard(
-                                            imageUrl = if (it.imageURLs.isNotEmpty()) {
-                                                it.imageURLs[0]
-                                            } else null,
-                                            name = it.name,
-                                            repetition = it.repetition,
-                                            set = it.set,
-                                            isActive = true,
-                                            onGuidelineButtonClicked = {
-                                                navController.navigate(
-                                                    Screen.GuidelineScreen.withArgs(
-                                                        testId,
-                                                        it.id.toString()
-                                                    )
-                                                )
-                                            },
-                                            onStartWorkoutButtonClicked = {
-                                                commonViewModel.onEvent(
-                                                    ExerciseEvent.ShowExerciseDemo(
-                                                        it.id
-                                                    )
-                                                )
-                                            },
-                                            onManualTrackingButtonClicked = {
-                                                commonViewModel.onEvent(
-                                                    ExerciseEvent.ManualSelectedExerciseId(
-                                                        it.id
-                                                    )
-                                                )
-                                                commonViewModel.onEvent(ExerciseEvent.ShowManualTrackingAlertDialogue)
-                                            }
-                                        )
-                                    }
-                                }
-                            } else {
-                                Text(
-                                    text = "No exercise is assigned yet!",
-                                    fontWeight = FontWeight.Bold
-                                )
                             }
+                        } else {
+                            Text(
+                                text = "No exercise is assigned yet!",
+                                fontWeight = FontWeight.Bold
+                            )
                         }
                     }
                 }
