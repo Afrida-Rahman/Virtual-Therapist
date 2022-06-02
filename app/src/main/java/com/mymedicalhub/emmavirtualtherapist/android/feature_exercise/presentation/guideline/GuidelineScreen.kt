@@ -12,12 +12,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.CommonViewModel
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseScreenActivity
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise.ExerciseScreenActivity
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.guideline.component.ImageSection
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.guideline.component.InstructionSection
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.guideline.component.VideoSection
@@ -27,8 +26,7 @@ fun GuidelineScreen(
     testId: String,
     exerciseId: Int,
     navController: NavController,
-    commonViewModel: CommonViewModel,
-    guidelineViewModel: GuidelineViewModel = hiltViewModel()
+    commonViewModel: CommonViewModel
 ) {
     val scaffoldState = rememberScaffoldState()
     val exercise = commonViewModel.getExercise(testId = testId, exerciseId = exerciseId)

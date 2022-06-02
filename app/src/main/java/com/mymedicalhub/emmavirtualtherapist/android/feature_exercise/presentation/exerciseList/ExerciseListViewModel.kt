@@ -13,7 +13,6 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.mod
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.usecase.ExerciseUseCases
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.CommonViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
@@ -30,9 +29,6 @@ class ExerciseListViewModel @Inject constructor(
     val patient: Patient = _patient
 
     private val commonViewModel = CommonViewModel(exerciseUseCases, preferences)
-
-    private val _exercises = mutableStateOf<List<Exercise>?>(null)
-    val exercises: State<List<Exercise>?> = _exercises
 
     private val _showExerciseSearchBar = mutableStateOf(false)
     val showExerciseSearchBar: State<Boolean> = _showExerciseSearchBar
@@ -64,8 +60,6 @@ class ExerciseListViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<UIEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    private var searchCoroutine: Job? = null
-
     fun onExerciseEvent(event: ExerciseListEvent) {
         when (event) {
             is ExerciseListEvent.SignOut -> {
@@ -89,6 +83,10 @@ class ExerciseListViewModel @Inject constructor(
             is ExerciseListEvent.HideExerciseSearchBar -> {
                 _showExerciseSearchBar.value = false
                 _exerciseSearchTerm.value = ""
+            }
+            is ExerciseListEvent.ExerciseSearchTermEntered -> {
+                _exerciseSearchTerm.value = event.searchTerm
+                commonViewModel.searchExercises(event.testId, event.searchTerm)
             }
             is ExerciseListEvent.ManualSelectedExerciseId -> {
                 _manualSelectedExercise.value = event.exerciseId
@@ -130,9 +128,6 @@ class ExerciseListViewModel @Inject constructor(
                         )
                     }
                 }
-            }
-            is ExerciseListEvent.GoToAssessmentPage -> {
-                _exercises.value = null
             }
             else -> {}
         }

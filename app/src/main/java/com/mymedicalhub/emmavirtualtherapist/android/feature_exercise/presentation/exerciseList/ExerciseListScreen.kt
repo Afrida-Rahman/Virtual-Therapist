@@ -30,7 +30,7 @@ import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.CommonViewModel
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.ExerciseScreenActivity
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise.ExerciseScreenActivity
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.ExerciseCard
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.ExerciseDemo
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.ManualTrackingForm
@@ -50,7 +50,7 @@ fun ExerciseListScreen(
     commonViewModel.loadExercises(testId = testId, tenant = tenant)
 
     LaunchedEffect(key1 = true) {
-        commonViewModel.eventFlow.collect { event ->
+        exerciseListViewModel.eventFlow.collect { event ->
             when (event) {
                 is UIEvent.ShowSnackBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(event.message)
@@ -108,7 +108,7 @@ fun ExerciseListScreen(
                     },
                     trailingIcon = R.drawable.search,
                     onClickTrailingIcon = {
-                        commonViewModel.onExerciseEvent(ExerciseListEvent.ShowExerciseSearchBar)
+                        exerciseListViewModel.onExerciseEvent(ExerciseListEvent.ShowExerciseSearchBar)
                     }
                 ) {
                     Text(

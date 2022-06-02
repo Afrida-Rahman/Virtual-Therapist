@@ -1,7 +1,6 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation
 
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -29,7 +28,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CommonViewModel @Inject constructor(
     private val exerciseUseCases: ExerciseUseCases,
-    private val preferences: SharedPreferences,
+    preferences: SharedPreferences,
 ) : ViewModel() {
     private var originalAssessmentList: List<Assessment> = emptyList()
 
@@ -56,9 +55,6 @@ class CommonViewModel @Inject constructor(
 
     private val _assessmentSearchTerm = mutableStateOf("")
     val assessmentSearchTerm: State<String> = _assessmentSearchTerm
-
-    private val _showFrontCamera = mutableStateOf(true)
-    val showFrontCamera: State<Boolean> = _showFrontCamera
 
     private var searchCoroutine: Job? = null
 
@@ -101,6 +97,7 @@ class CommonViewModel @Inject constructor(
                 testId = event.testId,
                 exerciseId = event.exerciseId
             )
+            else -> {}
         }
     }
 
@@ -109,7 +106,7 @@ class CommonViewModel @Inject constructor(
         return getExercises(testId = testId).find { it.id == exerciseId }
     }
 
-    fun getExercises(testId: String, searchTerm: String = ""): List<Exercise> {
+    private fun getExercises(testId: String, searchTerm: String = ""): List<Exercise> {
         var exercises: List<Exercise> = emptyList()
         originalAssessmentList.find { it.testId == testId }?.let {
             exercises = it.exercises
@@ -165,6 +162,7 @@ class CommonViewModel @Inject constructor(
         searchCoroutine?.cancel()
         searchCoroutine = viewModelScope.launch {
             delay(500L)
+
             _exercises.value =
                 getExercises(testId = testId, searchTerm = searchTerm)
         }
@@ -172,14 +170,13 @@ class CommonViewModel @Inject constructor(
 
     fun loadExercises(tenant: String, testId: String) {
         if (getExercises(testId = testId).isEmpty()) {
-            Log.d("loadingCheck", " if block1")
             fetchExercises(testId = testId, tenant = tenant)
         } else {
             searchExercises(testId = testId)
         }
     }
 
-    fun fetchExercises(tenant: String, testId: String) {
+    private fun fetchExercises(tenant: String, testId: String) {
         viewModelScope.launch {
             exerciseUseCases.fetchExercises(testId = testId, tenant = tenant)
                 .onEach {
