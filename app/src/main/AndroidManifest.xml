@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".feature_exercise.presentation.ExerciseScreenActivity"
+            android:name=".feature_exercise.presentation.exercise.ExerciseScreenActivity"
             android:screenOrientation="portrait"
             android:exported="false"
             tools:ignore="LockedOrientationActivity" />

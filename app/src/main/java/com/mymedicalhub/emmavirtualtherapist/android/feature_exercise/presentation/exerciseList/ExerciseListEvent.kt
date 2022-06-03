@@ -13,7 +13,6 @@ sealed class ExerciseListEvent {
     object SignOut : ExerciseListEvent()
     object ShowExerciseSearchBar : ExerciseListEvent()
     object HideExerciseSearchBar : ExerciseListEvent()
-    object GoToAssessmentPage : ExerciseListEvent()
     object ShowManualTrackingAlertDialogue : ExerciseListEvent()
     object HideManualTrackingAlertDialogue : ExerciseListEvent()
     data class ShowExerciseDemo(val exerciseId: Int) : ExerciseListEvent()

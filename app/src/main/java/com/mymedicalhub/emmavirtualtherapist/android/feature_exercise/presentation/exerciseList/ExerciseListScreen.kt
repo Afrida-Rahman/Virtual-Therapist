@@ -103,7 +103,6 @@ fun ExerciseListScreen(
                 CustomTopAppBar(
                     leadingIcon = R.drawable.ic_arrow_back,
                     onClickLeadingIcon = {
-                        commonViewModel.onExerciseEvent(ExerciseListEvent.GoToAssessmentPage)
                         navController.popBackStack()
                     },
                     trailingIcon = R.drawable.search,
