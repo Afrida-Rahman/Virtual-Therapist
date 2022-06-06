@@ -9,7 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Blue
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Blue900
 
 @Composable
 fun MultiselectItem(
@@ -32,7 +32,7 @@ fun MultiselectItem(
             },
             enabled = true,
             colors = CheckboxDefaults.colors(
-                checkedColor = Blue,
+                checkedColor = Blue900,
                 uncheckedColor = Color.Gray,
                 checkmarkColor = Color.White
             )

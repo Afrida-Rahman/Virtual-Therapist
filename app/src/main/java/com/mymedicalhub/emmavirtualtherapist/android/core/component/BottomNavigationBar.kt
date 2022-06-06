@@ -12,7 +12,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Blue
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Blue900
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.DarkCharcoal
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Gray500
@@ -23,7 +23,7 @@ fun BottomNavigationBar(navController: NavController, selectedIndex: Int = 1) {
         elevation = 8.dp,
         backgroundColor = Color.White
     ) {
-        val activeColor = Blue
+        val activeColor = Blue900
         val inactiveColor = Gray500
         val iconSize = 24.dp
 

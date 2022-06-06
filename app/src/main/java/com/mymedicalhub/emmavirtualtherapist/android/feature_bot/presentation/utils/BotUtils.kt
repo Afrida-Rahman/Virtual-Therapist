@@ -2,7 +2,7 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.u
 
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.domain.model.Bot
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Blue
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Blue900
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Green
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Yellow
 
@@ -12,7 +12,7 @@ object BotUtils {
             name = "Postural Assessment",
             codeName = "POSTURE_BOT",
             icon = R.drawable.posture_screening,
-            backgroundColor = Blue
+            backgroundColor = Blue900
         ),
         Bot(
             name = "Fysical Score™ Assessment",

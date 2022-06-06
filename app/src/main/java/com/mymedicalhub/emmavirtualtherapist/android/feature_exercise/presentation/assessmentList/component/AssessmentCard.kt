@@ -78,7 +78,7 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
                 MediumButton(
                     text = "Followup",
                     textColor = Color.White,
-                    backgroundColor = Blue,
+                    backgroundColor = Blue900,
                     icon = R.drawable.calendar_outlined,
                     iconColor = Color.White,
                     onClick = {}

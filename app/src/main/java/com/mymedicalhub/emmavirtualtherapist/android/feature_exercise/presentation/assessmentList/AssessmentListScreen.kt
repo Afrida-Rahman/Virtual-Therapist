@@ -1,25 +1,18 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessmentList
 
 import android.widget.Toast
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,11 +21,10 @@ import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.BottomNavigationBar
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
-import com.mymedicalhub.emmavirtualtherapist.android.core.component.NavigationDrawer
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.CommonViewModel
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessmentList.component.AssessmentCard
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.ExerciseListEvent
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessmentList.component.AssessmentFilter
 
 @Composable
 fun AssessmentListScreen(
@@ -45,7 +37,6 @@ fun AssessmentListScreen(
     val tenant = viewModel.patient.tenant
     val context = LocalContext.current
     val localConfiguration = LocalConfiguration.current
-    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collect { event ->
@@ -63,65 +54,42 @@ fun AssessmentListScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            if (viewModel.showAssessmentSearchBar.value) {
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    OutlinedTextField(
-                        value = viewModel.assessmentSearchTerm.value,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color.White),
-                        onValueChange = { searchTerm ->
-                            viewModel.onAssessmentEvent(
-                                AssessmentEvent.AssessmentSearchTermEntered(searchTerm)
-                            )
-                        },
-                        leadingIcon = ({
-                            Icon(
-                                imageVector = Icons.Default.Search,
-                                contentDescription = "Search icon"
-                            )
-                        }),
-                        trailingIcon = ({
-                            Icon(
-                                imageVector = Icons.Default.Close,
-                                contentDescription = "Close search bar",
-                                modifier = Modifier.clickable {
-                                    viewModel.onAssessmentEvent(AssessmentEvent.HideAssessmentSearchBar)
-                                }
-                            )
-                        }),
-                        singleLine = true,
-                        textStyle = TextStyle(color = MaterialTheme.colors.primary)
-                    )
-                }
-            } else {
-                CustomTopAppBar(
-                    leadingIcon = R.drawable.menu_new,
-                    onClickLeadingIcon = {
-                        navController.navigate(Screen.SettingsScreen.route)
-                    },
-                    trailingIcon = R.drawable.filter,
-                    onClickTrailingIcon = {
-                        viewModel.onAssessmentEvent(AssessmentEvent.ShowAssessmentSearchBar)
+            CustomTopAppBar(
+                leadingIcon = R.drawable.menu_new,
+                onClickLeadingIcon = {
+                    navController.navigate(Screen.SettingsScreen.route)
+                },
+                trailingIcon = if (viewModel.showAssessmentFilter.value) {
+                    R.drawable.ic_cross
+                } else {
+                    R.drawable.filter
+                },
+                onClickTrailingIcon = {
+                    if (viewModel.showAssessmentFilter.value) {
+                        viewModel.onEvent(CommonEvent.HideAssessmentFilter)
+                    } else {
+                        viewModel.onEvent(CommonEvent.ShowAssessmentFilter)
                     }
-                ) {
-                    Text(
-                        text = "My Assessments",
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                },
+                extraContent = {
+                    AnimatedVisibility(visible = viewModel.showAssessmentFilter.value) {
+                        AssessmentFilter(
+                            testIdField = viewModel.assessmentId,
+                            onTestIdValueChanged = {
+                                viewModel.onEvent(CommonEvent.AssessmentSearchTermEntered(it))
+                            }, onClickApply = {
+                                viewModel.onEvent(CommonEvent.ApplyAssessmentFilter)
+                                viewModel.onEvent(CommonEvent.HideAssessmentFilter)
+                            }
+                        )
+                    }
                 }
-            }
-        },
-        drawerContent = {
-            NavigationDrawer(
-                navController = navController,
-                coroutineScope = coroutineScope,
-                scaffoldState = scaffoldState
             ) {
-                viewModel.onExerciseEvent(ExerciseListEvent.SignOut)
-                navController.popBackStack()
-                navController.navigate(Screen.SignInScreen.route)
+                Text(
+                    text = "My Assessments",
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
         },
         bottomBar = {
@@ -179,7 +147,7 @@ fun AssessmentListScreen(
                     viewModel.showTryAgain.value -> {
                         Button(
                             onClick = {
-                                viewModel.onAssessmentEvent(AssessmentEvent.FetchAssessments)
+                                viewModel.onEvent(CommonEvent.FetchAssessments)
                             }
                         ) {
                             Text(text = "Try Again")
