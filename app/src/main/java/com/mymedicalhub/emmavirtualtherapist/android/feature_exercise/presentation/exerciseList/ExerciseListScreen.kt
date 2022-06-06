@@ -2,16 +2,11 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentat
 
 import android.content.Intent
 import android.widget.Toast
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -19,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,12 +22,15 @@ import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
+import com.mymedicalhub.emmavirtualtherapist.android.core.component.Pill
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.CommonViewModel
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessmentList.AssessmentEvent
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise.ExerciseScreenActivity
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.ExerciseCard
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.ExerciseDemo
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.ManualTrackingForm
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Yellow
 
 @Composable
 fun ExerciseListScreen(
@@ -65,56 +62,37 @@ fun ExerciseListScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            if (exerciseListViewModel.showExerciseSearchBar.value) {
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    OutlinedTextField(
-                        value = exerciseListViewModel.exerciseSearchTerm.value,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color.White),
-                        onValueChange = { searchTerm ->
-                            exerciseListViewModel.onExerciseEvent(
-                                ExerciseListEvent.ExerciseSearchTermEntered(
-                                    testId = testId,
-                                    searchTerm = searchTerm
-                                )
-                            )
-                        },
-                        leadingIcon = ({
-                            Icon(
-                                imageVector = Icons.Default.Search,
-                                contentDescription = "Search icon"
-                            )
-                        }),
-                        trailingIcon = ({
-                            Icon(
-                                imageVector = Icons.Default.Close,
-                                contentDescription = "Close search bar",
-                                modifier = Modifier.clickable {
-                                    exerciseListViewModel.onExerciseEvent(ExerciseListEvent.HideExerciseSearchBar)
-                                }
-                            )
-                        }),
-                        singleLine = true,
-                        textStyle = TextStyle(color = MaterialTheme.colors.primary)
-                    )
+            CustomTopAppBar(
+                leadingIcon = R.drawable.ic_arrow_back,
+                onClickLeadingIcon = {
+                    navController.popBackStack()
+                },
+                trailingIcon = R.drawable.search,
+                onClickTrailingIcon = {
+                    exerciseListViewModel.onEvent(ExerciseListEvent.ShowExerciseSearchBar)
                 }
-            } else {
-                CustomTopAppBar(
-                    leadingIcon = R.drawable.ic_arrow_back,
-                    onClickLeadingIcon = {
-                        navController.popBackStack()
-                    },
-                    trailingIcon = R.drawable.search,
-                    onClickTrailingIcon = {
-                        exerciseListViewModel.onExerciseEvent(ExerciseListEvent.ShowExerciseSearchBar)
-                    }
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
                         text = "Home Exercises",
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold
                     )
+                    Row {
+                        Pill(
+                            text = testId,
+                            textColor = Color.Black,
+                            backgroundColor = Yellow
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Pill(
+                            text = creationDate,
+                            textColor = Color.Black,
+                            backgroundColor = Yellow
+                        )
+                    }
                 }
             }
         },
@@ -123,25 +101,6 @@ fun ExerciseListScreen(
         Column(
             modifier = Modifier.padding(horizontal = 8.dp)
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 4.dp, top = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = "Home Exercises",
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Column(
-                    horizontalAlignment = Alignment.End
-                ) {
-                    Text(text = testId, fontWeight = FontWeight.SemiBold, fontSize = 22.sp)
-                    Text(text = creationDate, fontSize = 14.sp)
-                }
-            }
-            Spacer(modifier = Modifier.height(8.dp))
             if (exerciseListViewModel.showManualTrackingForm.value) {
                 commonViewModel.getExercise(
                     testId = testId,
@@ -151,7 +110,7 @@ fun ExerciseListScreen(
                         exerciseName = selectedExercise.name,
                         repetitionField = exerciseListViewModel.manualRepetitionCount,
                         onRepetitionValueChanged = {
-                            exerciseListViewModel.onExerciseEvent(
+                            exerciseListViewModel.onEvent(
                                 ExerciseListEvent.ManualRepetitionCountEntered(
                                     it
                                 )
@@ -159,7 +118,7 @@ fun ExerciseListScreen(
                         },
                         setField = exerciseListViewModel.manualSetCount,
                         onSetValueChanged = {
-                            exerciseListViewModel.onExerciseEvent(
+                            exerciseListViewModel.onEvent(
                                 ExerciseListEvent.ManualSetCountEntered(
                                     it
                                 )
@@ -167,17 +126,17 @@ fun ExerciseListScreen(
                         },
                         wrongField = exerciseListViewModel.manualWrongCount,
                         onWrongValueChanged = {
-                            exerciseListViewModel.onExerciseEvent(
+                            exerciseListViewModel.onEvent(
                                 ExerciseListEvent.ManualWrongCountEntered(
                                     it
                                 )
                             )
                         },
                         onCloseClicked = {
-                            exerciseListViewModel.onExerciseEvent(ExerciseListEvent.HideManualTrackingAlertDialogue)
+                            exerciseListViewModel.onEvent(ExerciseListEvent.HideManualTrackingAlertDialogue)
                         },
                         onSaveDataClick = {
-                            exerciseListViewModel.onExerciseEvent(
+                            exerciseListViewModel.onEvent(
                                 ExerciseListEvent.SaveDataButtonClicked(
                                     testId = testId,
                                     exercise = selectedExercise
@@ -201,9 +160,9 @@ fun ExerciseListScreen(
                                     ExerciseScreenActivity::class.java
                                 )
                             )
-                            exerciseListViewModel.onExerciseEvent(ExerciseListEvent.HideExerciseDemo)
+                            exerciseListViewModel.onEvent(ExerciseListEvent.HideExerciseDemo)
                         },
-                        onDismiss = { exerciseListViewModel.onExerciseEvent(ExerciseListEvent.HideExerciseDemo) }
+                        onDismiss = { exerciseListViewModel.onEvent(ExerciseListEvent.HideExerciseDemo) }
                     )
                 }
             }
@@ -223,8 +182,8 @@ fun ExerciseListScreen(
                         modifier = Modifier.fillMaxSize()
                     ) {
                         Button(onClick = {
-                            commonViewModel.onExerciseEvent(
-                                ExerciseListEvent.FetchExercises(
+                            commonViewModel.onEvent(
+                                AssessmentEvent.FetchExercises(
                                     testId = testId,
                                     tenant = tenant
                                 )
@@ -270,19 +229,19 @@ fun ExerciseListScreen(
                                             )
                                         },
                                         onStartWorkoutButtonClicked = {
-                                            exerciseListViewModel.onExerciseEvent(
+                                            exerciseListViewModel.onEvent(
                                                 ExerciseListEvent.ShowExerciseDemo(
                                                     it.id
                                                 )
                                             )
                                         },
                                         onManualTrackingButtonClicked = {
-                                            exerciseListViewModel.onExerciseEvent(
+                                            exerciseListViewModel.onEvent(
                                                 ExerciseListEvent.ManualSelectedExerciseId(
                                                     it.id
                                                 )
                                             )
-                                            exerciseListViewModel.onExerciseEvent(ExerciseListEvent.ShowManualTrackingAlertDialogue)
+                                            exerciseListViewModel.onEvent(ExerciseListEvent.ShowManualTrackingAlertDialogue)
                                         }
                                     )
                                 }

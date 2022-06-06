@@ -14,7 +14,6 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.mod
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Phase
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.usecase.ExerciseUseCases
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessmentList.AssessmentEvent
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.ExerciseListEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -28,7 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CommonViewModel @Inject constructor(
     private val exerciseUseCases: ExerciseUseCases,
-    preferences: SharedPreferences,
+    private val preferences: SharedPreferences,
 ) : ViewModel() {
     private var originalAssessmentList: List<Assessment> = emptyList()
 
@@ -50,11 +49,14 @@ class CommonViewModel @Inject constructor(
     private val _showTryAgainButton = mutableStateOf(false)
     val showTryAgain: State<Boolean> = _showTryAgainButton
 
-    private val _showAssessmentSearchBar = mutableStateOf(false)
-    val showAssessmentSearchBar: State<Boolean> = _showAssessmentSearchBar
+    private val _showAssessmentFilter = mutableStateOf(false)
+    val showAssessmentFilter: State<Boolean> = _showAssessmentFilter
 
-    private val _assessmentSearchTerm = mutableStateOf("")
-    val assessmentSearchTerm: State<String> = _assessmentSearchTerm
+    private val _assessmentId = mutableStateOf("")
+    val assessmentId: State<String> = _assessmentId
+
+    private val _exerciseSearchTerm = mutableStateOf("")
+    val exerciseSearchTerm: State<String> = _exerciseSearchTerm
 
     private var searchCoroutine: Job? = null
 
@@ -62,48 +64,66 @@ class CommonViewModel @Inject constructor(
     val eventFlow = _eventFlow.asSharedFlow()
 
     init {
-        patient = Utilities.getPatient(preferences = preferences)
         fetchAssessments(patient)
     }
 
-    fun onAssessmentEvent(event: AssessmentEvent) {
+    fun onEvent(event: AssessmentEvent) {
         when (event) {
             is AssessmentEvent.FetchAssessments -> {
                 fetchAssessments(patient)
             }
-            is AssessmentEvent.AssessmentSearchTermEntered -> {
-                _assessmentSearchTerm.value = event.searchTerm
-                _assessments.value = getAssessments(event.searchTerm)
-            }
-            is AssessmentEvent.ShowAssessmentSearchBar -> {
-                _showAssessmentSearchBar.value = true
-            }
-            is AssessmentEvent.HideAssessmentSearchBar -> {
-                _showAssessmentSearchBar.value = false
-                _assessmentSearchTerm.value = ""
-                _assessments.value = originalAssessmentList
-            }
-        }
-    }
-
-    fun onExerciseEvent(event: ExerciseListEvent) {
-        when (event) {
-            is ExerciseListEvent.FetchExercises -> fetchExercises(
+            is AssessmentEvent.FetchExercises -> fetchExercises(
                 tenant = event.tenant,
                 testId = event.testId
             )
-            is ExerciseListEvent.FetchExerciseConstraints -> fetchExerciseConstraints(
+            is AssessmentEvent.FetchExerciseConstraints -> fetchExerciseConstraints(
                 tenant = event.tenant,
                 testId = event.testId,
                 exerciseId = event.exerciseId
             )
-            else -> {}
+            is AssessmentEvent.ExerciseSearchTermEntered -> {
+                _exerciseSearchTerm.value = event.searchTerm
+                searchExercises(event.testId, event.searchTerm)
+            }
+            is AssessmentEvent.AssessmentSearchTermEntered -> {
+                _assessmentId.value = event.searchTerm
+                _assessments.value = getAssessments(event.searchTerm)
+            }
+            is AssessmentEvent.ShowAssessmentSearchBar -> {
+                _showAssessmentFilter.value = true
+            }
+            is AssessmentEvent.HideAssessmentSearchBar -> {
+                _showAssessmentFilter.value = false
+                _assessmentId.value = ""
+                _assessments.value = originalAssessmentList
+            }
+            is AssessmentEvent.SignOut -> {
+                Utilities.savePatient(
+                    preferences = preferences,
+                    data = Patient(
+                        id = null,
+                        tenant = "",
+                        patientId = "",
+                        firstName = "",
+                        lastName = "",
+                        email = "",
+                        loggedIn = false
+                    )
+                )
+            }
         }
     }
 
-
     fun getExercise(testId: String, exerciseId: Int): Exercise? {
         return getExercises(testId = testId).find { it.id == exerciseId }
+    }
+
+    fun loadExercises(tenant: String, testId: String) {
+        if (getExercises(testId = testId).isEmpty()) {
+            fetchExercises(testId = testId, tenant = tenant)
+        } else {
+            searchExercises(testId = testId)
+        }
     }
 
     private fun getExercises(testId: String, searchTerm: String = ""): List<Exercise> {
@@ -158,21 +178,13 @@ class CommonViewModel @Inject constructor(
         }
     }
 
-    fun searchExercises(testId: String, searchTerm: String = "") {
+    private fun searchExercises(testId: String, searchTerm: String = "") {
         searchCoroutine?.cancel()
         searchCoroutine = viewModelScope.launch {
             delay(500L)
 
             _exercises.value =
                 getExercises(testId = testId, searchTerm = searchTerm)
-        }
-    }
-
-    fun loadExercises(tenant: String, testId: String) {
-        if (getExercises(testId = testId).isEmpty()) {
-            fetchExercises(testId = testId, tenant = tenant)
-        } else {
-            searchExercises(testId = testId)
         }
     }
 

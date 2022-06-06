@@ -8,10 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.mymedicalhub.emmavirtualtherapist.android.core.Resource
 import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Utilities
-import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.domain.model.Patient
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Exercise
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.usecase.ExerciseUseCases
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.CommonViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -23,18 +21,13 @@ import javax.inject.Inject
 @HiltViewModel
 class ExerciseListViewModel @Inject constructor(
     private val exerciseUseCases: ExerciseUseCases,
-    private val preferences: SharedPreferences
+    preferences: SharedPreferences
 ) : ViewModel() {
-    private val _patient = Utilities.getPatient(preferences)
-    val patient: Patient = _patient
-
-    private val commonViewModel = CommonViewModel(exerciseUseCases, preferences)
+    private val patient = Utilities.getPatient(preferences)
 
     private val _showExerciseSearchBar = mutableStateOf(false)
     val showExerciseSearchBar: State<Boolean> = _showExerciseSearchBar
 
-    private val _exerciseSearchTerm = mutableStateOf("")
-    val exerciseSearchTerm: State<String> = _exerciseSearchTerm
 
     private val _showManualTrackingForm = mutableStateOf(false)
     val showManualTrackingForm: State<Boolean> = _showManualTrackingForm
@@ -60,33 +53,13 @@ class ExerciseListViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<UIEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    fun onExerciseEvent(event: ExerciseListEvent) {
+    fun onEvent(event: ExerciseListEvent) {
         when (event) {
-            is ExerciseListEvent.SignOut -> {
-                Utilities.savePatient(
-                    preferences = preferences,
-                    data = Patient(
-                        id = null,
-                        tenant = "",
-                        patientId = "",
-                        firstName = "",
-                        lastName = "",
-                        email = "",
-                        loggedIn = false
-                    )
-                )
-            }
-
             is ExerciseListEvent.ShowExerciseSearchBar -> {
                 _showExerciseSearchBar.value = true
             }
             is ExerciseListEvent.HideExerciseSearchBar -> {
                 _showExerciseSearchBar.value = false
-                _exerciseSearchTerm.value = ""
-            }
-            is ExerciseListEvent.ExerciseSearchTermEntered -> {
-                _exerciseSearchTerm.value = event.searchTerm
-                commonViewModel.searchExercises(event.testId, event.searchTerm)
             }
             is ExerciseListEvent.ManualSelectedExerciseId -> {
                 _manualSelectedExercise.value = event.exerciseId
@@ -129,7 +102,6 @@ class ExerciseListViewModel @Inject constructor(
                     }
                 }
             }
-            else -> {}
         }
     }
 
