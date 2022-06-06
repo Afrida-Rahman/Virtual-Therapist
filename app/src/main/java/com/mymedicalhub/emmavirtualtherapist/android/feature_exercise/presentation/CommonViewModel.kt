@@ -55,9 +55,6 @@ class CommonViewModel @Inject constructor(
     private val _assessmentId = mutableStateOf("")
     val assessmentId: State<String> = _assessmentId
 
-    private val _exerciseSearchTerm = mutableStateOf("")
-    val exerciseSearchTerm: State<String> = _exerciseSearchTerm
-
     private var searchCoroutine: Job? = null
 
     private val _eventFlow = MutableSharedFlow<UIEvent>()
@@ -81,21 +78,17 @@ class CommonViewModel @Inject constructor(
                 testId = event.testId,
                 exerciseId = event.exerciseId
             )
-            is AssessmentEvent.ExerciseSearchTermEntered -> {
-                _exerciseSearchTerm.value = event.searchTerm
-                searchExercises(event.testId, event.searchTerm)
-            }
             is AssessmentEvent.AssessmentSearchTermEntered -> {
                 _assessmentId.value = event.searchTerm
-                _assessments.value = getAssessments(event.searchTerm)
             }
-            is AssessmentEvent.ShowAssessmentSearchBar -> {
+            is AssessmentEvent.ShowAssessmentFilter -> {
                 _showAssessmentFilter.value = true
             }
-            is AssessmentEvent.HideAssessmentSearchBar -> {
+            is AssessmentEvent.HideAssessmentFilter -> {
                 _showAssessmentFilter.value = false
-                _assessmentId.value = ""
-                _assessments.value = originalAssessmentList
+            }
+            is AssessmentEvent.ApplyFilter -> {
+                _assessments.value = getAssessments(_assessmentId.value)
             }
             is AssessmentEvent.SignOut -> {
                 Utilities.savePatient(

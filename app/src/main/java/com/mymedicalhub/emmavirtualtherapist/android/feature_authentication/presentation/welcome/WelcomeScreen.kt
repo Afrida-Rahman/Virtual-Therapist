@@ -16,7 +16,7 @@ import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.welcome.components.ActionCard
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Blue
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Blue900
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Green
 
 @Composable
@@ -48,7 +48,7 @@ fun WelcomeScreen(
         ActionCard(
             icon = R.drawable.user_tick,
             text = "Returning Patient",
-            backgroundColor = Blue
+            backgroundColor = Blue900
         ) {
             navController.navigate(Screen.SignInScreen.route)
         }

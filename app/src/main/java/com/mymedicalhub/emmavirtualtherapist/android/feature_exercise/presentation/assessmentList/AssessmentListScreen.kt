@@ -66,9 +66,9 @@ fun AssessmentListScreen(
                 },
                 onClickTrailingIcon = {
                     if (viewModel.showAssessmentFilter.value) {
-                        viewModel.onEvent(AssessmentEvent.HideAssessmentSearchBar)
+                        viewModel.onEvent(AssessmentEvent.HideAssessmentFilter)
                     } else {
-                        viewModel.onEvent(AssessmentEvent.ShowAssessmentSearchBar)
+                        viewModel.onEvent(AssessmentEvent.ShowAssessmentFilter)
                     }
                 },
                 extraContent = {
@@ -78,7 +78,8 @@ fun AssessmentListScreen(
                             onTestIdValueChanged = {
                                 viewModel.onEvent(AssessmentEvent.AssessmentSearchTermEntered(it))
                             }, onClickApply = {
-                                viewModel.onEvent(AssessmentEvent.HideAssessmentSearchBar)
+                                viewModel.onEvent(AssessmentEvent.ApplyFilter)
+                                viewModel.onEvent(AssessmentEvent.HideAssessmentFilter)
                             }
                         )
                     }

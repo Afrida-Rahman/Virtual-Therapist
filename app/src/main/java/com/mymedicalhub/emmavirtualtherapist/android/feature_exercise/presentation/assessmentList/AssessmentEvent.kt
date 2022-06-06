@@ -9,11 +9,9 @@ sealed class AssessmentEvent {
         val exerciseId: Int
     ) : AssessmentEvent()
 
-    data class ExerciseSearchTermEntered(val testId: String, val searchTerm: String) :
-        AssessmentEvent()
-
-    object ShowAssessmentSearchBar : AssessmentEvent()
-    object HideAssessmentSearchBar : AssessmentEvent()
+    object ShowAssessmentFilter : AssessmentEvent()
+    object HideAssessmentFilter : AssessmentEvent()
+    object ApplyFilter : AssessmentEvent()
     data class AssessmentSearchTermEntered(val searchTerm: String) : AssessmentEvent()
     object SignOut : AssessmentEvent()
 }
