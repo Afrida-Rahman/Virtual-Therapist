@@ -2,6 +2,7 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentat
 
 import android.content.Intent
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -25,10 +26,11 @@ import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopApp
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.Pill
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.CommonViewModel
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessmentList.AssessmentEvent
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessmentList.CommonEvent
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise.ExerciseScreenActivity
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.ExerciseCard
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.ExerciseDemo
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.ExerciseFilter
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.ManualTrackingForm
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Yellow
 
@@ -67,9 +69,36 @@ fun ExerciseListScreen(
                 onClickLeadingIcon = {
                     navController.popBackStack()
                 },
-                trailingIcon = R.drawable.search,
+                trailingIcon = if (exerciseListViewModel.showExerciseFilter.value) {
+                    R.drawable.ic_cross
+                } else {
+                    R.drawable.search
+                },
                 onClickTrailingIcon = {
-                    exerciseListViewModel.onEvent(ExerciseListEvent.ShowExerciseSearchBar)
+                    exerciseListViewModel.onEvent(ExerciseListEvent.ToggleExerciseFilter)
+                },
+                extraContent = {
+                    AnimatedVisibility(visible = exerciseListViewModel.showExerciseFilter.value) {
+                        ExerciseFilter(
+                            field = exerciseListViewModel.searchTerm,
+                            onValueChange = {
+                                exerciseListViewModel.onEvent(
+                                    ExerciseListEvent.ExerciseNameEntered(
+                                        it
+                                    )
+                                )
+                            },
+                            onClickApply = {
+                                commonViewModel.onEvent(
+                                    CommonEvent.ApplyExerciseFilter(
+                                        testId = testId,
+                                        searchTerm = exerciseListViewModel.searchTerm.value
+                                    )
+                                )
+                                exerciseListViewModel.onEvent(ExerciseListEvent.ToggleExerciseFilter)
+                            }
+                        )
+                    }
                 }
             ) {
                 Column(
@@ -183,7 +212,7 @@ fun ExerciseListScreen(
                     ) {
                         Button(onClick = {
                             commonViewModel.onEvent(
-                                AssessmentEvent.FetchExercises(
+                                CommonEvent.FetchExercises(
                                     testId = testId,
                                     tenant = tenant
                                 )

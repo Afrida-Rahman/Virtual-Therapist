@@ -3,8 +3,8 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentat
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Exercise
 
 sealed class ExerciseListEvent {
-    object ShowExerciseSearchBar : ExerciseListEvent()
-    object HideExerciseSearchBar : ExerciseListEvent()
+    object ToggleExerciseFilter : ExerciseListEvent()
+    data class ExerciseNameEntered(val name: String) : ExerciseListEvent()
     object ShowManualTrackingAlertDialogue : ExerciseListEvent()
     object HideManualTrackingAlertDialogue : ExerciseListEvent()
     data class ShowExerciseDemo(val exerciseId: Int) : ExerciseListEvent()

@@ -13,7 +13,7 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.mod
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Exercise
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Phase
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.usecase.ExerciseUseCases
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessmentList.AssessmentEvent
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessmentList.CommonEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -64,33 +64,38 @@ class CommonViewModel @Inject constructor(
         fetchAssessments(patient)
     }
 
-    fun onEvent(event: AssessmentEvent) {
+    fun onEvent(event: CommonEvent) {
         when (event) {
-            is AssessmentEvent.FetchAssessments -> {
+            is CommonEvent.FetchAssessments -> {
                 fetchAssessments(patient)
             }
-            is AssessmentEvent.FetchExercises -> fetchExercises(
+            is CommonEvent.FetchExercises -> fetchExercises(
                 tenant = event.tenant,
                 testId = event.testId
             )
-            is AssessmentEvent.FetchExerciseConstraints -> fetchExerciseConstraints(
+            is CommonEvent.FetchExerciseConstraints -> fetchExerciseConstraints(
                 tenant = event.tenant,
                 testId = event.testId,
                 exerciseId = event.exerciseId
             )
-            is AssessmentEvent.AssessmentSearchTermEntered -> {
+            is CommonEvent.AssessmentSearchTermEntered -> {
                 _assessmentId.value = event.searchTerm
             }
-            is AssessmentEvent.ShowAssessmentFilter -> {
+            is CommonEvent.ShowAssessmentFilter -> {
                 _showAssessmentFilter.value = true
             }
-            is AssessmentEvent.HideAssessmentFilter -> {
+            is CommonEvent.HideAssessmentFilter -> {
                 _showAssessmentFilter.value = false
             }
-            is AssessmentEvent.ApplyFilter -> {
+            is CommonEvent.ApplyAssessmentFilter -> {
                 _assessments.value = getAssessments(_assessmentId.value)
             }
-            is AssessmentEvent.SignOut -> {
+            is CommonEvent.ApplyExerciseFilter -> {
+                _exercises.value = getExercises(
+                    testId = event.testId, searchTerm = event.searchTerm
+                )
+            }
+            is CommonEvent.SignOut -> {
                 Utilities.savePatient(
                     preferences = preferences,
                     data = Patient(

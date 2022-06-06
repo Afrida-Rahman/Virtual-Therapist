@@ -25,9 +25,11 @@ class ExerciseListViewModel @Inject constructor(
 ) : ViewModel() {
     private val patient = Utilities.getPatient(preferences)
 
-    private val _showExerciseSearchBar = mutableStateOf(false)
-    val showExerciseSearchBar: State<Boolean> = _showExerciseSearchBar
+    private val _showExerciseFilter = mutableStateOf(false)
+    val showExerciseFilter: State<Boolean> = _showExerciseFilter
 
+    private val _searchTerm = mutableStateOf("")
+    val searchTerm: State<String> = _searchTerm
 
     private val _showManualTrackingForm = mutableStateOf(false)
     val showManualTrackingForm: State<Boolean> = _showManualTrackingForm
@@ -55,11 +57,11 @@ class ExerciseListViewModel @Inject constructor(
 
     fun onEvent(event: ExerciseListEvent) {
         when (event) {
-            is ExerciseListEvent.ShowExerciseSearchBar -> {
-                _showExerciseSearchBar.value = true
+            is ExerciseListEvent.ToggleExerciseFilter -> {
+                _showExerciseFilter.value = !showExerciseFilter.value
             }
-            is ExerciseListEvent.HideExerciseSearchBar -> {
-                _showExerciseSearchBar.value = false
+            is ExerciseListEvent.ExerciseNameEntered -> {
+                _searchTerm.value = event.name
             }
             is ExerciseListEvent.ManualSelectedExerciseId -> {
                 _manualSelectedExercise.value = event.exerciseId

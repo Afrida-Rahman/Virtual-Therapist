@@ -66,9 +66,9 @@ fun AssessmentListScreen(
                 },
                 onClickTrailingIcon = {
                     if (viewModel.showAssessmentFilter.value) {
-                        viewModel.onEvent(AssessmentEvent.HideAssessmentFilter)
+                        viewModel.onEvent(CommonEvent.HideAssessmentFilter)
                     } else {
-                        viewModel.onEvent(AssessmentEvent.ShowAssessmentFilter)
+                        viewModel.onEvent(CommonEvent.ShowAssessmentFilter)
                     }
                 },
                 extraContent = {
@@ -76,10 +76,10 @@ fun AssessmentListScreen(
                         AssessmentFilter(
                             testIdField = viewModel.assessmentId,
                             onTestIdValueChanged = {
-                                viewModel.onEvent(AssessmentEvent.AssessmentSearchTermEntered(it))
+                                viewModel.onEvent(CommonEvent.AssessmentSearchTermEntered(it))
                             }, onClickApply = {
-                                viewModel.onEvent(AssessmentEvent.ApplyFilter)
-                                viewModel.onEvent(AssessmentEvent.HideAssessmentFilter)
+                                viewModel.onEvent(CommonEvent.ApplyAssessmentFilter)
+                                viewModel.onEvent(CommonEvent.HideAssessmentFilter)
                             }
                         )
                     }
@@ -147,7 +147,7 @@ fun AssessmentListScreen(
                     viewModel.showTryAgain.value -> {
                         Button(
                             onClick = {
-                                viewModel.onEvent(AssessmentEvent.FetchAssessments)
+                                viewModel.onEvent(CommonEvent.FetchAssessments)
                             }
                         ) {
                             Text(text = "Try Again")
