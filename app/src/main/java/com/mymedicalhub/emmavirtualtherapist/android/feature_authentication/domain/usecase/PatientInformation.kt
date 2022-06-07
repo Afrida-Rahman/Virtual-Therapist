@@ -36,7 +36,7 @@ class PatientInformation @Inject constructor(
                             )
                         )
                     if (patientDto.success) {
-                        emit(Resource.Success(patientDto.toPatient(tenant)))
+                        emit(Resource.Success(patientDto.toPatient(tenant, email)))
                     } else {
                         emit(Resource.Error("Invalid email or password"))
                     }

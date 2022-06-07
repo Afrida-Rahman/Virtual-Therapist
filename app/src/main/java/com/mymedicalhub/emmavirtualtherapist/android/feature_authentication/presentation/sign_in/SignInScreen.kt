@@ -3,15 +3,14 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.pre
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,6 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
+import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.OutlineInputTextField
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 
@@ -63,8 +63,22 @@ fun SignInScreen(
             }
         }
     }
-
-    Scaffold(scaffoldState = scaffoldState) {
+    Scaffold(
+        scaffoldState = scaffoldState,
+        topBar = {
+            CustomTopAppBar(
+                leadingIcon = R.drawable.ic_arrow_back,
+                onClickLeadingIcon = { navController.popBackStack() }
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.mmh),
+                    contentDescription = "MyMedicalHub",
+                    modifier = Modifier
+                        .height(50.dp)
+                )
+            }
+        }
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -72,34 +86,12 @@ fun SignInScreen(
                 .padding(24.dp),
             verticalArrangement = Arrangement.Center
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { }) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBackIosNew,
-                        contentDescription = "Back",
-                        modifier = Modifier
-                            .border(
-                                width = 1.dp,
-                                color = Color.LightGray,
-                                shape = CircleShape
-                            )
-                            .size(40.dp)
-                            .padding(12.dp)
-                    )
-                }
-                Image(
-                    painter = painterResource(id = R.drawable.mmh),
-                    contentDescription = "MyMedicalHub",
-                    modifier = Modifier
-                        .height(50.dp)
-                        .weight(1f)
-                )
-            }
             Spacer(modifier = Modifier.height(32.dp))
             Column(
                 modifier = Modifier
                     .weight(1f)
             ) {
+
                 Text(text = "Select Your Practice")
                 OutlinedTextField(
                     value = selectedTenant.uppercase(),
@@ -119,6 +111,7 @@ fun SignInScreen(
                     placeholder = { Text("Select Your Practice") },
                     shape = RoundedCornerShape(16.dp),
                 )
+
                 DropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { expanded = false },
@@ -139,7 +132,7 @@ fun SignInScreen(
                 Text(text = "Email Address")
                 OutlineInputTextField(
                     field = viewModel.email,
-                    leadingIcon = Icons.Default.Email,
+                    leadingIcon = R.drawable.email_gray,
                     onValueChange = {
                         viewModel.onEvent(SignInEvent.EnteredEmail(it))
                     },
@@ -155,11 +148,11 @@ fun SignInScreen(
                     onValueChange = {
                         viewModel.onEvent(SignInEvent.EnteredPassword(it))
                     },
-                    leadingIcon = Icons.Default.Lock,
+                    leadingIcon = R.drawable.lock_gray,
                     trailingIcon = if (viewModel.showPassword.value) {
-                        painterResource(id = R.drawable.ic_eye_open)
+                        R.drawable.eye_open_gray
                     } else {
-                        painterResource(id = R.drawable.ic_eye_closed)
+                        R.drawable.eye_close_gray
                     },
                     onIconPressed = {
                         viewModel.onEvent(SignInEvent.ShowPassword)
@@ -176,7 +169,7 @@ fun SignInScreen(
                         keyboardService?.hideSoftwareKeyboard()
                         viewModel.onEvent(SignInEvent.SignInButtonClick {
                             navController.popBackStack()
-                            navController.navigate(Screen.AssessmentListScreen.route)
+                            navController.navigate(Screen.DashboardScreen.route)
                         })
                     })
                 )
@@ -184,14 +177,18 @@ fun SignInScreen(
                 Text(
                     text = "Forget Password?",
                     textAlign = TextAlign.Right,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            navController.navigate(Screen.ResetPasswordScreen.route)
+                        }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
                     onClick = {
                         viewModel.onEvent(SignInEvent.SignInButtonClick {
                             navController.popBackStack()
-                            navController.navigate(Screen.AssessmentListScreen.route)
+                            navController.navigate(Screen.DashboardScreen.route)
                         })
                     },
                     modifier = Modifier
@@ -220,11 +217,16 @@ fun SignInScreen(
                     Text(text = "Don't have account? ")
                     Text(
                         text = "Sign Up",
-                        color = Color.Blue,
-                        fontWeight = FontWeight.Bold
+                        color = Color(0xFF1176B4),
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .clickable {
+                                navController.navigate(Screen.SignUpScreen.route)
+                            }
                     )
                 }
             }
         }
     }
 }
+

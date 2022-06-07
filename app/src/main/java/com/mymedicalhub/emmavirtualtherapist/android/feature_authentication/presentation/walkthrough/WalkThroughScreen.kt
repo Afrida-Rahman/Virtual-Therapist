@@ -1,8 +1,10 @@
 package com.mymedicalhub.emmavirtualtherapist.android.feature_authentication.presentation.walkthrough
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
@@ -10,7 +12,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -31,17 +32,17 @@ fun WalkThroughScreen(
 ) {
     val pages = listOf(
         WalkThroughPage(
-            image = R.drawable.chest_pain,
+            image = R.drawable.walkthrough,
             title = "Providing a revolutionary approach to musculoskeletal",
             description = "Our health technology solution enables physicians to identify patient risk for injuring any of the ove 350 joints in the human body"
         ),
         WalkThroughPage(
-            image = R.drawable.chest_pain,
+            image = R.drawable.walkthrough_two,
             title = "Patient Experience Journey",
-            description = "Fysical Score Assessment identifies and quantifies risk factors that are predisposing people to catastrophic injuries."
+            description = "Fysical Score™ Assessment identifies and quantifies risk factors that are predisposing people to catastrophic injuries.."
         ),
         WalkThroughPage(
-            image = R.drawable.chest_pain,
+            image = R.drawable.walkthrough_three,
             title = "AI-powered, ever-leaning engine to beat",
             description = "My Medical Hub is a cloud-based, predictive healthcare informatics and technology health/wellness services company."
         )
@@ -52,14 +53,9 @@ fun WalkThroughScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 22.dp)
+
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.mmh),
-            contentDescription = "MyMedicalHUB",
-            modifier = Modifier
-                .width(150.dp)
-        )
         HorizontalPager(
             count = pages.size,
             state = pagerState,
@@ -80,7 +76,7 @@ fun WalkThroughScreen(
                 onClick = {
                     viewModel.onEvent(WalkThroughScreenEvent.Finish)
                     navController.popBackStack()
-                    navController.navigate(Screen.SignInScreen.route)
+                    navController.navigate(Screen.WelcomeScreen.route)
                 },
                 modifier = Modifier
                     .fillMaxWidth()

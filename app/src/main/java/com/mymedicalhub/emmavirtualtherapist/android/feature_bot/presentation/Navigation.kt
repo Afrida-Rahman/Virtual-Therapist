@@ -4,15 +4,12 @@ import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.CHAT_BOT_ROUTE
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
-import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.utils.BotUtils
+import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.chat.ChatScreen
 
 fun NavGraphBuilder.chatBotNav(navController: NavController) {
     navigation(route = CHAT_BOT_ROUTE, startDestination = Screen.BotListScreen.route) {
-        composable(route = Screen.BotListScreen.route) {
-            BotListScreen(navController = navController)
-        }
         composable(
-            route = Screen.ChatBotScreen.route + "/{codeName}",
+            route = Screen.ChatScreen.route + "/{codeName}",
             arguments = listOf(
                 navArgument(name = "codeName") {
                     type = NavType.StringType
@@ -20,9 +17,7 @@ fun NavGraphBuilder.chatBotNav(navController: NavController) {
             )
         ) {
             it.arguments?.get("codeName")?.let { codeName ->
-                BotUtils.getBot(codeName = codeName.toString())?.let { bot ->
-                    ChatScreen(bot = bot)
-                }
+                ChatScreen(navController = navController, codeName = codeName.toString())
             }
         }
     }

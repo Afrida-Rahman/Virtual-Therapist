@@ -26,19 +26,18 @@ class SaveExerciseData @Inject constructor(
     ): Flow<Resource<ExerciseTrackingDto>> = flow {
         emit(Resource.Loading())
         try {
-            val exerciseTrackingDto = repository.saveExerciseData(
-                payload = ExerciseTrackingPayload(
-                    exerciseId = exercise.id,
-                    testId = testId,
-                    protocolId = exercise.protocolId,
-                    patientId = patientId,
-                    exerciseDate = Utilities.currentDate(),
-                    noOfReps = noOfReps,
-                    noOfSets = noOfSets,
-                    noOfWrongCount = noOfWrongCount,
-                    tenant = tenant
-                )
+            val payload = ExerciseTrackingPayload(
+                exerciseId = exercise.id,
+                testId = testId,
+                protocolId = exercise.protocolId,
+                patientId = patientId,
+                exerciseDate = Utilities.currentDate(),
+                noOfReps = noOfReps,
+                noOfSets = noOfSets,
+                noOfWrongCount = noOfWrongCount,
+                tenant = tenant
             )
+            val exerciseTrackingDto = repository.saveExerciseData(payload = payload)
             if (exerciseTrackingDto.success) {
                 emit(Resource.Success(exerciseTrackingDto))
             } else {
