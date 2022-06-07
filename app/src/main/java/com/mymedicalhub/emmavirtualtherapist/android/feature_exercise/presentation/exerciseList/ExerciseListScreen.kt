@@ -8,8 +8,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,13 +24,11 @@ import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.Pill
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.CommonEvent
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.CommonViewModel
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessmentList.CommonEvent
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise.ExerciseScreenActivity
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.ExerciseCard
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.ExerciseDemo
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.ExerciseFilter
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.component.ManualTrackingForm
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Yellow
 
 @Composable
@@ -41,15 +38,29 @@ fun ExerciseListScreen(
     creationDate: String,
     navController: NavController,
     commonViewModel: CommonViewModel,
-    exerciseListViewModel: ExerciseListViewModel = hiltViewModel()
+    viewModel: ExerciseListViewModel = hiltViewModel()
 ) {
     val scaffoldState = rememberScaffoldState()
+    var showExerciseFilter by remember {
+        mutableStateOf(false)
+    }
     val context = LocalContext.current
     val localConfiguration = LocalConfiguration.current
+    val itemsPerRow = when {
+        localConfiguration.screenWidthDp > 840 -> {
+            3
+        }
+        localConfiguration.screenWidthDp > 600 -> {
+            2
+        }
+        else -> {
+            1
+        }
+    }
     commonViewModel.loadExercises(testId = testId, tenant = tenant)
 
     LaunchedEffect(key1 = true) {
-        exerciseListViewModel.eventFlow.collect { event ->
+        viewModel.eventFlow.collect { event ->
             when (event) {
                 is UIEvent.ShowSnackBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(event.message)
@@ -69,35 +80,23 @@ fun ExerciseListScreen(
                 onClickLeadingIcon = {
                     navController.popBackStack()
                 },
-                trailingIcon = if (exerciseListViewModel.showExerciseFilter.value) {
+                trailingIcon = if (showExerciseFilter) {
                     R.drawable.ic_cross
                 } else {
                     R.drawable.search
                 },
-                onClickTrailingIcon = {
-                    exerciseListViewModel.onEvent(ExerciseListEvent.ToggleExerciseFilter)
-                },
+                onClickTrailingIcon = { showExerciseFilter = !showExerciseFilter },
                 extraContent = {
-                    AnimatedVisibility(visible = exerciseListViewModel.showExerciseFilter.value) {
-                        ExerciseFilter(
-                            field = exerciseListViewModel.searchTerm,
-                            onValueChange = {
-                                exerciseListViewModel.onEvent(
-                                    ExerciseListEvent.ExerciseNameEntered(
-                                        it
-                                    )
+                    AnimatedVisibility(visible = showExerciseFilter) {
+                        ExerciseFilter {
+                            commonViewModel.onEvent(
+                                CommonEvent.ApplyExerciseFilter(
+                                    testId = testId,
+                                    exerciseName = it
                                 )
-                            },
-                            onClickApply = {
-                                commonViewModel.onEvent(
-                                    CommonEvent.ApplyExerciseFilter(
-                                        testId = testId,
-                                        searchTerm = exerciseListViewModel.searchTerm.value
-                                    )
-                                )
-                                exerciseListViewModel.onEvent(ExerciseListEvent.ToggleExerciseFilter)
-                            }
-                        )
+                            )
+                            showExerciseFilter = false
+                        }
                     }
                 }
             ) {
@@ -130,72 +129,6 @@ fun ExerciseListScreen(
         Column(
             modifier = Modifier.padding(horizontal = 8.dp)
         ) {
-            if (exerciseListViewModel.showManualTrackingForm.value) {
-                commonViewModel.getExercise(
-                    testId = testId,
-                    exerciseId = exerciseListViewModel.manualSelectedExercise.value
-                )?.let { selectedExercise ->
-                    ManualTrackingForm(
-                        exerciseName = selectedExercise.name,
-                        repetitionField = exerciseListViewModel.manualRepetitionCount,
-                        onRepetitionValueChanged = {
-                            exerciseListViewModel.onEvent(
-                                ExerciseListEvent.ManualRepetitionCountEntered(
-                                    it
-                                )
-                            )
-                        },
-                        setField = exerciseListViewModel.manualSetCount,
-                        onSetValueChanged = {
-                            exerciseListViewModel.onEvent(
-                                ExerciseListEvent.ManualSetCountEntered(
-                                    it
-                                )
-                            )
-                        },
-                        wrongField = exerciseListViewModel.manualWrongCount,
-                        onWrongValueChanged = {
-                            exerciseListViewModel.onEvent(
-                                ExerciseListEvent.ManualWrongCountEntered(
-                                    it
-                                )
-                            )
-                        },
-                        onCloseClicked = {
-                            exerciseListViewModel.onEvent(ExerciseListEvent.HideManualTrackingAlertDialogue)
-                        },
-                        onSaveDataClick = {
-                            exerciseListViewModel.onEvent(
-                                ExerciseListEvent.SaveDataButtonClicked(
-                                    testId = testId,
-                                    exercise = selectedExercise
-                                )
-                            )
-                        },
-                        saveDataButtonClickState = exerciseListViewModel.saveDataButtonClicked
-                    )
-                }
-            } else if (exerciseListViewModel.showExerciseDemo.value) {
-                commonViewModel.getExercise(
-                    testId = testId,
-                    exerciseId = exerciseListViewModel.manualSelectedExercise.value
-                )?.let {
-                    ExerciseDemo(
-                        phases = it.phases,
-                        onStartButtonClicked = {
-                            context.startActivity(
-                                Intent(
-                                    context,
-                                    ExerciseScreenActivity::class.java
-                                )
-                            )
-                            exerciseListViewModel.onEvent(ExerciseListEvent.HideExerciseDemo)
-                        },
-                        onDismiss = { exerciseListViewModel.onEvent(ExerciseListEvent.HideExerciseDemo) }
-                    )
-                }
-            }
-
             when {
                 commonViewModel.isExerciseLoading.value -> {
                     Box(
@@ -225,30 +158,16 @@ fun ExerciseListScreen(
                 else -> {
                     commonViewModel.exercises.value?.let { exercises ->
                         if (exercises.isNotEmpty()) {
-                            val itemsPerRow = when {
-                                localConfiguration.screenWidthDp > 840 -> {
-                                    3
-                                }
-                                localConfiguration.screenWidthDp > 600 -> {
-                                    2
-                                }
-                                else -> {
-                                    1
-                                }
-                            }
                             LazyVerticalGrid(
                                 columns = GridCells.Fixed(itemsPerRow),
                                 modifier = Modifier.padding(4.dp)
                             ) {
                                 items(exercises) {
                                     ExerciseCard(
-                                        imageUrl = if (it.imageURLs.isNotEmpty()) {
-                                            it.imageURLs[0]
-                                        } else null,
+                                        imageUrls = it.imageURLs,
                                         name = it.name,
                                         repetition = it.repetition,
                                         set = it.set,
-                                        isActive = true,
                                         onGuidelineButtonClicked = {
                                             navController.navigate(
                                                 Screen.GuidelineScreen.withArgs(
@@ -258,19 +177,12 @@ fun ExerciseListScreen(
                                             )
                                         },
                                         onStartWorkoutButtonClicked = {
-                                            exerciseListViewModel.onEvent(
-                                                ExerciseListEvent.ShowExerciseDemo(
-                                                    it.id
+                                            context.startActivity(
+                                                Intent(
+                                                    context,
+                                                    ExerciseScreenActivity::class.java
                                                 )
                                             )
-                                        },
-                                        onManualTrackingButtonClicked = {
-                                            exerciseListViewModel.onEvent(
-                                                ExerciseListEvent.ManualSelectedExerciseId(
-                                                    it.id
-                                                )
-                                            )
-                                            exerciseListViewModel.onEvent(ExerciseListEvent.ShowManualTrackingAlertDialogue)
                                         }
                                     )
                                 }

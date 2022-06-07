@@ -97,7 +97,7 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
                 text = "Movements",
                 textColor = Color.White,
                 backgroundColor = Color.Black,
-                icon = R.drawable.calendar_outlined,
+                icon = R.drawable.movement_2,
                 iconColor = Color.White,
                 onClick = {}
             )
