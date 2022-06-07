@@ -61,7 +61,7 @@ fun DashboardScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(24.dp))
                 ActionCard(
                     icon = it.icon,
-                    text = it.name,
+                    text = it.botName,
                     backgroundColor = it.backgroundColor,
                     onClick = { navController.navigate(Screen.ChatScreen.withArgs(it.codeName)) }
                 )
