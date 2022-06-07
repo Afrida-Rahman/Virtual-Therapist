@@ -7,8 +7,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -22,6 +21,7 @@ import com.mymedicalhub.emmavirtualtherapist.android.core.UIEvent
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.BottomNavigationBar
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopAppBar
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.CommonEvent
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.CommonViewModel
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessmentList.component.AssessmentCard
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessmentList.component.AssessmentFilter
@@ -34,6 +34,9 @@ fun AssessmentListScreen(
     val scaffoldState = rememberScaffoldState(
         drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     )
+    var showAssessmentFilter by remember {
+        mutableStateOf(false)
+    }
     val tenant = viewModel.patient.tenant
     val context = LocalContext.current
     val localConfiguration = LocalConfiguration.current
@@ -59,29 +62,25 @@ fun AssessmentListScreen(
                 onClickLeadingIcon = {
                     navController.navigate(Screen.SettingsScreen.route)
                 },
-                trailingIcon = if (viewModel.showAssessmentFilter.value) {
+                trailingIcon = if (showAssessmentFilter) {
                     R.drawable.ic_cross
                 } else {
                     R.drawable.filter
                 },
                 onClickTrailingIcon = {
-                    if (viewModel.showAssessmentFilter.value) {
-                        viewModel.onEvent(CommonEvent.HideAssessmentFilter)
-                    } else {
-                        viewModel.onEvent(CommonEvent.ShowAssessmentFilter)
-                    }
+                    showAssessmentFilter = !showAssessmentFilter
                 },
                 extraContent = {
-                    AnimatedVisibility(visible = viewModel.showAssessmentFilter.value) {
-                        AssessmentFilter(
-                            testIdField = viewModel.assessmentId,
-                            onTestIdValueChanged = {
-                                viewModel.onEvent(CommonEvent.AssessmentSearchTermEntered(it))
-                            }, onClickApply = {
-                                viewModel.onEvent(CommonEvent.ApplyAssessmentFilter)
-                                viewModel.onEvent(CommonEvent.HideAssessmentFilter)
-                            }
-                        )
+                    AnimatedVisibility(visible = showAssessmentFilter) {
+                        AssessmentFilter { testId, bodyRegion ->
+                            showAssessmentFilter = false
+                            viewModel.onEvent(
+                                CommonEvent.ApplyAssessmentFilter(
+                                    testId = testId,
+                                    bodyRegion = bodyRegion
+                                )
+                            )
+                        }
                     }
                 }
             ) {

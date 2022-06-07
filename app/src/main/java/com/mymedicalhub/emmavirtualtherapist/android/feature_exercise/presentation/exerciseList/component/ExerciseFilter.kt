@@ -3,7 +3,6 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentat
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -16,10 +15,11 @@ import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapi
 
 @Composable
 fun ExerciseFilter(
-    field: State<String>,
-    onValueChange: (value: String) -> Unit = {},
-    onClickApply: () -> Unit = {}
+    onClickApply: (exerciseName: String) -> Unit = {}
 ) {
+    val field = remember {
+        mutableStateOf("")
+    }
     Column(
         modifier = Modifier
             .background(Color.White)
@@ -29,12 +29,10 @@ fun ExerciseFilter(
         OutlineInputTextField(
             field = field,
             placeholder = "Exercise Name",
-            onValueChange = { value ->
-                onValueChange(value)
-            }
+            onValueChange = { field.value = it }
         )
         Spacer(modifier = Modifier.height(12.dp))
-        PrimaryLargeButton(text = "Apply", onClick = onClickApply)
+        PrimaryLargeButton(text = "Apply", onClick = { onClickApply(field.value) })
     }
 }
 
@@ -42,9 +40,6 @@ fun ExerciseFilter(
 @Composable
 fun ExerciseFilterPreview() {
     EmmaVirtualTherapistTheme {
-        val field = remember {
-            mutableStateOf("")
-        }
-        ExerciseFilter(field)
+        ExerciseFilter()
     }
 }

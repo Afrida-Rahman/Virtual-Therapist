@@ -2,10 +2,8 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentat
 
 import android.os.Build
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -25,25 +23,24 @@ import coil.compose.rememberImagePainter
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import com.mymedicalhub.emmavirtualtherapist.android.R
+import com.mymedicalhub.emmavirtualtherapist.android.core.component.SmallButton
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
 
 @Composable
 fun ExerciseCard(
-    imageUrl: String?,
+    imageUrls: List<String>,
     name: String,
     repetition: Int,
     set: Int,
-    isActive: Boolean,
     onGuidelineButtonClicked: () -> Unit,
-    onStartWorkoutButtonClicked: () -> Unit = {},
-    onManualTrackingButtonClicked: () -> Unit = {}
+    onStartWorkoutButtonClicked: () -> Unit = {}
 ) {
-    val statusIconId = if (isActive) {
-        R.drawable.ic_check
-    } else {
-        R.drawable.ic_cross
-    }
     val context = LocalContext.current
+    val imageUrl = if (imageUrls.isNotEmpty()) {
+        imageUrls.find { it.endsWith(".gif") } ?: imageUrls[0]
+    } else {
+        null
+    }
     val imageLoader = ImageLoader.Builder(context)
         .componentRegistry {
             if (Build.VERSION.SDK_INT >= 28) {
@@ -97,11 +94,6 @@ fun ExerciseCard(
                                     .align(Alignment.Center)
                             )
                         }
-                        Image(
-                            painter = painterResource(id = statusIconId),
-                            contentDescription = "Exercise Activation Status",
-                            modifier = Modifier.size(20.dp)
-                        )
                     }
                     Column(modifier = Modifier.padding(start = 8.dp)) {
                         Text(text = name, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
@@ -116,23 +108,10 @@ fun ExerciseCard(
                         )
                     }
                 }
-                Image(
-                    painter = painterResource(id = R.drawable.ic_guideline),
-                    contentDescription = "Guideline Icon Button",
-                    modifier = Modifier.clickable { onGuidelineButtonClicked() }
-                )
             }
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Button(onClick = { onStartWorkoutButtonClicked() }) {
-                    Text(text = "Start Workout")
-                }
-                Button(onClick = { onManualTrackingButtonClicked() }) {
-                    Text(text = "Manual Tracking")
-                }
+            Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                SmallButton(text = "See Demo", onClick = onGuidelineButtonClicked)
+                SmallButton(text = "Start Workout", onClick = onStartWorkoutButtonClicked)
             }
         }
     }
@@ -143,11 +122,10 @@ fun ExerciseCard(
 fun ExerciseCardPreview() {
     EmmaVirtualTherapistTheme {
         ExerciseCard(
-            imageUrl = null,
+            imageUrls = emptyList(),
             name = "Body Weight Squat",
             repetition = 5,
             set = 3,
-            isActive = true,
             onGuidelineButtonClicked = {}
         )
     }
