@@ -27,7 +27,8 @@ fun AssessmentFilter(
     val bodyRegionField = remember {
         mutableStateOf("")
     }
-    val showTrailingIcon = testIdField.value.isNotEmpty()
+    val showTestSearchTrailingIcon = testIdField.value.isNotEmpty()
+    val showBodyRegionSearchTrailingIcon = bodyRegionField.value.isNotEmpty()
     Column(
         modifier = Modifier
             .background(Color.White)
@@ -44,7 +45,7 @@ fun AssessmentFilter(
             placeholder = "Search here",
             onValueChange = { testIdField.value = it },
             leadingIcon = R.drawable.search,
-            trailingIcon = if (showTrailingIcon) {
+            trailingIcon = if (showTestSearchTrailingIcon) {
                 R.drawable.ic_cross
             } else {
                 null
@@ -59,7 +60,20 @@ fun AssessmentFilter(
             style = MaterialTheme.typography.body1,
             fontWeight = FontWeight.Bold
         )
-        OutlineInputTextField(field = bodyRegionField, placeholder = "Search here")
+        OutlineInputTextField(
+            field = bodyRegionField,
+            placeholder = "Search here",
+            onValueChange = { bodyRegionField.value = it },
+            leadingIcon = R.drawable.search,
+            trailingIcon = if (showBodyRegionSearchTrailingIcon) {
+                R.drawable.ic_cross
+            } else {
+                null
+            },
+            onIconPressed = {
+                bodyRegionField.value = ""
+            }
+        )
         Spacer(modifier = Modifier.height(12.dp))
         PrimaryLargeButton(
             text = "Apply",
