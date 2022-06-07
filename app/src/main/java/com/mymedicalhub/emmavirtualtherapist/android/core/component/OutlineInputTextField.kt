@@ -20,6 +20,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
 
 @Composable
@@ -37,6 +38,7 @@ fun OutlineInputTextField(
     imeAction: ImeAction = ImeAction.Next,
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
+    val iconSize = 20.dp
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -59,7 +61,8 @@ fun OutlineInputTextField(
                 leadingIcon = {
                     Icon(
                         painter = painterResource(id = leadingIcon),
-                        contentDescription = "Leading Icon"
+                        contentDescription = "Leading Icon",
+                        modifier = Modifier.size(iconSize)
                     )
                 },
                 trailingIcon = {
@@ -74,14 +77,13 @@ fun OutlineInputTextField(
                                 painter = painterResource(id = trailingIcon),
                                 contentDescription = "",
                                 tint = MaterialTheme.colors.primary,
-                                modifier = Modifier.size(20.dp)
+                                modifier = Modifier.size(iconSize)
                             )
                         }
                     }
                 },
                 singleLine = true,
                 placeholder = { Text(placeholder) },
-                label = { Text(placeholder) },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = keyboardType,
                     imeAction = imeAction
@@ -140,7 +142,8 @@ fun OutlineInputTextFieldPreview() {
             field = field,
             onValueChange = {},
             placeholder = "Text field",
-            keyboardType = KeyboardType.Text
+            keyboardType = KeyboardType.Text,
+            leadingIcon = R.drawable.search
         )
     }
 }

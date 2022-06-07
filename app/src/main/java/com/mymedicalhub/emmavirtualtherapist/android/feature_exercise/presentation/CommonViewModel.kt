@@ -13,7 +13,6 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.mod
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Exercise
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.model.Phase
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.usecase.ExerciseUseCases
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessmentList.CommonEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -49,12 +48,6 @@ class CommonViewModel @Inject constructor(
     private val _showTryAgainButton = mutableStateOf(false)
     val showTryAgain: State<Boolean> = _showTryAgainButton
 
-    private val _showAssessmentFilter = mutableStateOf(false)
-    val showAssessmentFilter: State<Boolean> = _showAssessmentFilter
-
-    private val _assessmentId = mutableStateOf("")
-    val assessmentId: State<String> = _assessmentId
-
     private var searchCoroutine: Job? = null
 
     private val _eventFlow = MutableSharedFlow<UIEvent>()
@@ -78,21 +71,14 @@ class CommonViewModel @Inject constructor(
                 testId = event.testId,
                 exerciseId = event.exerciseId
             )
-            is CommonEvent.AssessmentSearchTermEntered -> {
-                _assessmentId.value = event.searchTerm
-            }
-            is CommonEvent.ShowAssessmentFilter -> {
-                _showAssessmentFilter.value = true
-            }
-            is CommonEvent.HideAssessmentFilter -> {
-                _showAssessmentFilter.value = false
-            }
             is CommonEvent.ApplyAssessmentFilter -> {
-                _assessments.value = getAssessments(_assessmentId.value)
+                _assessments.value = getAssessments(
+                    searchTerm = event.testId ?: ""
+                )
             }
             is CommonEvent.ApplyExerciseFilter -> {
                 _exercises.value = getExercises(
-                    testId = event.testId, searchTerm = event.searchTerm
+                    testId = event.testId, searchTerm = event.exerciseName
                 )
             }
             is CommonEvent.SignOut -> {
