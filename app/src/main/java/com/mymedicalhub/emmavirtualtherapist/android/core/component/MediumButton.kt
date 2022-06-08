@@ -19,27 +19,30 @@ import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapi
 
 @Composable
 fun MediumButton(
+    modifier: Modifier = Modifier,
     text: String,
     textColor: Color,
     backgroundColor: Color,
-    @DrawableRes icon: Int,
-    iconColor: Color,
+    @DrawableRes icon: Int? = null,
+    iconColor: Color = MaterialTheme.colors.onPrimary,
     onClick: () -> Unit = {}
 ) {
     Button(
         onClick = onClick,
-        modifier = Modifier.size(height = 40.dp, width = 166.dp),
+        modifier = modifier.size(height = 40.dp, width = 166.dp),
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(
             backgroundColor = backgroundColor
         )
     ) {
-        Icon(
-            painter = painterResource(id = icon),
-            contentDescription = text,
-            tint = iconColor
-        )
-        Spacer(modifier = Modifier.width(8.dp))
+        icon?.let {
+            Icon(
+                painter = painterResource(id = it),
+                contentDescription = text,
+                tint = iconColor
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+        }
         Text(
             text = text,
             color = textColor,

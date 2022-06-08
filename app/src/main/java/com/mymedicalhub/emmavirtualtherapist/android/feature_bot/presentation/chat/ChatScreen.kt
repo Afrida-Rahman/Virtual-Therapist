@@ -25,8 +25,6 @@ import com.mymedicalhub.emmavirtualtherapist.android.core.component.CustomTopApp
 import com.mymedicalhub.emmavirtualtherapist.android.core.component.Pill
 import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.chat.components.ChatMessage
 import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.chat.components.Loading
-import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.chat.components.ResponseSection
-import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.chat.components.ResponseSubmittedDisplaySection
 import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.utils.BotUtils
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Yellow
 import kotlinx.coroutines.launch
@@ -46,7 +44,7 @@ fun ChatScreen(
     val lastItemIndex = chatResponses.value.size - 1
 
     LaunchedEffect(key1 = true) {
-        viewModel.onEvent(ChatEvent.InitializeBotInformation(botName = bot.codeName))
+        viewModel.onEvent(ChatEvent.InitializeBotInformation(botCodeName = bot.codeName))
         viewModel.onEvent(ChatEvent.TextMessageEntered(questionId = 0, message = "Hi"))
         viewModel.eventFlow.collect { event ->
             when (event) {
@@ -84,7 +82,7 @@ fun ChatScreen(
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = bot.name, style = MaterialTheme.typography.h3)
+                    Text(text = bot.botName, style = MaterialTheme.typography.h3)
                     Row {
                         if (viewModel.bodyRegions.value.isNotEmpty()) {
                             Pill(
@@ -115,23 +113,8 @@ fun ChatScreen(
                 val responseData = chatResponse.responseData
                 Spacer(modifier = Modifier.height(12.dp))
                 ChatMessage(
-                    questionText = responseData.dialogue,
-                    tags = listOf(
-                        responseData.header1,
-                        responseData.header2,
-                        responseData.typeName
-                    )
-                ) {
-                    if (responseData.answers.isNotEmpty()) {
-                        ResponseSubmittedDisplaySection(
-                            responseData = responseData, viewModel = viewModel, bot = bot
-                        )
-                    } else {
-                        ResponseSection(
-                            responseData = responseData, viewModel = viewModel, bot = bot
-                        )
-                    }
-                }
+                    responseData = responseData, viewModel = viewModel, bot = bot
+                )
             }
             item {
                 if (viewModel.isLoading.value) {

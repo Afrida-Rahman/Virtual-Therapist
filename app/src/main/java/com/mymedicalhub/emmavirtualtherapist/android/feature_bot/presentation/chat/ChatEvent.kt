@@ -11,8 +11,6 @@ sealed class ChatEvent {
         val questionId: Int, val responses: List<Response>
     ) : ChatEvent()
 
-    data class InitializeBotInformation(val botName: String) : ChatEvent()
-
+    data class InitializeBotInformation(val botCodeName: String) : ChatEvent()
     data class TextMessageEntered(val questionId: Int, val message: String) : ChatEvent()
-    object SendMessageButtonClicked : ChatEvent()
 }

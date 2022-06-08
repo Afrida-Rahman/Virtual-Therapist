@@ -28,7 +28,7 @@ fun DashboardScreen(navController: NavController) {
         scaffoldState = scaffoldState,
         topBar = {
             CustomTopAppBar(
-                leadingIcon = R.drawable.menu_new,
+                leadingIcon = R.drawable.menu,
                 onClickLeadingIcon = {
                     navController.navigate(Screen.SettingsScreen.route)
                 },

@@ -46,7 +46,7 @@ fun AssessmentFilter(
             onValueChange = { testIdField.value = it },
             leadingIcon = R.drawable.search,
             trailingIcon = if (showTestSearchTrailingIcon) {
-                R.drawable.ic_cross
+                R.drawable.cross
             } else {
                 null
             },
@@ -66,7 +66,7 @@ fun AssessmentFilter(
             onValueChange = { bodyRegionField.value = it },
             leadingIcon = R.drawable.search,
             trailingIcon = if (showBodyRegionSearchTrailingIcon) {
-                R.drawable.ic_cross
+                R.drawable.cross
             } else {
                 null
             },

@@ -17,6 +17,7 @@ import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapi
 
 @Composable
 fun SmallButton(
+    modifier: Modifier = Modifier,
     text: String,
     textColor: Color = Color.White,
     @DrawableRes icon: Int? = null,
@@ -33,7 +34,7 @@ fun SmallButton(
         ),
         shape = CircleShape,
         enabled = isEnable,
-        modifier = Modifier
+        modifier = modifier
             .height(44.dp)
     ) {
         icon?.let {

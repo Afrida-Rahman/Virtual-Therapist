@@ -89,7 +89,7 @@ fun CustomTopAppBar(
 fun CustomTopAppBarPreview() {
     EmmaVirtualTherapistTheme {
         CustomTopAppBar(
-            leadingIcon = R.drawable.menu_new,
+            leadingIcon = R.drawable.menu,
             trailingIcon = R.drawable.filter,
             extraContent = {
                 Column(
