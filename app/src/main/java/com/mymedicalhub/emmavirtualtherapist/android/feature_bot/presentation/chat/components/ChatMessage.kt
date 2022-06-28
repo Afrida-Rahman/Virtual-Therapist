@@ -40,10 +40,7 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.ch
 import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.chat.ChatViewModel
 import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.utils.Intents
 import com.mymedicalhub.emmavirtualtherapist.android.feature_bot.presentation.utils.Questions
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Gray200
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Green
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.MediumCharcoal
-import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Red
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.*
 import java.util.*
 
 @Composable
@@ -154,20 +151,22 @@ fun ChatMessage(
                         crossAxisAlignment = FlowCrossAxisAlignment.Center,
                         mainAxisAlignment = FlowMainAxisAlignment.End
                     ) {
+                        if (it.title.isNotEmpty()) {
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(text = it.title)
+                        }
                         Text(
                             text = it.name,
+                            color = Color.White,
                             modifier = Modifier
                                 .border(
                                     width = 1.dp,
                                     color = Gray200,
                                     shape = CircleShape
                                 )
+                                .background(color = Blue900, shape = CircleShape)
                                 .padding(vertical = 12.dp, horizontal = 24.dp)
                         )
-                        if (it.title.isNotEmpty()) {
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text(text = it.title)
-                        }
                     }
                 }
             } else {
