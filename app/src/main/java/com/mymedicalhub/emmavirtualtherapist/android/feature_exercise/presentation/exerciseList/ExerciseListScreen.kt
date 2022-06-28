@@ -81,7 +81,7 @@ fun ExerciseListScreen(
                     navController.popBackStack()
                 },
                 trailingIcon = if (showExerciseFilter) {
-                    R.drawable.ic_cross
+                    R.drawable.cross
                 } else {
                     R.drawable.search
                 },

@@ -16,28 +16,40 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mymedicalhub.emmavirtualtherapist.android.R
+import com.mymedicalhub.emmavirtualtherapist.android.core.component.MediumButton
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.EmmaVirtualTherapistTheme
+import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.Green
 
 @Composable
-fun MessageHeader(@DrawableRes icon: Int, title: String) {
+fun MessageHeader(
+    @DrawableRes icon: Int,
+    title: String,
+    trailingContent: @Composable () -> Unit = {}
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = painterResource(id = icon),
-            contentDescription = title,
-            modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
-        )
-        Spacer(modifier = Modifier.width(6.dp))
-        Text(
-            text = title,
-            fontSize = 14.sp,
-            color = Color.Black,
-            style = MaterialTheme.typography.h2,
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = icon),
+                contentDescription = title,
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
+            )
+            Spacer(modifier = Modifier.width(6.dp))
+            Text(
+                text = title,
+                fontSize = 14.sp,
+                color = Color.Black,
+                style = MaterialTheme.typography.h2,
+            )
+        }
+        trailingContent()
     }
 }
 
@@ -45,6 +57,17 @@ fun MessageHeader(@DrawableRes icon: Int, title: String) {
 @Composable
 fun MessageHeaderPreview() {
     EmmaVirtualTherapistTheme {
-        MessageHeader(icon = R.drawable.mmh_logo, title = "EMMA")
+        MessageHeader(icon = R.drawable.mmh_logo, title = "EMMA") {
+            MediumButton(
+                text = "Edit",
+                textColor = Color.White,
+                backgroundColor = Green,
+                icon = R.drawable.edit,
+                iconColor = Color.White,
+                onClick = { },
+                modifier = Modifier
+                    .size(width = 166.dp, height = 35.dp),
+            )
+        }
     }
 }

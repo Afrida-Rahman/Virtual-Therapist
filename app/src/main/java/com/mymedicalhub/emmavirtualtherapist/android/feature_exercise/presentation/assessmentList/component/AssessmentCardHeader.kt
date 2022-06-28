@@ -18,7 +18,7 @@ fun AssessmentCardHeader(testId: String, creationDate: String, isReportReady: Bo
     val reportReadyIcon = if (isReportReady) {
         painterResource(id = R.drawable.ic_check)
     } else {
-        painterResource(id = R.drawable.ic_cross)
+        painterResource(id = R.drawable.cross)
     }
     Row(
         modifier = Modifier.fillMaxWidth(),

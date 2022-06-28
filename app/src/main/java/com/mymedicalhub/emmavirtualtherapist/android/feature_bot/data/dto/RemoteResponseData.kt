@@ -63,6 +63,7 @@ fun RemoteResponseData.toResponseData(): ResponseData {
             "CHECKBOX" -> ResponseType.CHECKBOX
             "DATE_PICKER" -> ResponseType.DATE
             "DATETIME_PICKER" -> ResponseType.DATETIME
+            "MODAL" -> ResponseType.MODAL
             else -> ResponseType.TEXT
         },
         responses = responses.map { it.toResponse() },

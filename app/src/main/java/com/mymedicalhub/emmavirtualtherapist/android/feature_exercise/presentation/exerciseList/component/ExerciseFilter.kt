@@ -25,7 +25,7 @@ fun ExerciseFilter(
         mutableStateOf("")
     }
     val trailingIcon = if (field.value.isNotEmpty()) {
-        R.drawable.ic_cross
+        R.drawable.cross
     } else {
         null
     }

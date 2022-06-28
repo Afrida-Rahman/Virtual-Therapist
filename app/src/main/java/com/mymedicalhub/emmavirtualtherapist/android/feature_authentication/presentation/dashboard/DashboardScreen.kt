@@ -28,7 +28,7 @@ fun DashboardScreen(navController: NavController) {
         scaffoldState = scaffoldState,
         topBar = {
             CustomTopAppBar(
-                leadingIcon = R.drawable.menu_new,
+                leadingIcon = R.drawable.menu,
                 onClickLeadingIcon = {
                     navController.navigate(Screen.SettingsScreen.route)
                 },
@@ -61,7 +61,7 @@ fun DashboardScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(24.dp))
                 ActionCard(
                     icon = it.icon,
-                    text = it.name,
+                    text = it.botName,
                     backgroundColor = it.backgroundColor,
                     onClick = { navController.navigate(Screen.ChatScreen.withArgs(it.codeName)) }
                 )
