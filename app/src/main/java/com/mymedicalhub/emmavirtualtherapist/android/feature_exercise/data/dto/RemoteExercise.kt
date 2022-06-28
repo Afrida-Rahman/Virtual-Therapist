@@ -13,7 +13,8 @@ data class RemoteExercise(
     @SerializedName("SetInCount") val totalSet: Int,
     @SerializedName("RepetitionInCount") val repetitionPerSet: Int,
     @SerializedName("FrequencyInDay") val frequency: Int,
-    @SerializedName("Phases") val phases: List<RemotePhase>
+    @SerializedName("Phases") val phases: List<RemotePhase>,
+    @SerializedName("EvalExerciseProperties") val exerciseProperties: List<RemoteExerciseProperty>
 )
 
 fun RemoteExercise.toExercise(): Exercise {
@@ -22,9 +23,21 @@ fun RemoteExercise.toExercise(): Exercise {
         name = name,
         imageURLs = imageUrls,
         videoURL = videoUrl,
-        frequency = frequency,
-        repetition = repetitionPerSet,
-        set = totalSet,
+        frequency = if (exerciseProperties.isNotEmpty()) {
+            exerciseProperties[0].exerciseFrequency
+        } else {
+            frequency
+        },
+        repetition = if (exerciseProperties.isNotEmpty()) {
+            exerciseProperties[0].repetitionPerSet
+        } else {
+            repetitionPerSet
+        },
+        set = if (exerciseProperties.isNotEmpty()) {
+            exerciseProperties[0].totalSet
+        } else {
+            totalSet
+        },
         protocolId = protocolId,
         instruction = instruction,
         phases = phases.map { it.toPhase() },
