@@ -17,7 +17,11 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.mod
 import com.mymedicalhub.emmavirtualtherapist.android.ui.theme.*
 
 @Composable
-fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Unit) {
+fun AssessmentCard(
+    assessment: Assessment,
+    onExerciseButtonClicked: () -> Unit = {},
+    onMovementButtonClicked: () -> Unit = {}
+) {
     val context = LocalContext.current
 
     Card(
@@ -59,7 +63,7 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
                     iconColor = Color.White,
                     onClick = {
                         if (assessment.totalExercise > 0) {
-                            onViewExerciseButtonClicked()
+                            onExerciseButtonClicked()
                         } else {
                             Toast.makeText(
                                 context,
@@ -99,7 +103,9 @@ fun AssessmentCard(assessment: Assessment, onViewExerciseButtonClicked: () -> Un
                 backgroundColor = Color.Black,
                 icon = R.drawable.movement_2,
                 iconColor = Color.White,
-                onClick = {}
+                onClick = {
+                    onMovementButtonClicked()
+                }
             )
         }
     }
