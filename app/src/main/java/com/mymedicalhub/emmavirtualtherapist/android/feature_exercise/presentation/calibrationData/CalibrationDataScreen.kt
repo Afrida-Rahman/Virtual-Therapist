@@ -1,6 +1,7 @@
-package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.postureData
+package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.calibrationData
 
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,7 +31,7 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentati
 @Composable
 fun PostureDataScreen(
     navController: NavController,
-    viewModel: PostureDataViewModel = hiltViewModel()
+    viewModel: CalibrationDataViewModel = hiltViewModel()
 ) {
     val scaffoldState = rememberScaffoldState()
     val context = LocalContext.current
@@ -69,7 +70,7 @@ fun PostureDataScreen(
                     leadingIcon = R.drawable.user_gray,
                     keyboardType = KeyboardType.Number,
                     onValueChange = {
-                        viewModel.onEvent(PostureDataEvent.EnteredShoulderToShoulderDistance(it))
+                        viewModel.onEvent(CalibrationDataEvent.EnteredShoulderToShoulderDistance(it))
                     }
                 )
                 OutlineInputTextField(
@@ -79,7 +80,7 @@ fun PostureDataScreen(
                     leadingIcon = R.drawable.user_gray,
                     keyboardType = KeyboardType.Number,
                     onValueChange = {
-                        viewModel.onEvent(PostureDataEvent.EnteredShoulderToElbowDistance(it))
+                        viewModel.onEvent(CalibrationDataEvent.EnteredShoulderToElbowDistance(it))
                     }
                 )
                 OutlineInputTextField(
@@ -89,7 +90,7 @@ fun PostureDataScreen(
                     leadingIcon = R.drawable.user_gray,
                     keyboardType = KeyboardType.Number,
                     onValueChange = {
-                        viewModel.onEvent(PostureDataEvent.EnteredElbowToWristDistance(it))
+                        viewModel.onEvent(CalibrationDataEvent.EnteredElbowToWristDistance(it))
                     },
                     keyboardActions = KeyboardActions(onDone = {
                         keyboardService?.hideSoftwareKeyboard()
@@ -98,11 +99,28 @@ fun PostureDataScreen(
 
                 Button(
                     onClick = {
+                        Log.d(
+                            "buttonClick",
+                            "${viewModel.shoulderToShoulderDistance.value}-- ${viewModel.shoulderToElbowDistance.value} -- ${viewModel.elbowToWristDistance.value}"
+                        )
                         context.startActivity(
                             Intent(
                                 context,
                                 ExerciseScreenActivity::class.java
-                            )
+                            ).apply {
+                                putExtra(
+                                    ExerciseScreenActivity.ShoulderToShoulderDistance,
+                                    viewModel.shoulderToShoulderDistance.value
+                                )
+                                putExtra(
+                                    ExerciseScreenActivity.ShoulderToElbowDistance,
+                                    viewModel.shoulderToElbowDistance.value
+                                )
+                                putExtra(
+                                    ExerciseScreenActivity.ElbowToWristDistance,
+                                    viewModel.elbowToWristDistance.value
+                                )
+                            }
                         )
                     },
                     modifier = Modifier.fillMaxWidth(),

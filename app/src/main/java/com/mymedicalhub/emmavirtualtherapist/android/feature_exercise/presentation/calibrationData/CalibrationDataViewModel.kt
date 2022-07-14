@@ -1,4 +1,4 @@
-package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.postureData
+package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.calibrationData
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -7,8 +7,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class PostureDataViewModel @Inject constructor() : ViewModel() {
-    val _shoulderToShoulderDistance = mutableStateOf("")
+class CalibrationDataViewModel @Inject constructor() : ViewModel() {
+    private val _shoulderToShoulderDistance = mutableStateOf("")
     val shoulderToShoulderDistance: State<String> = _shoulderToShoulderDistance
 
     private val _shoulderToElbowDistance = mutableStateOf("")
@@ -18,15 +18,15 @@ class PostureDataViewModel @Inject constructor() : ViewModel() {
     val elbowToWristDistance: State<String> = _elbowToWristDistance
 
 
-    fun onEvent(event: PostureDataEvent) {
+    fun onEvent(event: CalibrationDataEvent) {
         when (event) {
-            is PostureDataEvent.EnteredShoulderToShoulderDistance -> {
+            is CalibrationDataEvent.EnteredShoulderToShoulderDistance -> {
                 _shoulderToShoulderDistance.value = event.ShoulderToShoulderDistance
             }
-            is PostureDataEvent.EnteredShoulderToElbowDistance -> {
+            is CalibrationDataEvent.EnteredShoulderToElbowDistance -> {
                 _shoulderToElbowDistance.value = event.ShoulderToElbowDistance
             }
-            is PostureDataEvent.EnteredElbowToWristDistance -> {
+            is CalibrationDataEvent.EnteredElbowToWristDistance -> {
                 _elbowToWristDistance.value = event.ElbowToWristDistance
             }
             else -> {}

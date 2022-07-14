@@ -6,9 +6,9 @@ import androidx.navigation.compose.composable
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.EXERCISE_ROUTE
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessmentList.AssessmentListScreen
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.calibrationData.PostureDataScreen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.ExerciseListScreen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.guideline.GuidelineScreen
-import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.postureData.PostureDataScreen
 
 fun NavGraphBuilder.exerciseNav(navController: NavController) {
     lateinit var commonViewModel: CommonViewModel
