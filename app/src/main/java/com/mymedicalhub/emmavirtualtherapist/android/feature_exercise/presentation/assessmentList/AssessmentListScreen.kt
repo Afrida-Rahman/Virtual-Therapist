@@ -119,17 +119,24 @@ fun AssessmentListScreen(
                 )
             ) {
                 items(viewModel.assessments.value) {
-                    AssessmentCard(it) {
-                        if (it.totalExercise > 0) {
-                            navController.navigate(
-                                Screen.ExerciseListScreen.withArgs(
-                                    tenant,
-                                    it.testId,
-                                    it.creationDate
+                    AssessmentCard(assessment = it,
+                        onExerciseButtonClicked = {
+                            if (it.totalExercise > 0) {
+                                navController.navigate(
+                                    Screen.ExerciseListScreen.withArgs(
+                                        tenant,
+                                        it.testId,
+                                        it.creationDate
+                                    )
                                 )
+                            }
+                        },
+                        onMovementButtonClicked = {
+                            navController.navigate(
+                                Screen.CalibrationDataScreen.route
                             )
                         }
-                    }
+                    )
                 }
             }
         } else {

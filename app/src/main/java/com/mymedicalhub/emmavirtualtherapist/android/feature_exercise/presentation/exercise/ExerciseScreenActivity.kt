@@ -15,7 +15,6 @@ import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.common.annotation.KeepName
 import com.google.mlkit.common.MlKitException
 import com.mymedicalhub.emmavirtualtherapist.android.R
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.posedetector.PoseDetectorProcessor
@@ -24,9 +23,22 @@ import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.pos
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.domain.posedetector.utils.PreferenceUtils
 
 /** Live preview demo app for ML Kit APIs using CameraX. */
-@KeepName
+
 class ExerciseScreenActivity :
     AppCompatActivity(), CompoundButton.OnCheckedChangeListener {
+    companion object {
+        private const val PERMISSION_REQUESTS = 1
+
+        private val REQUIRED_RUNTIME_PERMISSIONS =
+            arrayOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+        private const val TAG = "CameraXLivePreview"
+        private const val POSE_DETECTION = "Pose Detection"
+        private const val STATE_SELECTED_MODEL = "selected_model"
+    }
 
     private var previewView: PreviewView? = null
     private var graphicOverlay: GraphicOverlay? = null
@@ -51,6 +63,9 @@ class ExerciseScreenActivity :
         setContentView(R.layout.exercise_screen_preview)
         previewView = findViewById(R.id.preview_view)
         graphicOverlay = findViewById(R.id.graphic_overlay)
+
+        val hipToKneeDistance = intent.getIntExtra("HipToKneeDistance", 0)
+
         if (graphicOverlay == null) {
             Log.d(TAG, "graphicOverlay is null")
         }
@@ -67,6 +82,11 @@ class ExerciseScreenActivity :
                 cameraProvider = provider
                 bindAllCameraUseCases()
             }
+
+        Log.d(
+            "buttonClick",
+            "$hipToKneeDistance"
+        )
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
@@ -268,19 +288,5 @@ class ExerciseScreenActivity :
         }
         Log.i("CameraPermission", "Permission NOT granted: $permission")
         return false
-    }
-
-    companion object {
-        private const val PERMISSION_REQUESTS = 1
-
-        private val REQUIRED_RUNTIME_PERMISSIONS =
-            arrayOf(
-                Manifest.permission.CAMERA,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            )
-        private const val TAG = "CameraXLivePreview"
-        private const val POSE_DETECTION = "Pose Detection"
-        private const val STATE_SELECTED_MODEL = "selected_model"
     }
 }

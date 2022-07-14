@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.EXERCISE_ROUTE
 import com.mymedicalhub.emmavirtualtherapist.android.core.util.Screen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.assessmentList.AssessmentListScreen
+import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.calibrationData.CalibrationDataScreen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exerciseList.ExerciseListScreen
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.guideline.GuidelineScreen
 
@@ -16,6 +17,9 @@ fun NavGraphBuilder.exerciseNav(navController: NavController) {
         composable(route = Screen.AssessmentListScreen.route) {
             commonViewModel = hiltViewModel()
             AssessmentListScreen(navController = navController, viewModel = commonViewModel)
+        }
+        composable(route = Screen.CalibrationDataScreen.route) {
+            CalibrationDataScreen(navController = navController)
         }
         composable(
             route = Screen.ExerciseListScreen.route + "/{tenant}/{testId}/{creationDate}",
