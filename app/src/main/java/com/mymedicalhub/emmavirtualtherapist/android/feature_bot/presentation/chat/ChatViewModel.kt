@@ -54,6 +54,7 @@ class ChatViewModel @Inject constructor(
             email = patientData.email,
             intent = "initial",
             patientId = "411a6950-b0b3-eb11-8236-000d3a5a872e",
+            demographicsCompleted = true,
             providerId = "00000000-0000-0000-0000-000000000000",
             loggedTime = currentTime.subSequence(
                 startIndex = 0, endIndex = currentTime.length - 2
@@ -65,7 +66,7 @@ class ChatViewModel @Inject constructor(
         when (event) {
             is ChatEvent.InitializeBotInformation -> {
                 chatPayload.value = chatPayload.value?.copy(
-                    botName = event.botName
+                    botName = event.botCodeName
                 )
             }
             is ChatEvent.MultiselectQuestionSubmitted -> {
@@ -74,20 +75,20 @@ class ChatViewModel @Inject constructor(
                         _eventFlow.emit(UIEvent.ShowSnackBar("You need to select at least one option"))
                     }
                 } else {
-                    sendReply(
+                    handleReply(
                         questionId = event.questionId,
                         responses = event.responses
                     )
                 }
             }
             is ChatEvent.ResponseButtonClicked -> {
-                sendReply(
+                handleReply(
                     questionId = event.questionId,
                     responses = listOf(event.response)
                 )
             }
             is ChatEvent.TextMessageEntered -> {
-                sendReply(
+                handleReply(
                     questionId = event.questionId,
                     responses = listOf(
                         Response(
@@ -97,7 +98,6 @@ class ChatViewModel @Inject constructor(
                     )
                 )
             }
-            ChatEvent.SendMessageButtonClicked -> {}
         }
     }
 
@@ -108,6 +108,19 @@ class ChatViewModel @Inject constructor(
         return chatResponse?.responseData?.answers?.map {
             it.name
         } ?: emptyList()
+    }
+
+    private fun handleReply(questionId: Int, responses: List<Response>) {
+        val chatResponse = _chatResponses.value.find {
+            it.responseData.questionId == questionId
+        }
+        val alreadyExists = chatResponse != null && chatResponse.responseData.answers.isNotEmpty()
+
+        if (alreadyExists) {
+            updateResponse(questionId = questionId, answers = responses)
+        } else {
+            sendReply(questionId = questionId, responses = responses)
+        }
     }
 
     private fun sendReply(questionId: Int, responses: List<Response>) {
@@ -135,14 +148,14 @@ class ChatViewModel @Inject constructor(
                             }
                             is Resource.Success -> {
                                 _isLoading.value = false
-                                handleResponse(
+                                addResponse(
                                     previousResponses = responses,
                                     chatResponse = it.data
                                 )
                                 if (questionId == Questions.WELCOME.id) {
                                     val bodyRegions = buildString {
-                                        getBodyRegions().forEach {
-                                            append("$it, ")
+                                        getBodyRegions().forEach { bodyRegion ->
+                                            append("$bodyRegion, ")
                                         }
                                     }
                                     _bodyRegions.value = bodyRegions.substring(
@@ -158,7 +171,7 @@ class ChatViewModel @Inject constructor(
         }
     }
 
-    private fun handleResponse(previousResponses: List<Response>, chatResponse: ChatResponse?) {
+    private fun addResponse(previousResponses: List<Response>, chatResponse: ChatResponse?) {
         chatResponse?.let { response ->
             if (chatResponses.value.isNotEmpty()) {
                 val lastIndex = _chatResponses.value.size - 1
@@ -169,7 +182,17 @@ class ChatViewModel @Inject constructor(
                 intent = response.responseData.intent,
                 sessionId = response.responseData.sessionId
             )
-            Log.d("NewResponse", response.toString())
+        }
+    }
+
+    private fun updateResponse(questionId: Int, answers: List<Response>) {
+        for (index in 0 until _chatResponses.value.size) {
+            val responseData = _chatResponses.value[index].responseData
+            if (responseData.questionId == questionId) {
+                _chatResponses.value[index].responseData.answers = answers
+                Log.d("ResponseUpdate", "Updating: $questionId\tResponses: $answers")
+                break
+            }
         }
     }
 }

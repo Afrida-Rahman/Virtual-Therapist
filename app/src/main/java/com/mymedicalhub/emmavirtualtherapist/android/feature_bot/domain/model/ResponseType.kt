@@ -6,5 +6,6 @@ enum class ResponseType {
     CHECKBOX,
     AUTOCOMPLETE,
     DATE,
-    DATETIME
+    DATETIME,
+    MODAL
 }

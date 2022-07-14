@@ -58,12 +58,12 @@ fun AssessmentListScreen(
         scaffoldState = scaffoldState,
         topBar = {
             CustomTopAppBar(
-                leadingIcon = R.drawable.menu_new,
+                leadingIcon = R.drawable.menu,
                 onClickLeadingIcon = {
                     navController.navigate(Screen.SettingsScreen.route)
                 },
                 trailingIcon = if (showAssessmentFilter) {
-                    R.drawable.ic_cross
+                    R.drawable.cross
                 } else {
                     R.drawable.filter
                 },
