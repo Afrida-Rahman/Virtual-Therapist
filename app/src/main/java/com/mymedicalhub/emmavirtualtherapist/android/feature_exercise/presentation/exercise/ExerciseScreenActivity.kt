@@ -38,9 +38,6 @@ class ExerciseScreenActivity :
         private const val TAG = "CameraXLivePreview"
         private const val POSE_DETECTION = "Pose Detection"
         private const val STATE_SELECTED_MODEL = "selected_model"
-        const val ShoulderToShoulderDistance = "ShoulderToShoulderDistance"
-        const val ShoulderToElbowDistance = "ShoulderToElbowDistance"
-        const val ElbowToWristDistance = "ElbowToWristDistance"
     }
 
     private var previewView: PreviewView? = null
@@ -67,9 +64,7 @@ class ExerciseScreenActivity :
         previewView = findViewById(R.id.preview_view)
         graphicOverlay = findViewById(R.id.graphic_overlay)
 
-        val shoulderToShoulderDistance = intent.getIntExtra(ShoulderToShoulderDistance, 0)
-        val shoulderToElbowDistance = intent.getIntExtra(ShoulderToElbowDistance, 0)
-        val elbowToWristDistance = intent.getIntExtra(ElbowToWristDistance, 0)
+        val hipToKneeDistance = intent.getIntExtra("HipToKneeDistance", 0)
 
         if (graphicOverlay == null) {
             Log.d(TAG, "graphicOverlay is null")
@@ -90,7 +85,7 @@ class ExerciseScreenActivity :
 
         Log.d(
             "buttonClick",
-            "${shoulderToShoulderDistance}-- ${shoulderToElbowDistance} -- ${elbowToWristDistance}"
+            "$hipToKneeDistance"
         )
     }
 

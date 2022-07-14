@@ -133,7 +133,7 @@ fun AssessmentListScreen(
                         },
                         onMovementButtonClicked = {
                             navController.navigate(
-                                Screen.PostureDataScreen.route
+                                Screen.CalibrationDataScreen.route
                             )
                         }
                     )

@@ -8,28 +8,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CalibrationDataViewModel @Inject constructor() : ViewModel() {
-    private val _shoulderToShoulderDistance = mutableStateOf("")
-    val shoulderToShoulderDistance: State<String> = _shoulderToShoulderDistance
-
-    private val _shoulderToElbowDistance = mutableStateOf("")
-    val shoulderToElbowDistance: State<String> = _shoulderToElbowDistance
-
-    private val _elbowToWristDistance = mutableStateOf("")
-    val elbowToWristDistance: State<String> = _elbowToWristDistance
-
+    private val _hipToKneeDistance = mutableStateOf("")
+    val hipToKneeDistance: State<String> = _hipToKneeDistance
 
     fun onEvent(event: CalibrationDataEvent) {
         when (event) {
-            is CalibrationDataEvent.EnteredShoulderToShoulderDistance -> {
-                _shoulderToShoulderDistance.value = event.ShoulderToShoulderDistance
+            is CalibrationDataEvent.EnteredhipToKneeDistance -> {
+                _hipToKneeDistance.value = event.hipToKneeDistance
             }
-            is CalibrationDataEvent.EnteredShoulderToElbowDistance -> {
-                _shoulderToElbowDistance.value = event.ShoulderToElbowDistance
-            }
-            is CalibrationDataEvent.EnteredElbowToWristDistance -> {
-                _elbowToWristDistance.value = event.ElbowToWristDistance
-            }
-            else -> {}
         }
     }
 }

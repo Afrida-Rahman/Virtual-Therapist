@@ -2,10 +2,7 @@ package com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentat
 
 import android.content.Intent
 import android.util.Log
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -29,7 +26,7 @@ import com.mymedicalhub.emmavirtualtherapist.android.core.component.OutlineInput
 import com.mymedicalhub.emmavirtualtherapist.android.feature_exercise.presentation.exercise.ExerciseScreenActivity
 
 @Composable
-fun PostureDataScreen(
+fun CalibrationDataScreen(
     navController: NavController,
     viewModel: CalibrationDataViewModel = hiltViewModel()
 ) {
@@ -44,7 +41,7 @@ fun PostureDataScreen(
                 onClickLeadingIcon = { navController.popBackStack() }
             ) {
                 Text(
-                    text = "User Calibration Data",
+                    text = "Calibration Data",
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -56,52 +53,37 @@ fun PostureDataScreen(
                 .fillMaxSize()
                 .padding(horizontal = 24.dp)
                 .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
             ) {
+                Spacer(modifier = Modifier.height(24.dp))
+
                 OutlineInputTextField(
-                    field = viewModel.shoulderToShoulderDistance,
-                    placeholder = "Enter shoulder to shoulder distance",
-                    label = "Shoulder to shoulder distance",
+                    field = viewModel.hipToKneeDistance,
+                    placeholder = "Enter hip to knee distance",
+                    label = "Hip to knee distance",
                     leadingIcon = R.drawable.user_gray,
                     keyboardType = KeyboardType.Number,
                     onValueChange = {
-                        viewModel.onEvent(CalibrationDataEvent.EnteredShoulderToShoulderDistance(it))
-                    }
-                )
-                OutlineInputTextField(
-                    field = viewModel.shoulderToElbowDistance,
-                    placeholder = "Enter shoulder to elbow distance",
-                    label = "Shoulder to elbow distance",
-                    leadingIcon = R.drawable.user_gray,
-                    keyboardType = KeyboardType.Number,
-                    onValueChange = {
-                        viewModel.onEvent(CalibrationDataEvent.EnteredShoulderToElbowDistance(it))
-                    }
-                )
-                OutlineInputTextField(
-                    field = viewModel.elbowToWristDistance,
-                    placeholder = "Enter elbow to wrist distance",
-                    label = " Elbow to wrist distance",
-                    leadingIcon = R.drawable.user_gray,
-                    keyboardType = KeyboardType.Number,
-                    onValueChange = {
-                        viewModel.onEvent(CalibrationDataEvent.EnteredElbowToWristDistance(it))
+                        viewModel.onEvent(CalibrationDataEvent.EnteredhipToKneeDistance(it))
                     },
                     keyboardActions = KeyboardActions(onDone = {
                         keyboardService?.hideSoftwareKeyboard()
                     })
                 )
+                Spacer(modifier = Modifier.height(12.dp))
 
                 Button(
                     onClick = {
+                        navController.popBackStack()
                         Log.d(
                             "buttonClick",
-                            "${viewModel.shoulderToShoulderDistance.value}-- ${viewModel.shoulderToElbowDistance.value} -- ${viewModel.elbowToWristDistance.value}"
+                            viewModel.hipToKneeDistance.value
                         )
                         context.startActivity(
                             Intent(
@@ -109,16 +91,8 @@ fun PostureDataScreen(
                                 ExerciseScreenActivity::class.java
                             ).apply {
                                 putExtra(
-                                    ExerciseScreenActivity.ShoulderToShoulderDistance,
-                                    viewModel.shoulderToShoulderDistance.value
-                                )
-                                putExtra(
-                                    ExerciseScreenActivity.ShoulderToElbowDistance,
-                                    viewModel.shoulderToElbowDistance.value
-                                )
-                                putExtra(
-                                    ExerciseScreenActivity.ElbowToWristDistance,
-                                    viewModel.elbowToWristDistance.value
+                                    "HipToKneeDistance",
+                                    viewModel.hipToKneeDistance.value.toInt()
                                 )
                             }
                         )
